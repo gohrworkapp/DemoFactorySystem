@@ -30,73 +30,36 @@
             overflow-x: hidden;
         }
 
-        h2, h3 { margin-top: 0; }
+        h2, h3, h4 { margin-top: 0; }
 
         /* Branding */
-        .brand-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        .brand-header { text-align: center; margin-bottom: 20px; }
         .brand-title {
-            font-size: 26px;
-            font-weight: bold;
-            background: var(--brand-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 26px; font-weight: bold;
+            background: var(--brand-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 5px;
         }
-        .brand-subtitle {
-            font-size: 12px;
-            color: var(--text-sub);
-        }
+        .brand-subtitle { font-size: 12px; color: var(--text-sub); }
 
         /* UI Components */
         .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            border: 1px solid #333;
+            background: var(--card-bg); border-radius: 12px; padding: 20px;
+            margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid #333;
         }
 
-        label {
-            display: block;
-            font-size: 14px;
-            color: var(--text-sub);
-            margin-bottom: 5px;
-            margin-top: 10px;
-        }
+        label { display: block; font-size: 14px; color: var(--text-sub); margin-bottom: 5px; margin-top: 10px; }
 
         input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            background: var(--input-bg);
-            border: 1px solid #444;
-            border-radius: 8px;
-            color: #fff;
-            box-sizing: border-box;
-            font-family: 'Kanit';
-            font-size: 16px;
+            width: 100%; padding: 12px; background: var(--input-bg);
+            border: 1px solid #444; border-radius: 8px; color: #fff;
+            box-sizing: border-box; font-family: 'Kanit'; font-size: 16px;
         }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #FF0080;
-        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #FF0080; }
 
         .btn-main {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 30px;
-            background: var(--brand-grad);
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
+            width: 100%; padding: 14px; border: none; border-radius: 30px;
+            background: var(--brand-grad); color: white; font-weight: bold; font-size: 16px;
+            cursor: pointer; margin-top: 20px; box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
             transition: transform 0.2s;
         }
         .btn-main:active { transform: scale(0.98); }
@@ -108,13 +71,19 @@
         
         /* Status Badge */
         .status-badge {
-            background: #333;
-            color: var(--accent-color);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            border: 1px solid #444;
+            background: #333; color: var(--accent-color);
+            padding: 4px 10px; border-radius: 12px; font-size: 12px; border: 1px solid #444;
         }
+
+        /* --- NEW: Staff Action Buttons --- */
+        .btn {
+            width: 100%; padding: 10px; border: none; border-radius: 8px;
+            color: white; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 14px;
+        }
+        .btn-pm { background: linear-gradient(90deg, #00B9F2, #0055ff); }
+        .btn-qc { background: linear-gradient(90deg, #00C851, #007E33); }
+        .btn-ship { background: linear-gradient(90deg, #FF0080, #9900CC); }
+        .btn-merch { background: linear-gradient(90deg, #FF9800, #F57C00); }
 
         /* Loading Spinner */
         #loader {
@@ -123,10 +92,8 @@
             display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
         .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid #333;
-            border-top: 4px solid #FF0080;
-            border-radius: 50%;
+            width: 40px; height: 40px; border: 4px solid #333;
+            border-top: 4px solid #FF0080; border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -148,58 +115,65 @@
         <div class="card">
             <h2 class="text-center">ลงทะเบียนสมาชิก</h2>
             <p class="text-center" style="color: #aaa; font-size: 14px;">กรุณาระบุข้อมูลเพื่อเริ่มต้นใช้งาน</p>
-            
             <label>ชื่อลูกค้า / ชื่อแบรนด์</label>
             <input type="text" id="regName" placeholder="ระบุชื่อของคุณ...">
-            
             <label>เบอร์โทรศัพท์ (สำคัญมาก)</label>
             <input type="tel" id="regPhone" placeholder="เช่น 0812345678">
-            
             <button class="btn-main" onclick="submitRegister()">ยืนยันการลงทะเบียน</button>
         </div>
     </div>
 
-    <div id="viewAdmin" class="hidden">
+    <div id="viewStaff" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <span style="color: var(--accent-color);"><i class="fas fa-user-shield"></i> <span id="adminNameDisplay">Admin</span></span>
-            <span style="font-size:10px; background:#333; padding:2px 8px; border-radius:4px;">STAFF MODE</span>
+            <span style="color: var(--accent-color);">
+                <i class="fas fa-id-badge"></i> <span id="staffNameDisplay">User</span>
+            </span>
+            <span id="staffRoleDisplay" style="font-size:10px; background:#333; padding:2px 8px; border-radius:4px;">ROLE</span>
         </div>
 
-        <div class="card">
-            <h3 style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
-                <i class="fas fa-plus-circle"></i> เปิดออเดอร์ใหม่
-            </h3>
-            
-            <form id="createOrderForm">
-                <label>เบอร์โทรลูกค้า (เพื่อค้นหา)</label>
-                <input type="tel" id="ordPhone" placeholder="กรอกเบอร์ลูกค้า..." required>
-                
-                <label>รูปแบบเสื้อ (Style)</label>
-                <select id="ordStyle" required>
-                    <option value="" disabled selected>กำลังโหลดข้อมูล...</option>
-                </select>
+        <div id="adminPanel" class="hidden">
+            <button class="btn-main" style="margin-bottom:20px; background: #333; border: 1px solid #555;" onclick="toggleAdminPanel()">
+                <i class="fas fa-plus"></i> เปิดออเดอร์ใหม่ / ซ่อน
+            </button>
 
-                <div class="flex-row">
-                    <div style="width: 50%;">
-                        <label>จำนวน (ตัว)</label>
-                        <input type="number" id="ordQty" placeholder="100" required>
+            <div id="createOrderFormContainer" class="card hidden">
+                <h3 style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+                    เปิดออเดอร์ใหม่
+                </h3>
+                <form id="createOrderForm">
+                    <label>เบอร์โทรลูกค้า (เพื่อค้นหา)</label>
+                    <input type="tel" id="ordPhone" placeholder="กรอกเบอร์ลูกค้า..." required>
+                    
+                    <label>รูปแบบเสื้อ (Style)</label>
+                    <select id="ordStyle" required><option value="" disabled selected>Loading...</option></select>
+
+                    <div class="flex-row">
+                        <div style="width: 50%;">
+                            <label>จำนวน (ตัว)</label>
+                            <input type="number" id="ordQty" placeholder="100" required>
+                        </div>
+                        <div style="width: 50%;">
+                            <label>ชนิดผ้า (Fabric)</label>
+                            <select id="ordFabric" required><option value="" disabled selected>Loading...</option></select>
+                        </div>
                     </div>
-                    <div style="width: 50%;">
-                        <label>ชนิดผ้า (Fabric)</label>
-                        <select id="ordFabric" required>
-                            <option value="" disabled selected>กำลังโหลด...</option>
-                        </select>
-                    </div>
-                </div>
 
-                <label>วันกำหนดส่ง (Delivery Date)</label>
-                <input type="date" id="ordDate" required>
+                    <label>วันกำหนดส่ง (Delivery Date)</label>
+                    <input type="date" id="ordDate" required>
 
-                <label>รายละเอียดเพิ่มเติม (Detail)</label>
-                <textarea id="ordDetail" rows="3" placeholder="เช่น สกรีน 1 จุด, ปักโลโก้อกซ้าย..."></textarea>
+                    <label>รายละเอียดเพิ่มเติม</label>
+                    <textarea id="ordDetail" rows="3" placeholder="เช่น สกรีน 1 จุด..."></textarea>
 
-                <button type="submit" class="btn-main">บันทึกและแจ้งเตือนลูกค้า</button>
-            </form>
+                    <button type="submit" class="btn-main">บันทึกและแจ้งเตือน</button>
+                </form>
+            </div>
+        </div>
+
+        <h4 style="color: #aaa; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">
+            รายการงานล่าสุด
+        </h4>
+        <div id="staffTaskList">
+            <p class="text-center" style="color:#666;">กำลังโหลดรายการงาน...</p>
         </div>
     </div>
 
@@ -208,30 +182,23 @@
             <h2 id="custNameDisplay" style="color: var(--accent-color);">สวัสดีครับ</h2>
             <p style="color: #aaa; font-size: 14px;">รายการสั่งผลิตของคุณ</p>
         </div>
-
-        <div id="orderListContainer">
-            </div>
+        <div id="orderListContainer"></div>
     </div>
 
     <script>
         // ================= CONFIGURATION =================
-        // 1. ใส่ URL Web App ที่ได้จาก Google Apps Script (ลงท้ายด้วย /exec)
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbxolZJjHKgetgyfSnrxDWL0c9APIrJzHn_FnOhveedxVKBAAk9tgx7Mvw5u1-6Cx30LYg/exec'; 
-        
-        // 2. ใส่ LIFF ID ของคุณ
+        // *** แก้ไข 2 บรรทัดนี้ให้เป็นของจริง ***
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbzm5j3ccH50DEDIuJGR_pJ2uKbAj9gmeBhcrazngImsCeiGS6WTKgNO1bD4DZxiOWMqwQ/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         // =================================================
 
         let userProfile = {};
+        let currentUserRole = '';
 
-        // --- INITIALIZATION ---
         async function main() {
             try {
                 await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) {
-                    liff.login();
-                    return;
-                }
+                if (!liff.isLoggedIn()) { liff.login(); return; }
                 userProfile = await liff.getProfile();
                 checkUserStatus();
             } catch (err) {
@@ -240,9 +207,7 @@
         }
         main();
 
-        // --- CORE FUNCTIONS ---
-
-        // 1. ตรวจสอบสถานะ User (ใหม่/เก่า/Admin)
+        // 1. เช็ค User & Redirect ไปหน้า Dashboard ที่ถูกต้อง
         function checkUserStatus() {
             fetch(GAS_API, {
                 method: 'POST',
@@ -250,168 +215,200 @@
             })
             .then(res => res.json())
             .then(res => {
-                document.getElementById('loader').classList.add('hidden'); // ซ่อน Loading
+                document.getElementById('loader').classList.add('hidden');
                 
                 if (res.found) {
-                    // เจอ User -> เช็ค Role
-                    if (['Admin', 'Sales', 'PM', 'QC'].includes(res.data.Role)) {
-                        showAdmin(res.data);
+                    currentUserRole = res.data.Role;
+                    // รวม Role ทั้งหมดที่เป็น Staff
+                    if (['Admin', 'Sale admin', 'PM', 'QC', 'Merchandiser'].includes(currentUserRole)) {
+                        showStaffDashboard(res.data);
                     } else {
                         showCustomer(res.data);
                     }
                 } else {
-                    // ไม่เจอ -> ไปหน้าลงทะเบียน
                     document.getElementById('viewRegister').classList.remove('hidden');
                 }
             })
             .catch(err => alert("Connection Error: " + err));
         }
 
-        // 2. ฟังก์ชันหน้า Admin
-        function showAdmin(data) {
-            document.getElementById('viewAdmin').classList.remove('hidden');
-            document.getElementById('adminNameDisplay').innerText = data.RealName;
-            
-            // ดึงข้อมูล Dropdown จาก Sheet 'Options'
-            fetchOptions();
+        // 2. Dashboard สำหรับ Staff (Admin, Sale, PM, QC, Merch)
+        function showStaffDashboard(data) {
+            document.getElementById('viewStaff').classList.remove('hidden');
+            document.getElementById('staffNameDisplay').innerText = data.RealName;
+            document.getElementById('staffRoleDisplay').innerText = data.Role;
 
-            // Handle Submit Form
-            document.getElementById('createOrderForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                if(!confirm("ยืนยันการเปิดออเดอร์?")) return;
+            // ถ้าเป็น Sale admin หรือ Admin ให้เห็นปุ่มเปิดออเดอร์
+            if (data.Role === 'Sale admin' || data.Role === 'Admin') {
+                document.getElementById('adminPanel').classList.remove('hidden');
+                fetchOptions(); // ดึง Dropdown
+            }
 
-                // Show loading state on button
-                const btn = e.target.querySelector('button');
-                const originalText = btn.innerText;
-                btn.innerText = "กำลังบันทึก...";
-                btn.disabled = true;
+            // ดึงรายการงาน (Task List) มาแสดง
+            fetchStaffTasks();
+        }
 
-                fetch(GAS_API, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'create_order',
-                        data: {
-                            adminName: data.RealName,
-                            phone: document.getElementById('ordPhone').value,
-                            style: document.getElementById('ordStyle').value,
-                            qty: document.getElementById('ordQty').value,
-                            fabric: document.getElementById('ordFabric').value,
-                            deliveryDate: document.getElementById('ordDate').value,
-                            detail: document.getElementById('ordDetail').value
-                        }
-                    })
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status === 'success') {
-                        alert(`เปิดออเดอร์สำเร็จ! หมายเลข: ${res.orderId}`);
-                        document.getElementById('createOrderForm').reset();
-                    } else {
-                        alert("เกิดข้อผิดพลาด: " + res.message);
+        // ฟังก์ชันดึงงานสำหรับ Staff และสร้างปุ่มตาม Role
+        function fetchStaffTasks() {
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_all_orders' }) })
+            .then(r => r.json()).then(res => {
+                const list = document.getElementById('staffTaskList');
+                if (res.orders.length === 0) {
+                    list.innerHTML = '<div class="card text-center"><p style="color:#666;">ไม่มีงานค้างในระบบ</p></div>';
+                    return;
+                }
+                
+                let html = '';
+                res.orders.forEach(o => {
+                    let actionButtons = '';
+
+                    // === ปุ่มสำหรับ PM ===
+                    if (currentUserRole === 'PM' || currentUserRole === 'Admin') {
+                        actionButtons += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')"><i class="fas fa-clipboard-check"></i> อนุมัติใบงาน (WO)</button>`;
+                        actionButtons += `<button class="btn btn-pm" style="margin-top:5px; background:linear-gradient(90deg, #00B9F2, #0088cc);" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')"><i class="fas fa-bolt"></i> ผลิตเสร็จ 50%</button>`;
                     }
-                    btn.innerText = originalText;
-                    btn.disabled = false;
+
+                    // === ปุ่มสำหรับ Merchandiser ===
+                    if (currentUserRole === 'Merchandiser' || currentUserRole === 'Admin') {
+                        actionButtons += `
+                            <div style="margin-top:10px; border-top:1px dashed #555; padding-top:10px;">
+                                <input type="text" id="track-sample-${o.orderNo}" placeholder="Tracking ตัวอย่าง" style="font-size:14px; margin-bottom:5px;">
+                                <button class="btn btn-merch" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> ส่งตัวอย่าง</button>
+                                <button class="btn btn-qc" style="margin-top:5px;" onclick="updateStatus('${o.orderNo}', 'PP_APPROVE')"><i class="fas fa-check-circle"></i> ลูกค้าอนุมัติ (PP)</button>
+                            </div>`;
+                    }
+
+                    // === ปุ่มสำหรับ QC ===
+                    if (currentUserRole === 'QC' || currentUserRole === 'Admin') {
+                        actionButtons += `<button class="btn btn-qc" onclick="updateStatus('${o.orderNo}', 'QC_PASS')"><i class="fas fa-shield-alt"></i> ผ่าน QC</button>`;
+                    }
+
+                    // === ปุ่มสำหรับ Sale admin (Shipping) ===
+                    if (currentUserRole === 'Sale admin' || currentUserRole === 'Admin') {
+                        actionButtons += `
+                            <div style="margin-top:10px; border-top:1px dashed #555; padding-top:10px;">
+                                <input type="text" id="track-${o.orderNo}" placeholder="เลขพัสดุสินค้าจริง" style="font-size:14px; margin-bottom:5px;">
+                                <button class="btn btn-ship" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันส่งของ</button>
+                            </div>`;
+                    }
+
+                    // สร้างการ์ดงาน
+                    html += `
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                            <strong style="color:var(--accent-color); font-size:18px;">${o.orderNo}</strong>
+                            <small class="status-badge">${o.status}</small>
+                        </div>
+                        <div style="color:#ccc; font-size:14px; margin-bottom:10px;">
+                            <div><i class="fas fa-tshirt"></i> ${o.style} (${o.qty} ตัว)</div>
+                            <div><i class="far fa-calendar"></i> ส่ง: ${o.delivery}</div>
+                        </div>
+                        ${actionButtons}
+                    </div>`;
                 });
+                list.innerHTML = html;
             });
         }
 
-        // 3. ฟังก์ชันดึง Options (Style/Fabric)
-        function fetchOptions() {
-            fetch(GAS_API, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'get_options' })
-            })
-            .then(res => res.json())
-            .then(res => {
-                if(res.status === 'success') {
-                    const styles = res.data.styles;
-                    const fabrics = res.data.fabrics;
-                    
-                    const styleSelect = document.getElementById('ordStyle');
-                    const fabricSelect = document.getElementById('ordFabric');
-                    
-                    // Render Style Options
-                    styleSelect.innerHTML = '<option value="" disabled selected>เลือกรูปแบบ...</option>';
-                    styles.forEach(s => {
-                        styleSelect.innerHTML += `<option value="${s}">${s}</option>`;
-                    });
+        // --- Action Functions ---
+        function updateStatus(orderNo, action) {
+            if(!confirm(`ยืนยันการทำรายการ?`)) return;
+            callApi({ orderNo: orderNo, actionType: action, staffName: document.getElementById('staffNameDisplay').innerText });
+        }
 
-                    // Render Fabric Options
-                    fabricSelect.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>';
-                    fabrics.forEach(f => {
-                        fabricSelect.innerHTML += `<option value="${f}">${f}</option>`;
-                    });
+        function sendSample(orderNo) {
+            const tr = document.getElementById(`track-sample-${orderNo}`).value;
+            callApi({ orderNo: orderNo, actionType: 'SEND_SAMPLE', tracking: tr, staffName: document.getElementById('staffNameDisplay').innerText });
+        }
+
+        function shipOrder(orderNo) {
+            const tr = document.getElementById(`track-${orderNo}`).value;
+            if(!tr) return alert("กรุณากรอกเลขพัสดุ");
+            callApi({ orderNo: orderNo, actionType: 'SHIP', tracking: tr, staffName: document.getElementById('staffNameDisplay').innerText });
+        }
+
+        function callApi(payload) {
+            document.getElementById('loader').classList.remove('hidden');
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'update_status', data: payload }) })
+            .then(r => r.json()).then(res => {
+                document.getElementById('loader').classList.add('hidden');
+                if(res.status === 'success') { alert("บันทึกสำเร็จ!"); fetchStaffTasks(); }
+                else alert("Error: " + res.message);
+            });
+        }
+
+        // --- Helper Functions ---
+        function toggleAdminPanel() {
+            document.getElementById('createOrderFormContainer').classList.toggle('hidden');
+        }
+
+        function fetchOptions() {
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_options' }) })
+            .then(r => r.json()).then(res => {
+                if(res.status === 'success') {
+                    const s = document.getElementById('ordStyle'), f = document.getElementById('ordFabric');
+                    s.innerHTML = '<option value="" disabled selected>เลือก...</option>';
+                    f.innerHTML = '<option value="" disabled selected>เลือก...</option>';
+                    res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`);
+                    res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`);
                 }
             });
         }
 
-        // 4. ฟังก์ชันหน้า Customer
+        // Form Submit for Create Order
+        document.getElementById('createOrderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if(!confirm("ยืนยันเปิดออเดอร์?")) return;
+            
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "กำลังบันทึก..."; btn.disabled = true;
+
+            const payload = {
+                adminName: document.getElementById('staffNameDisplay').innerText,
+                phone: document.getElementById('ordPhone').value,
+                style: document.getElementById('ordStyle').value,
+                qty: document.getElementById('ordQty').value,
+                fabric: document.getElementById('ordFabric').value,
+                deliveryDate: document.getElementById('ordDate').value,
+                detail: document.getElementById('ordDetail').value
+            };
+
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'create_order', data: payload }) })
+            .then(r => r.json()).then(res => {
+                if(res.status === 'success') { alert("สำเร็จ!"); fetchStaffTasks(); document.getElementById('createOrderForm').reset(); }
+                else alert("Error: " + res.message);
+                btn.innerText = originalText; btn.disabled = false;
+            });
+        });
+
+        // 3. Register Function (คงเดิม)
+        function submitRegister() {
+            const n = document.getElementById('regName').value, p = document.getElementById('regPhone').value;
+            if(!n || !p) return alert("กรอกข้อมูลให้ครบ");
+            document.getElementById('loader').classList.remove('hidden');
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'register', data: { userId: userProfile.userId, displayName: userProfile.displayName, realName: n, phone: p } }) })
+            .then(() => location.reload());
+        }
+
+        // 4. Customer View Function (คงเดิม)
         function showCustomer(data) {
             document.getElementById('viewCustomer').classList.remove('hidden');
             document.getElementById('custNameDisplay').innerText = "สวัสดีครับ, " + data.RealName;
-
-            // ดึงรายการออเดอร์
-            fetch(GAS_API, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'get_my_orders', data: { userId: userProfile.userId } })
-            })
-            .then(res => res.json())
-            .then(res => {
-                const container = document.getElementById('orderListContainer');
-                if (res.orders.length === 0) {
-                    container.innerHTML = `
-                        <div class="card text-center" style="padding:40px;">
-                            <i class="fas fa-box-open" style="font-size:40px; color:#333; margin-bottom:10px;"></i>
-                            <p style="color:#666;">ยังไม่มีออเดอร์ในขณะนี้</p>
-                        </div>`;
-                } else {
-                    let html = '';
-                    res.orders.forEach(order => {
-                        html += `
-                        <div class="card">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                                <span style="font-weight:bold; color:var(--accent-color); font-size:18px;">${order.orderNo}</span>
-                                <span class="status-badge">${order.status}</span>
-                            </div>
-                            <div style="font-size:14px; color:#ddd; line-height:1.6;">
-                                <div><i class="fas fa-tshirt" style="width:20px;"></i> ${order.style} (${order.qty} ตัว)</div>
-                                <div><i class="far fa-calendar-alt" style="width:20px;"></i> กำหนดส่ง: ${order.delivery}</div>
-                            </div>
-                        </div>`;
-                    });
-                    container.innerHTML = html;
-                }
-            });
-        }
-
-        // 5. ฟังก์ชันลงทะเบียน
-        function submitRegister() {
-            const name = document.getElementById('regName').value;
-            const phone = document.getElementById('regPhone').value;
-
-            if (!name || !phone) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-
-            document.getElementById('loader').classList.remove('hidden'); // Show loader
-
-            fetch(GAS_API, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'register',
-                    data: {
-                        userId: userProfile.userId,
-                        displayName: userProfile.displayName,
-                        realName: name,
-                        phone: phone
-                    }
-                })
-            })
-            .then(res => res.json())
-            .then(res => {
-                alert("ลงทะเบียนเรียบร้อย! ยินดีต้อนรับครับ");
-                location.reload(); // รีโหลดเพื่อเข้าหน้า Dashboard
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_my_orders', data: { userId: userProfile.userId } }) })
+            .then(r => r.json()).then(res => {
+                const div = document.getElementById('orderListContainer');
+                if(res.orders.length == 0) div.innerHTML = "<div class='card text-center'><p style='color:#666;'>ยังไม่มีออเดอร์</p></div>";
+                else div.innerHTML = res.orders.map(o => `
+                   <div class="card">
+                       <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                           <strong style="color:var(--accent-color);">${o.orderNo}</strong>
+                           <span class="status-badge">${o.status}</span>
+                       </div>
+                       <p style="color:#ddd; font-size:14px;">${o.style} (${o.qty} ตัว) <br> กำหนดส่ง: ${o.delivery}</p>
+                   </div>`).join('');
             });
         }
     </script>
 </body>
 </html>
-
