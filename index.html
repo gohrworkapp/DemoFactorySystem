@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Factory</title>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- CSS: Design System (Dark Mode & Gradient CI) --- */
+        :root {
+            --bg-color: #000000;
+            --card-bg: #1E1E1E;
+            --text-main: #FFFFFF;
+            --text-sub: #AAAAAA;
+            --brand-grad: linear-gradient(90deg, #FFC805 0%, #FF0080 50%, #00B9F2 100%);
+            --input-bg: #2A2A2A;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Kanit', sans-serif;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Loading Overlay */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid #333;
+            border-top: 4px solid #FF0080; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 10px;
+        }
+
+        /* Branding */
+        .brand-title {
+            font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 5px;
+            background: var(--brand-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .brand-subtitle { text-align: center; color: var(--text-sub); font-size: 12px; margin-bottom: 30px; }
+
+        /* Containers (Views) */
+        .view-section { display: none; animation: fadeIn 0.5s; }
+        .view-section.active { display: block; }
+
+        /* Card Style */
+        .card {
+            background: var(--card-bg); border-radius: 12px; padding: 20px;
+            margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Form Elements */
+        label { display: block; color: var(--text-sub); margin-bottom: 5px; font-size: 14px; }
+        input, select, textarea {
+            width: 100%; padding: 12px; background: var(--input-bg);
+            border: 1px solid #444; border-radius: 8px; color: white;
+            box-sizing: border-box; font-family: 'Kanit'; margin-bottom: 15px;
+        }
+        input:focus { outline: none; border-color: #FF0080; }
+
+        /* Buttons */
+        .btn-grad {
+            width: 100%; padding: 14px; border: none; border-radius: 30px;
+            background: var(--brand-grad); color: white; font-weight: bold; font-size: 16px;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            transition: transform 0.2s;
+        }
+        .btn-grad:active { transform: scale(0.98); }
+        .btn-secondary { background: #333; color: #fff; margin-top: 10px; }
+
+        /* Wizard Steps */
+        .step { display: none; }
+        .step.active { display: block; }
+
+        /* Utility */
+        .text-center { text-align: center; }
+        .hidden { display: none; }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <div style="color: #aaa; font-size: 12px;">กำลังเชื่อมต่อระบบ...</div>
+    </div>
+
+    <div class="brand-title">DEMO FACTORY</div>
+    <div class="brand-subtitle">Tailor-Made Production System</div>
+
+    <div id="viewRegister" class="view-section">
+        <div class="card">
+            <div id="regStep1" class="step active">
+                <h2 class="text-center">ยินดีต้อนรับครับ 👋</h2>
+                <p class="text-center" style="color:#aaa;">กรุณาระบุชื่อของคุณ หรือชื่อแบรนด์ เพื่อเริ่มต้นใช้งาน</p>
+                <label>ชื่อลูกค้า / แบรนด์</label>
+                <input type="text" id="regName" placeholder="เช่น คุณสมชาย หรือ Brand ABC">
+                <button class="btn-grad" onclick="nextStep(2)">ถัดไป</button>
+            </div>
+
+            <div id="regStep2" class="step">
+                <h2 class="text-center">ข้อมูลติดต่อ</h2>
+                <p class="text-center" style="color:#aaa;">ขอเบอร์โทรศัพท์เพื่อใช้ยืนยันออเดอร์และแจ้งสถานะครับ</p>
+                <label>เบอร์โทรศัพท์</label>
+                <input type="tel" id="regPhone" placeholder="08x-xxx-xxxx">
+                <button class="btn-grad" onclick="submitRegister()">ลงทะเบียน</button>
+                <button class="btn-grad btn-secondary" onclick="nextStep(1)">ย้อนกลับ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewAdmin" class="view-section">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="color:#FFC805;"><i class="fas fa-user-shield"></i> <span id="adminNameDisplay">Admin</span></span>
+            <span style="font-size:12px; color:#aaa;">Staff Mode</span>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-top:0;">สร้างออเดอร์ใหม่</h3>
+            <form id="createOrderForm">
+                <label>เบอร์ลูกค้า (ค้นหา)</label>
+                <input type="tel" id="orderClientPhone" placeholder="กรอกเบอร์ลูกค้า..." required>
+                
+                <label>รูปแบบเสื้อ (Style)</label>
+                <select id="orderStyle">
+                    <option value="T-Shirt">T-Shirt (คอกลม)</option>
+                    <option value="Polo">Polo (โปโล)</option>
+                    <option value="Hoodie">Hoodie (ฮู้ด)</option>
+                    <option value="Jacket">Jacket (แจ็คเก็ต)</option>
+                </select>
+
+                <div style="display:flex; gap:10px;">
+                    <div style="width:50%;">
+                        <label>จำนวน (ตัว)</label>
+                        <input type="number" id="orderQty" placeholder="100" required>
+                    </div>
+                    <div style="width:50%;">
+                        <label>รหัสผ้า</label>
+                        <input type="text" id="orderFabric" placeholder="เช่น C32" required>
+                    </div>
+                </div>
+
+                <label>วันกำหนดส่ง (Delivery Date)</label>
+                <input type="date" id="orderDate" required>
+
+                <label>รายละเอียดเพิ่มเติม (Custom Detail)</label>
+                <textarea id="orderDetail" rows="3" placeholder="สกรีน 1 จุด, ปักอกซ้าย..."></textarea>
+
+                <button type="submit" class="btn-grad">💾 บันทึกและแจ้งลูกค้า</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="viewCustomer" class="view-section">
+        <div class="card text-center">
+            <h2 id="custNameDisplay" style="color: #FFC805;">สวัสดีครับ</h2>
+            <p>สถานะออเดอร์ล่าสุดของคุณ</p>
+            <div style="margin: 20px 0; padding: 20px; background: #000; border-radius: 8px;">
+                <i class="fas fa-box-open" style="font-size: 40px; color: #333;"></i>
+                <p style="color: #666; font-size: 14px; margin-top: 10px;">ยังไม่มีออเดอร์ที่กำลังดำเนินการ</p>
+            </div>
+            <p style="font-size: 12px; color: #aaa;">หากต้องการสั่งผลิต กรุณาติดต่อแอดมินผ่านแชท</p>
+        </div>
+    </div>
+
+    <script>
+        // ================= CONFIGURATION =================
+        // ใส่ URL Web App ของคุณที่นี่ (ลงท้ายด้วย /exec)
+        const GAS_URL = 'https://script.google.com/macros/s/ไอดี_DEPLOY_ของคุณ/exec'; 
+        const LIFF_ID = 'ไอดี_LIFF_ของคุณ';
+        // =================================================
+
+        let userProfile = {};
+
+        // 1. เริ่มทำงานเมื่อเปิด LIFF
+        async function main() {
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+                userProfile = await liff.getProfile();
+                checkUserStatus(userProfile.userId);
+            } catch (err) {
+                alert("LIFF Error: " + err);
+            }
+        }
+        main();
+
+        // 2. เช็คว่ามี User นี้ในระบบหรือยัง
+        function checkUserStatus(userId) {
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'get_user', data: { userId: userId } })
+            })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('loader').style.display = 'none';
+                
+                if (res.status === 'success' && res.found) {
+                    // เจอ User เก่า -> เช็ค Role
+                    if (res.data.Role === 'Admin' || res.data.Role === 'Sales' || res.data.Role === 'PM') {
+                        showAdminDashboard(res.data);
+                    } else {
+                        showCustomerDashboard(res.data);
+                    }
+                } else {
+                    // ไม่เจอ -> ไปหน้าลงทะเบียน
+                    showRegister();
+                }
+            })
+            .catch(err => {
+                alert("Connection Error: " + err);
+                document.getElementById('loader').style.display = 'none';
+            });
+        }
+
+        // --- NAVIGATION FUNCTIONS ---
+        function showRegister() {
+            hideAllViews();
+            document.getElementById('viewRegister').classList.add('active');
+        }
+
+        function showAdminDashboard(userData) {
+            hideAllViews();
+            document.getElementById('viewAdmin').classList.add('active');
+            document.getElementById('adminNameDisplay').innerText = userData.RealName;
+        }
+
+        function showCustomerDashboard(userData) {
+            hideAllViews();
+            document.getElementById('viewCustomer').classList.add('active');
+            document.getElementById('custNameDisplay').innerText = "สวัสดีครับ, " + userData.RealName;
+        }
+
+        function hideAllViews() {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        }
+
+        // --- REGISTER LOGIC ---
+        function nextStep(step) {
+            if(step === 2 && document.getElementById('regName').value.trim() === "") {
+                return alert("กรุณากรอกชื่อก่อนครับ");
+            }
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.getElementById('regStep' + step).classList.add('active');
+        }
+
+        function submitRegister() {
+            const phone = document.getElementById('regPhone').value;
+            const name = document.getElementById('regName').value;
+            
+            if(!phone) return alert("กรุณากรอกเบอร์โทร");
+
+            document.getElementById('loader').style.display = 'flex'; // Show loading
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'register',
+                    data: {
+                        userId: userProfile.userId,
+                        displayName: userProfile.displayName,
+                        realName: name,
+                        phone: phone
+                    }
+                })
+            })
+            .then(res => res.json())
+            .then(res => {
+                alert("ลงทะเบียนสำเร็จ!");
+                location.reload(); // รีโหลดเพื่อเข้าหน้า Dashboard
+            });
+        }
+
+        // --- ADMIN: CREATE ORDER LOGIC ---
+        document.getElementById('createOrderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if(!confirm("ยืนยันการเปิดออเดอร์?")) return;
+
+            document.getElementById('loader').style.display = 'flex';
+
+            const payload = {
+                action: 'create_order',
+                data: {
+                    adminName: document.getElementById('adminNameDisplay').innerText,
+                    phone: document.getElementById('orderClientPhone').value,
+                    style: document.getElementById('orderStyle').value,
+                    qty: document.getElementById('orderQty').value,
+                    fabric: document.getElementById('orderFabric').value,
+                    deliveryDate: document.getElementById('orderDate').value,
+                    detail: document.getElementById('orderDetail').value
+                }
+            };
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('loader').style.display = 'none';
+                if(res.status === 'success') {
+                    alert("สร้างออเดอร์เรียบร้อย! (Order No: " + res.orderId + ")");
+                    // Reset Form
+                    document.getElementById('createOrderForm').reset();
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + res.message);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
