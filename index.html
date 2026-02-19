@@ -107,16 +107,16 @@
         <div class="filter-container">
             <input type="text" id="staffSearch" placeholder="🔍 ค้นหา ชื่อลูกค้า, เบอร์, Batch, Order No..." onkeyup="filterStaffList()">
             <select id="staffStatusFilter" onchange="filterStaffList()">
-                <option value="ACTIVE">🔥 งานที่กำลังดำเนินการ (ซ่อนงานที่ส่งแล้ว)</option>
-                <option value="ALL">📋 แสดงงานทั้งหมด (รวม History)</option>
-                <option value="Correction Needed">⚠ งานต้องแก้ไข (Feedback)</option>
-                <option value="Order Confirmation">1. ยืนยันออเดอร์แล้ว</option>
-                <option value="Work Order Review Stage">2. รอตรวจสอบ Work Order</option>
-                <option value="Sampling Stage">3. งานตัวอย่าง (Sampling)</option>
-                <option value="Pre-Production Approved">4. ลูกค้าอนุมัติแบบ (PP Approved)</option>
-                <option value="Bulk Production">5. กำลังผลิต (Bulk Production)</option>
-                <option value="Quality Control">6. รอตรวจสอบคุณภาพ (QC)</option>
-                <option value="Shipped">7. จัดส่งเรียบร้อยแล้ว (Shipped)</option>
+                <option value="ACTIVE">งานที่กำลังดำเนินการ</option>
+                <option value="ALL">งานทั้งหมด</option>
+                <option value="Correction Needed">งานต้องแก้ไข</option>
+                <option value="Order Confirmation">1. ยืนยันออเดอร์</option>
+                <option value="Work Order Review Stage">2. ตรวจสอบ Work Order</option>
+                <option value="Sampling Stage">3. งานตัวอย่าง</option>
+                <option value="Pre-Production Approved">4. อนุมัติแบบ</option>
+                <option value="Bulk Production">5. กำลังผลิต</option>
+                <option value="Quality Control">6. ตรวจสอบคุณภาพ</option>
+                <option value="Shipped">7. จัดส่งแล้ว</option>
             </select>
         </div>
 
@@ -319,7 +319,7 @@
                             <div class="card-header"><strong style="color:var(--danger-color)">⚠ ต้องแก้ไข (${o.orderNo})</strong><span class="status-badge" style="background:var(--danger-color)">Fix Needed</span></div>
                             ${custInfo}
                             <p style="font-size:13px; color:#fff; background:#333; padding:10px; border-radius:6px; border-left:3px solid var(--danger-color);"><b>สาเหตุที่ต้องแก้:</b> ${o.feedback}</p>
-                            <button class="btn" style="background:var(--success-color);" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')"><i class="fas fa-check-circle"></i> แก้ไขเสร็จสิ้น (ส่งกลับเข้ากระบวนการ)</button>
+                            <button class="btn" style="background:var(--success-color);" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')"><i class="fas fa-check-circle"></i> แก้ไขเสร็จสิ้น (ส่ง QC ตรวจใหม่)</button>
                         </div>`;
                     } else {
                         html += `<div class="card" style="border:1px solid var(--danger-color)">
