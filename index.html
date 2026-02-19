@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Demo Factory</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
@@ -11,114 +11,72 @@
     <style>
         :root {
             --bg-color: #000000;
-            --card-bg: #1E1E1E;
+            --card-bg: #1A1A1A;
             --input-bg: #2A2A2A;
             --text-main: #FFFFFF;
-            --text-sub: #AAAAAA;
             --brand-grad: linear-gradient(90deg, #FFC805 0%, #FF0080 50%, #00B9F2 100%);
             --accent-color: #FFC805;
             --success-color: #00C851;
             --danger-color: #ff4444;
-            --disable-color: #555555;
+            --disable-color: #333333;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Kanit', sans-serif;
-            margin: 0;
-            padding: 20px;
-            padding-bottom: 80px;
+            background-color: var(--bg-color); color: var(--text-main);
+            font-family: 'Kanit', sans-serif; margin: 0; padding: 15px; padding-bottom: 80px;
         }
 
-        /* UI Components */
-        .brand-header { text-align: center; margin-bottom: 20px; }
-        .brand-title {
-            font-size: 24px; font-weight: bold;
-            background: var(--brand-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .brand-title { font-size: 24px; font-weight: bold; background: var(--brand-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 5px; }
         
-        .card {
-            background: var(--card-bg); border-radius: 12px; padding: 15px;
-            margin-bottom: 15px; border: 1px solid #333; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #333; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        .cust-info { font-size: 13px; color: #ddd; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-color); }
 
         /* Buttons */
-        .btn {
-            width: 100%; padding: 10px; border: none; border-radius: 8px;
-            color: white; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 14px;
-            transition: 0.2s;
-        }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 14px; transition: 0.2s; }
         .btn-main { background: var(--brand-grad); }
         .btn-pm { background: linear-gradient(90deg, #00B9F2, #0055ff); }
         .btn-qc { background: linear-gradient(90deg, #00C851, #007E33); }
         .btn-ship { background: linear-gradient(90deg, #FF0080, #9900CC); }
         .btn-merch { background: linear-gradient(90deg, #FF9800, #F57C00); }
         .btn-reject { background: transparent; border: 1px solid var(--danger-color); color: var(--danger-color); }
+        .btn-disabled { background: var(--disable-color) !important; color: #777 !important; cursor: not-allowed; border: 1px solid #444 !important; }
+
+        /* Inputs */
+        .input-label { font-size: 13px; color: var(--accent-color); margin-bottom: 5px; display: block; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid #444; border-radius: 8px; color: #fff; box-sizing: border-box; font-family: 'Kanit'; font-size: 14px; }
         
-        /* Disabled Button Style */
-        .btn-disabled {
-            background: var(--disable-color) !important;
-            color: #888 !important;
-            cursor: not-allowed;
-            border: 1px solid #444 !important;
-            box-shadow: none;
-        }
-
-        /* Form Inputs & Labels */
-        .input-label { font-size: 13px; color: var(--accent-color); margin-bottom: 5px; display: block; margin-top:10px; }
-        input, select, textarea {
-            width: 100%; padding: 12px; background: var(--input-bg);
-            border: 1px solid #444; border-radius: 8px; color: #fff;
-            box-sizing: border-box; font-family: 'Kanit'; margin-bottom: 5px;
-        }
-
-        /* Stats & Dashboard */
-        .dashboard-stats { display: flex; gap: 10px; margin-bottom: 15px; }
-        .stat-box {
-            background: #252525; border: 1px solid #333; border-radius: 8px;
-            padding: 15px; text-align: center; flex: 1;
-        }
-        .stat-num { font-size: 24px; font-weight: bold; color: var(--accent-color); }
-        .stat-label { font-size: 12px; color: #aaa; }
-
-        /* Tabs System */
+        /* Filter & Tabs */
+        .filter-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .tab-container { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .tab-btn {
-            background: transparent; border: none; color: #666; font-size: 16px; font-weight: bold;
-            padding: 5px 10px; cursor: pointer;
-        }
+        .tab-btn { background: transparent; border: none; color: #666; font-size: 16px; font-weight: bold; padding: 5px 10px; cursor: pointer; }
         .tab-btn.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
 
-        /* Progress Bar */
-        .stepper-wrapper { display: flex; justify-content: space-between; margin-top: 20px; position: relative; }
+        /* Dashboard Stats */
+        .dashboard-stats { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; }
+        .stat-box { background: #252525; border: 1px solid #333; border-radius: 8px; min-width: 85px; padding: 12px; text-align: center; flex: 1; }
+        .stat-num { font-size: 22px; font-weight: bold; color: var(--accent-color); }
+        .stat-label { font-size: 11px; color: #aaa; white-space: nowrap; }
+
+        /* Progress Bar (Timeline) */
+        .stepper-wrapper { display: flex; justify-content: space-between; margin-top: 15px; position: relative; }
         .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .stepper-item::before {
-            content: ""; position: absolute; top: 7px; left: -50%; width: 100%; height: 2px;
-            background: #444; z-index: 1;
-        }
+        .stepper-item::before { content: ""; position: absolute; top: 7px; left: -50%; width: 100%; height: 2px; background: #444; z-index: 1; }
         .stepper-item:first-child::before { content: none; }
         .stepper-item.active::before { background: var(--success-color); }
-        .step-counter {
-            z-index: 2; width: 15px; height: 15px; border-radius: 50%; background: #444;
-        }
-        .stepper-item.active .step-counter { background: var(--success-color); box-shadow: 0 0 5px var(--success-color); }
-        .step-name { margin-top: 5px; font-size: 10px; color: #666; text-align: center; }
+        .step-counter { z-index: 2; width: 14px; height: 14px; border-radius: 50%; background: #444; border: 2px solid #222;}
+        .stepper-item.active .step-counter { background: var(--success-color); box-shadow: 0 0 5px var(--success-color); border-color: var(--success-color);}
+        .step-name { margin-top: 5px; font-size: 9px; color: #666; text-align: center; line-height: 1.2; }
         .stepper-item.active .step-name { color: #fff; font-weight: bold; }
 
         /* Modal */
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 999; display: none;
-            justify-content: center; align-items: center;
-        }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal.show { display: flex; }
-        .modal-content { width: 85%; max-width: 320px; background: #222; padding: 20px; border-radius: 12px; border: 1px solid #444; }
+        .modal-content { width: 100%; max-width: 400px; background: #222; padding: 20px; border-radius: 12px; border: 1px solid #444; }
 
         .hidden { display: none !important; }
         .flex-row { display: flex; gap: 10px; }
-        .status-badge { background:#333; padding:2px 8px; border-radius:4px; font-size:10px; color:#fff; border:1px solid #555; }
-        
+        .status-badge { background:#333; padding:4px 8px; border-radius:6px; font-size:11px; color:var(--accent-color); border:1px solid #555; text-align: right; }
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
@@ -126,124 +84,140 @@
 
     <div id="loader"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--accent-color)"></i></div>
 
-    <div class="brand-header">
-        <div class="brand-title">DEMO FACTORY</div>
-        <small style="color:#666;">Smart Production System</small>
-    </div>
+    <div class="brand-title">DEMO FACTORY</div>
+    <div style="text-align:center; color:#666; font-size:12px; margin-bottom:20px;">Smart Production System</div>
 
     <div id="viewRegister" class="hidden">
         <div class="card">
-            <h3 style="text-align:center;">ลงทะเบียนสมาชิก</h3>
+            <h3 style="text-align:center; margin-top:0;">ลงทะเบียนลูกค้า</h3>
             <label class="input-label">ชื่อลูกค้า / ชื่อแบรนด์</label>
             <input type="text" id="regName" placeholder="ระบุชื่อของคุณ...">
             <label class="input-label">เบอร์โทรศัพท์ (สำคัญมาก)</label>
             <input type="tel" id="regPhone" placeholder="เช่น 0812345678">
-            <button class="btn btn-main" onclick="register()">ยืนยันลงทะเบียน</button>
+            <button class="btn btn-main" onclick="register()">ยืนยันการลงทะเบียน</button>
         </div>
     </div>
 
     <div id="viewStaff" class="hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <span><i class="fas fa-user-circle" style="font-size:20px; color:var(--accent-color);"></i> <span id="staffName">User</span></span>
-            <span id="staffRole" class="status-badge">ROLE</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#222; padding:12px; border-radius:8px;">
+            <span><i class="fas fa-user-circle" style="color:var(--accent-color); font-size:18px;"></i> <span id="staffName" style="font-weight:bold; margin-left:5px;">User</span></span>
+            <span id="staffRole" style="font-size:11px; color:#aaa; background:#111; padding:4px 8px; border-radius:4px; border:1px solid #444;">ROLE</span>
         </div>
 
-        <div id="adminTabs" class="tab-container hidden">
-            <button class="tab-btn active" onclick="switchAdminTab('active')">งานปัจจุบัน</button>
-            <button class="tab-btn" onclick="switchAdminTab('history')">ประวัติ (History)</button>
-        </div>
-
-        <div style="margin-bottom: 15px;">
-            <input type="text" id="staffFilter" placeholder="🔍 ค้นหาสถานะ หรือ เลขออเดอร์..." onkeyup="filterStaffList()">
+        <div class="filter-container">
+            <input type="text" id="staffSearch" placeholder="🔍 ค้นหา ชื่อลูกค้า, เบอร์, Batch, Order No..." onkeyup="filterStaffList()">
+            <select id="staffStatusFilter" onchange="filterStaffList()">
+                <option value="ACTIVE">🔥 งานที่กำลังดำเนินการ (ซ่อนงานที่ส่งแล้ว)</option>
+                <option value="ALL">📋 แสดงงานทั้งหมด (รวม History)</option>
+                <option value="Correction Needed">⚠ งานต้องแก้ไข (Feedback)</option>
+                <option value="Order Confirmation">1. ยืนยันออเดอร์แล้ว</option>
+                <option value="Work Order Review Stage">2. รอตรวจสอบ Work Order</option>
+                <option value="Sampling Stage">3. งานตัวอย่าง (Sampling)</option>
+                <option value="Pre-Production Approved">4. ลูกค้าอนุมัติแบบ (PP Approved)</option>
+                <option value="Bulk Production">5. กำลังผลิต (Bulk Production)</option>
+                <option value="Quality Control">6. รอตรวจสอบคุณภาพ (QC)</option>
+                <option value="Shipped">7. จัดส่งเรียบร้อยแล้ว (Shipped)</option>
+            </select>
         </div>
 
         <div id="adminPanel" class="hidden">
             <button class="btn" style="background:#333; border:1px solid #555; margin-bottom:15px;" onclick="document.getElementById('createOrderForm').classList.toggle('hidden')">
-                <i class="fas fa-plus"></i> เปิดออเดอร์ใหม่
+                <i class="fas fa-file-invoice"></i> + สร้างคำสั่งซื้อใหม่
             </button>
+            
             <div id="createOrderForm" class="card hidden">
-                <h4 style="margin-top:0; color:var(--accent-color);">สร้างคำสั่งซื้อใหม่</h4>
+                <h4 style="margin-top:0; color:var(--accent-color); border-bottom:1px solid #333; padding-bottom:10px;">เปิดออเดอร์ใหม่ (Sales Order)</h4>
                 
-                <label class="input-label">เบอร์โทรลูกค้า (เพื่อเชื่อมข้อมูล)</label>
+                <label class="input-label">1. เบอร์โทรลูกค้า (เพื่อค้นหาประวัติ)</label>
                 <input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx">
                 
-                <label class="input-label">ทรงเสื้อ / รูปแบบ (Style)</label>
-                <select id="ordStyle"><option>Loading...</option></select>
+                <label class="input-label">2. Batch / Lot Reference (เลขใบเสนอราคา/ล็อต)</label>
+                <input type="text" id="ordBatch" placeholder="เช่น QT2026-001">
 
                 <div class="flex-row">
                     <div style="width:50%">
-                        <label class="input-label">จำนวน (ตัว)</label>
-                        <input type="number" id="ordQty" placeholder="100">
+                        <label class="input-label">3. ทรงเสื้อ (Style)</label>
+                        <select id="ordStyle"><option>Loading...</option></select>
                     </div>
                     <div style="width:50%">
-                        <label class="input-label">ชนิดผ้า (Fabric)</label>
-                        <select id="ordFabric"><option>Loading...</option></select>
+                        <label class="input-label">4. จำนวน (Qty)</label>
+                        <input type="number" id="ordQty" placeholder="100">
                     </div>
                 </div>
 
-                <label class="input-label">วันที่ส่งมอบ (Delivery Date)</label>
+                <label class="input-label">5. ชนิดผ้า (Fabric Reference)</label>
+                <select id="ordFabric"><option>Loading...</option></select>
+
+                <label class="input-label">6. วันที่กำหนดส่งมอบ (Est. Delivery)</label>
                 <input type="date" id="ordDate">
 
-                <label class="input-label">รายละเอียดเพิ่มเติม (Detail)</label>
-                <textarea id="ordDetail" rows="2" placeholder="เช่น สกรีน 1 จุด, ปักอกซ้าย..."></textarea>
+                <label class="input-label">7. ที่อยู่จัดส่ง (Shipping Address)</label>
+                <textarea id="ordAddress" rows="2" placeholder="บ้านเลขที่, ถนน, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์"></textarea>
 
-                <button class="btn btn-main" onclick="createOrder()">บันทึกออเดอร์</button>
+                <label class="input-label">8. รายละเอียดเพิ่มเติม (Detail)</label>
+                <textarea id="ordDetail" rows="2" placeholder="จุดสกรีน, ขนาดโลโก้, ตำแหน่งปัก..."></textarea>
+
+                <button class="btn btn-main" style="margin-top:15px;" onclick="createOrder()">บันทึกและแจ้งเตือนลูกค้า</button>
             </div>
         </div>
 
-        <div id="staffTaskList">Loading...</div>
+        <div id="staffTaskList">Loading tasks...</div>
     </div>
 
     <div id="viewCustomer" class="hidden">
-        <h3 style="color:var(--accent-color); text-align:center; margin-bottom:5px;" id="custHeaderName">สวัสดีครับ</h3>
+        <div style="background:#222; padding:15px; border-radius:12px; margin-bottom:15px; text-align:center; border: 1px solid #444;">
+            <i class="fas fa-user-circle fa-2x" style="color:var(--accent-color); margin-bottom:5px;"></i>
+            <h3 style="margin:0; color:#fff;" id="custHeaderName">สวัสดีครับ</h3>
+        </div>
         
         <div class="tab-container" style="justify-content: center; border:none;">
             <button class="tab-btn active" onclick="switchCustTab('list')">รายการออเดอร์</button>
             <button class="tab-btn" onclick="switchCustTab('dashboard')">ภาพรวม (Dashboard)</button>
         </div>
 
-        <div id="custListView">
-            <div id="customerOrderList">Loading...</div>
-        </div>
-
+        <div id="custListView"><div id="customerOrderList">Loading...</div></div>
+        
         <div id="custDashView" class="hidden">
             <div class="dashboard-stats">
                 <div class="stat-box"><div class="stat-num" id="stat-confirm">0</div><div class="stat-label">ยืนยันแล้ว</div></div>
                 <div class="stat-box"><div class="stat-num" id="stat-prod">0</div><div class="stat-label">กำลังผลิต</div></div>
-                <div class="stat-box"><div class="stat-num" id="stat-done" style="color:var(--success-color)">0</div><div class="stat-label">เสร็จสิ้น</div></div>
+                <div class="stat-box"><div class="stat-num" id="stat-done" style="color:var(--success-color)">0</div><div class="stat-label">ส่งมอบแล้ว</div></div>
             </div>
-            <div class="card text-center" style="color:#666; font-size:12px;">
-                <p>ข้อมูลอัปเดตล่าสุด: <span id="lastUpdate">Now</span></p>
-            </div>
+            <p style="text-align:center; color:#666; font-size:12px; margin-top:20px;">ขอบคุณที่ไว้วางใจใช้บริการ Demo Factory</p>
         </div>
     </div>
 
     <div id="modalFeedback" class="modal">
         <div class="modal-content">
-            <h3 style="color:var(--danger-color); margin-top:0;">แจ้งแก้ไข / ตีกลับงาน</h3>
-            <label class="input-label">สาเหตุที่ต้องแก้ไข</label>
+            <h3 style="color:var(--danger-color); margin-top:0;"><i class="fas fa-exclamation-triangle"></i> แจ้งแก้ไข / ตีกลับงาน</h3>
+            <label class="input-label">ระบุสาเหตุที่ต้องแก้ไข</label>
             <input type="hidden" id="fbOrderNo">
-            <textarea id="fbReason" rows="3" placeholder="เช่น สกรีนผิดตำแหน่ง, ผ้ามีตำหนิ..."></textarea>
-            <div class="flex-row">
+            <textarea id="fbReason" rows="4" placeholder="ระบุจุดที่ต้องแก้ไขให้ชัดเจน เพื่อให้ Merchandiser ดำเนินการ..."></textarea>
+            <div class="flex-row" style="margin-top:15px;">
                 <button class="btn" style="background:#444;" onclick="closeModal()">ยกเลิก</button>
-                <button class="btn" style="background:var(--danger-color);" onclick="confirmRollback()">ยืนยันส่งกลับ</button>
+                <button class="btn" style="background:var(--danger-color);" onclick="confirmRollback()">ยืนยันการส่งกลับ</button>
             </div>
         </div>
     </div>
 
     <script>
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbwmH4YpD9SSN0E8VJ47p0LdwtJmcZsP2TR0RS7hGKdHyJ1CYoHbvivGiAa3uFKyhPGz6w/exec'; 
+        // ================= CONFIGURATION =================
+        // *** ใส่ URL Web App ของคุณที่นี่ ***
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbz-gooAHoQEyobTy8SZSk1eAORVnT_E_SjsIea7Q1jkKacFFqNdaES-a-2H2DEOYmHqgw/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
+        // =================================================
 
         let userProfile = {};
         let currentUserRole = '';
-        let globalOrders = []; // Store orders for filtering
+        let globalOrders = [];
 
         async function main() {
-            await liff.init({ liffId: LIFF_ID });
-            if (!liff.isLoggedIn()) { liff.login(); return; }
-            userProfile = await liff.getProfile();
-            checkUser();
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                if (!liff.isLoggedIn()) { liff.login(); return; }
+                userProfile = await liff.getProfile();
+                checkUser();
+            } catch(e) { alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); }
         }
         main();
 
@@ -253,7 +227,8 @@
                 document.getElementById('loader').classList.add('hidden');
                 if (res.found) {
                     currentUserRole = res.data.Role;
-                    if (['Admin', 'Sale admin', 'PM', 'QC', 'Merchandiser'].includes(currentUserRole)) {
+                    // ตรวจสอบชื่อ Role แบบเต็ม
+                    if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(currentUserRole)) {
                         showStaffDashboard(res.data);
                     } else {
                         showCustomerView(res.data);
@@ -270,9 +245,8 @@
             document.getElementById('staffName').innerText = data.RealName;
             document.getElementById('staffRole').innerText = data.Role;
 
-            if (data.Role === 'Sale admin' || data.Role === 'Admin') {
+            if (data.Role === 'Sales Admin' || data.Role === 'Admin') {
                 document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('adminTabs').classList.remove('hidden'); // Show History Tab
                 fetchOptions();
             }
             fetchStaffData();
@@ -281,133 +255,159 @@
         function fetchStaffData() {
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_all_orders' }) })
             .then(r => r.json()).then(res => {
-                globalOrders = res.orders; // Keep for filtering
-                renderStaffList('active'); // Default view
+                globalOrders = res.orders;
+                document.getElementById('staffStatusFilter').value = "ACTIVE"; // ค่าเริ่มต้น
+                filterStaffList();
             });
         }
 
-        // Filter Logic (Status/ID)
         function filterStaffList() {
-            const keyword = document.getElementById('staffFilter').value.toLowerCase();
-            const currentTab = document.querySelector('#adminTabs .active')?.onclick.toString().includes('history') ? 'history' : 'active';
-            renderStaffList(currentTab, keyword);
-        }
-
-        function switchAdminTab(mode) {
-            document.querySelectorAll('#adminTabs .tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            renderStaffList(mode);
-        }
-
-        function renderStaffList(mode = 'active', filter = '') {
+            const keyword = document.getElementById('staffSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('staffStatusFilter').value;
             const list = document.getElementById('staffTaskList');
+            
             let filtered = globalOrders;
 
-            // 1. Role Filter Logic (Hide Shipped for non-Sales)
-            if (currentUserRole !== 'Sale admin' && currentUserRole !== 'Admin') {
-                filtered = filtered.filter(o => o.status !== 'Shipped');
-            } else {
-                // Sale Admin: Split by Tab
-                if (mode === 'active') filtered = filtered.filter(o => o.status !== 'Shipped');
-                else filtered = filtered.filter(o => o.status === 'Shipped');
+            // 1. กรองด้วย Status
+            if (statusFilter === 'ACTIVE') {
+                filtered = filtered.filter(o => o.status !== 'Shipped'); // ซ่อนงานที่จบแล้ว
+            } else if (statusFilter !== 'ALL') {
+                filtered = filtered.filter(o => o.status.includes(statusFilter));
             }
 
-            // 2. Search Filter
-            if (filter) {
+            // 2. กรองด้วย Keyword (Search)
+            if (keyword) {
                 filtered = filtered.filter(o => 
-                    o.orderNo.toLowerCase().includes(filter) || 
-                    o.status.toLowerCase().includes(filter)
+                    o.orderNo.toLowerCase().includes(keyword) || 
+                    (o.custName && o.custName.toLowerCase().includes(keyword)) ||
+                    (o.custPhone && o.custPhone.includes(keyword)) ||
+                    (o.batch && o.batch.toLowerCase().includes(keyword))
                 );
             }
 
-            if (filtered.length === 0) { list.innerHTML = '<p style="text-align:center; color:#666">ไม่พบรายการ</p>'; return; }
+            if (filtered.length === 0) { list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงานที่ตรงกับเงื่อนไข</div>'; return; }
 
             let html = '';
             filtered.forEach(o => {
                 let btns = '';
                 
-                // Helper to disable buttons if step is passed
-                const isPassed = (currentStep, targetStep) => {
-                    const steps = ['Order Confirmed', 'Work Order Approved', 'Sample Sent', 'PP Approved', 'Production 50%', 'Final QC Passed', 'Shipped'];
-                    return steps.indexOf(currentStep) >= steps.indexOf(targetStep);
+                // ฟังก์ชันเช็คว่าขั้นตอนผ่านไปหรือยัง (อิงจากชื่อสถานะใหม่)
+                const isPassed = (current, target) => {
+                    const steps = [
+                        'Order Confirmation', 
+                        'Work Order Review Stage', 
+                        'Sampling Stage', 
+                        'Pre-Production Approved', 
+                        'Bulk Production (50%)', 
+                        'Quality Control Passed', 
+                        'Shipped'
+                    ];
+                    return steps.indexOf(current) >= steps.indexOf(target);
                 };
 
-                // PM Buttons
-                if (currentUserRole === 'PM' || currentUserRole === 'Admin') {
-                    // Approve WO
-                    if (isPassed(o.status, 'Work Order Approved')) {
-                        btns += `<button class="btn btn-disabled">📋 WO Approved แล้ว</button>`;
+                // ข้อมูลลูกค้าแบบย่อ
+                const custInfo = `
+                    <div class="cust-info">
+                        <div style="font-size:14px; margin-bottom:5px;">👤 <b>${o.custName}</b> <a href="tel:${o.custPhone}" style="color:var(--accent-color); text-decoration:none; margin-left:10px;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                        <div style="font-size:12px; color:#aaa; border-top:1px dashed #444; padding-top:5px;">📍 <b>จัดส่ง:</b> ${o.address || '-'}</div>
+                    </div>`;
+
+                // --- กรณีติดปัญหา (Correction Needed) ---
+                if (o.status === 'Correction Needed') {
+                    if (currentUserRole === 'Merchandiser' || currentUserRole === 'Admin') {
+                        html += `<div class="card" style="border:1px solid var(--danger-color)">
+                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ ต้องแก้ไข (${o.orderNo})</strong><span class="status-badge" style="background:var(--danger-color)">Fix Needed</span></div>
+                            ${custInfo}
+                            <p style="font-size:13px; color:#fff; background:#333; padding:10px; border-radius:6px; border-left:3px solid var(--danger-color);"><b>สาเหตุที่ต้องแก้:</b> ${o.feedback}</p>
+                            <button class="btn" style="background:var(--success-color);" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')"><i class="fas fa-check-circle"></i> แก้ไขเสร็จสิ้น (ส่งกลับเข้ากระบวนการ)</button>
+                        </div>`;
                     } else {
-                        btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">📋 อนุมัติ WO</button>`;
+                        html += `<div class="card" style="border:1px solid var(--danger-color)">
+                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ รอ Merchandiser แก้ไข (${o.orderNo})</strong></div>
+                            <p style="font-size:12px; color:#aaa;">เหตุผลการตีกลับ: ${o.feedback}</p>
+                        </div>`;
+                    }
+                    return; // ข้ามการวาดการ์ดปกติไปเลย
+                }
+
+                // --- ปุ่มสำหรับ Production Manager ---
+                if (currentUserRole === 'Production Manager' || currentUserRole === 'Admin') {
+                    if (isPassed(o.status, 'Work Order Review Stage')) {
+                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ตรวจสอบ WO แล้ว</button>`;
+                    } else {
+                        btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')"><i class="fas fa-clipboard-check"></i> อนุมัติ Work Order</button>`;
                     }
                     
-                    // Update 50% (Only available after WO Approved)
-                    if (isPassed(o.status, 'Production 50%')) {
-                        btns += `<button class="btn btn-disabled">⚡ ผลิต 50% แล้ว</button>`;
-                    } else if (isPassed(o.status, 'Work Order Approved')) {
-                        btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')">⚡ ผลิต 50%</button>`;
+                    if (isPassed(o.status, 'Bulk Production (50%)')) {
+                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> อัปเดตผลิต 50% แล้ว</button>`;
+                    } else if (isPassed(o.status, 'Pre-Production Approved')) {
+                        btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')"><i class="fas fa-bolt"></i> แจ้งผลิตเสร็จ 50%</button>`;
                     }
                 }
 
-                // Merch Buttons
+                // --- ปุ่มสำหรับ Merchandiser ---
                 if (currentUserRole === 'Merchandiser' || currentUserRole === 'Admin') {
-                    if (isPassed(o.status, 'Sample Sent')) {
-                         btns += `<button class="btn btn-disabled">📦 ส่งตัวอย่างแล้ว</button>`;
-                    } else {
-                         btns += `<div style="margin-top:5px; border-top:1px dashed #444; padding-top:5px;">
-                            <input type="text" id="track-s-${o.orderNo}" placeholder="Tracking ตัวอย่าง" style="font-size:12px;">
-                            <button class="btn btn-merch" onclick="sendSample('${o.orderNo}')">📦 ส่งตัวอย่าง</button>
+                    if (isPassed(o.status, 'Sampling Stage')) {
+                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ส่งตัวอย่างแล้ว</button>`;
+                    } else if (isPassed(o.status, 'Work Order Review Stage')) {
+                        btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
+                            <input type="text" id="track-s-${o.orderNo}" placeholder="ระบุ Tracking ตัวอย่าง" style="font-size:13px;">
+                            <button class="btn btn-merch" style="margin-top:0;" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> แจ้งส่งตัวอย่าง</button>
                         </div>`;
                     }
 
-                    if (isPassed(o.status, 'PP Approved')) {
-                        btns += `<button class="btn btn-disabled">✨ ลูกค้าอนุมัติแล้ว</button>`;
-                    } else if(isPassed(o.status, 'Sample Sent')) {
-                        btns += `<button class="btn btn-qc" onclick="updateStatus('${o.orderNo}', 'PP_APPROVE')">✨ ลูกค้าอนุมัติ (PP)</button>`;
+                    if (isPassed(o.status, 'Pre-Production Approved')) {
+                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ลูกค้าอนุมัติแบบแล้ว</button>`;
+                    } else if(isPassed(o.status, 'Sampling Stage')) {
+                        btns += `<button class="btn btn-qc" onclick="updateStatus('${o.orderNo}', 'PP_APPROVE')"><i class="fas fa-thumbs-up"></i> ยืนยันลูกค้าอนุมัติ (PP)</button>`;
                     }
                 }
 
-                // QC Buttons
-                if (currentUserRole === 'QC' || currentUserRole === 'Admin') {
-                    if (isPassed(o.status, 'Final QC Passed')) {
-                        btns += `<button class="btn btn-disabled">✅ ผ่าน QC แล้ว</button>`;
-                    } else if(isPassed(o.status, 'Production 50%')) {
-                        btns += `<button class="btn btn-qc" onclick="updateStatus('${o.orderNo}', 'QC_PASS')">✅ ผ่าน QC</button>`;
-                        btns += `<button class="btn btn-reject" onclick="openFeedback('${o.orderNo}')"><i class="fas fa-undo"></i> ตีกลับ</button>`;
+                // --- ปุ่มสำหรับ Quality Control ---
+                if (currentUserRole === 'Quality Control' || currentUserRole === 'Admin') {
+                    if (isPassed(o.status, 'Quality Control Passed')) {
+                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ผ่านการตรวจ QC แล้ว</button>`;
+                    } else if(isPassed(o.status, 'Bulk Production (50%)')) {
+                        btns += `<div class="flex-row">
+                            <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')"><i class="fas fa-check-circle"></i> ให้ผ่าน QC</button>
+                            <button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')"><i class="fas fa-undo"></i> ตีกลับงาน</button>
+                        </div>`;
                     }
                 }
 
-                // Sale Buttons (Ship)
-                if (currentUserRole === 'Sale admin' || currentUserRole === 'Admin') {
-                    if (o.status !== 'Shipped' && isPassed(o.status, 'Final QC Passed')) {
-                        btns += `<div style="margin-top:5px;">
-                            <input type="text" id="track-${o.orderNo}" placeholder="Tracking สินค้าจริง" style="font-size:12px;">
-                            <button class="btn btn-ship" onclick="shipOrder('${o.orderNo}')">🚚 ยืนยันส่งของ</button>
+                // --- ปุ่มสำหรับ Sales Admin ---
+                if (currentUserRole === 'Sales Admin' || currentUserRole === 'Admin') {
+                    if (o.status !== 'Shipped' && isPassed(o.status, 'Quality Control Passed')) {
+                        btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
+                            <input type="text" id="track-${o.orderNo}" placeholder="ระบุ Tracking สินค้าจริง" style="font-size:13px;">
+                            <button class="btn btn-ship" style="margin-top:0;" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันจัดส่งลูกค้า</button>
                         </div>`;
                     } else if (o.status === 'Shipped') {
-                        btns += `<div style="margin-top:5px; font-size:12px; color:var(--success-color);">✔ ส่งแล้ว (Track: ${o.tracking || '-'})</div>`;
+                        btns += `<div style="margin-top:10px; font-size:13px; color:var(--success-color); text-align:center; background:#111; padding:8px; border-radius:6px;">✔ จัดส่งสำเร็จแล้ว (Track: ${o.tracking || '-'})</div>`;
                     }
                 }
 
-                // Correction Alert
-                if (o.status === 'Correction Needed') {
-                    html += `<div class="card" style="border:1px solid var(--danger-color)">
-                        <strong style="color:var(--danger-color)">⚠ งานต้องแก้ไข (${o.orderNo})</strong>
-                        <p style="font-size:12px;">เหตุผล: ${o.feedback}</p>
-                        <button class="btn" style="background:#333" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">ส่งอนุมัติใหม่</button>
-                    </div>`;
-                } else {
-                    // Normal Card
-                    html += `
-                    <div class="card">
-                        <div style="display:flex; justify-content:space-between;">
-                            <strong style="color:var(--accent-color)">${o.orderNo}</strong>
-                            <span class="status-badge">${o.status}</span>
+                // การ์ดหลัก
+                html += `
+                <div class="card">
+                    <div class="card-header">
+                        <strong style="color:var(--accent-color); font-size:16px;">${o.orderNo}</strong>
+                        <span class="status-badge">${o.status}</span>
+                    </div>
+                    ${custInfo}
+                    <div style="font-size:13px; color:#ccc; display:flex; justify-content:space-between; line-height:1.6;">
+                        <div>
+                            ทรงเสื้อ: <span style="color:#fff;">${o.style}</span><br>
+                            จำนวน: <span style="color:#fff;">${o.qty} ตัว</span><br>
+                            Batch: <span style="color:#fff;">${o.batch || '-'}</span>
                         </div>
-                        <p style="font-size:13px; color:#ccc;">${o.style} (${o.qty} ตัว)<br><small>Update: ${o.updatedDate}</small></p>
-                        ${btns}
-                    </div>`;
-                }
+                        <div style="text-align:right;">
+                            ส่งมอบ: <span style="color:#fff;">${o.delivery}</span><br>
+                            <span style="font-size:11px; color:#666;">อัปเดต: ${o.updatedDate}</span>
+                        </div>
+                    </div>
+                    ${btns}
+                </div>`;
             });
             list.innerHTML = html;
         }
@@ -415,25 +415,23 @@
         // --- CUSTOMER SECTION ---
         function showCustomerView(data) {
             document.getElementById('viewCustomer').classList.remove('hidden');
-            document.getElementById('custHeaderName').innerText = "สวัสดีคุณ " + data.RealName;
+            document.getElementById('custHeaderName').innerText = "คุณ " + data.RealName;
             
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_my_orders', data: { userId: userProfile.userId } }) })
             .then(r => r.json()).then(res => {
-                // Calculate Stats
                 let confirm = 0, prod = 0, done = 0;
                 res.orders.forEach(o => {
                     if(o.status === 'Shipped') done++;
-                    else if(o.status === 'Order Confirmed') confirm++;
+                    else if(o.status === 'Order Confirmation') confirm++;
                     else prod++;
                 });
                 document.getElementById('stat-confirm').innerText = confirm;
                 document.getElementById('stat-prod').innerText = prod;
                 document.getElementById('stat-done').innerText = done;
 
-                // Render List
                 const list = document.getElementById('customerOrderList');
-                if (res.orders.length === 0) { list.innerHTML = '<p style="text-align:center; color:#666">ไม่มีออเดอร์</p>'; return; }
-                list.innerHTML = res.orders.map(o => renderOrderCard(o)).join('');
+                if (res.orders.length === 0) { list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">คุณยังไม่มีรายการสั่งผลิต</div>'; return; }
+                list.innerHTML = res.orders.map(o => renderCustCard(o)).join('');
             });
         }
 
@@ -449,116 +447,104 @@
             }
         }
 
-        function renderOrderCard(o) {
+        function renderCustCard(o) {
             const steps = [
-                { label: 'รับงาน', active: true }, 
-                { label: 'เตรียม', active: ['Work Order Approved', 'Sample Sent', 'PP Approved', 'Production 50%', 'Final QC Passed', 'Shipped'].includes(o.status) },
-                { label: 'ผลิต', active: ['Production 50%', 'Final QC Passed', 'Shipped'].includes(o.status) },
-                { label: 'QC', active: ['Final QC Passed', 'Shipped'].includes(o.status) },
-                { label: 'ส่งของ', active: ['Shipped'].includes(o.status) }
+                { label: 'รับออเดอร์', active: true }, 
+                { label: 'เตรียมงาน', active: ['Work Order Review Stage', 'Sampling Stage', 'Pre-Production Approved', 'Bulk Production (50%)', 'Quality Control Passed', 'Shipped'].includes(o.status) },
+                { label: 'กำลังผลิต', active: ['Bulk Production (50%)', 'Quality Control Passed', 'Shipped'].includes(o.status) },
+                { label: 'ตรวจสอบ', active: ['Quality Control Passed', 'Shipped'].includes(o.status) },
+                { label: 'ส่งมอบ', active: ['Shipped'].includes(o.status) }
             ];
 
             let progressHtml = '<div class="stepper-wrapper">';
-            steps.forEach(s => {
-                progressHtml += `
-                    <div class="stepper-item ${s.active ? 'active' : ''}">
-                        <div class="step-counter"></div>
-                        <div class="step-name">${s.label}</div>
-                    </div>`;
+            steps.forEach(s => { 
+                progressHtml += `<div class="stepper-item ${s.active ? 'active' : ''}"><div class="step-counter"></div><div class="step-name">${s.label}</div></div>`; 
             });
             progressHtml += '</div>';
 
             return `
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                        <strong style="color:var(--accent-color)">${o.orderNo}</strong>
+                        <strong style="color:var(--accent-color); font-size:16px;">${o.orderNo}</strong>
                         <span class="status-badge">${o.status}</span>
                     </div>
-                    <div style="font-size:14px; color:#ddd;">
-                        ${o.style} (${o.qty} ตัว)<br>
-                        <i class="far fa-calendar"></i> ส่ง: ${o.delivery}
+                    <div style="font-size:14px; color:#ddd; background:#222; padding:10px; border-radius:8px;">
+                        👕 <b>${o.style}</b> (${o.qty} ตัว)<br>
+                        📅 กำหนดส่ง: <span style="color:#fff">${o.delivery}</span>
                     </div>
                     ${progressHtml}
                 </div>`;
         }
 
         // --- ACTIONS ---
-        function openFeedback(orderNo) {
-            document.getElementById('fbOrderNo').value = orderNo;
-            document.getElementById('modalFeedback').classList.add('show');
-        }
+        function openFeedback(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('modalFeedback').classList.add('show'); }
         function closeModal() { document.getElementById('modalFeedback').classList.remove('show'); }
-        
-        function confirmRollback() {
+        function confirmRollback() { 
             const no = document.getElementById('fbOrderNo').value;
             const reason = document.getElementById('fbReason').value;
-            if(!reason) return alert("กรุณาระบุเหตุผล");
-            callApi({ orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: document.getElementById('staffName').innerText });
-            closeModal();
+            if(!reason) return alert("กรุณาระบุสาเหตุที่ต้องแก้ไขให้ชัดเจน"); 
+            callApi({ orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: document.getElementById('staffName').innerText }); 
+            closeModal(); 
         }
-
-        function updateStatus(no, action) { 
-            if(!confirm('ยืนยันทำรายการ?')) return;
-            callApi({ orderNo: no, actionType: action, staffName: document.getElementById('staffName').innerText });
-        }
-        function sendSample(no) {
-            const t = document.getElementById(`track-s-${no}`).value;
-            if(!t) return alert("กรอก Tracking");
-            callApi({ orderNo: no, actionType: 'SEND_SAMPLE', tracking: t, staffName: document.getElementById('staffName').innerText });
-        }
-        function shipOrder(no) {
-            const t = document.getElementById(`track-${no}`).value;
-            if(!t) return alert("กรุณากรอกเลขพัสดุ");
-            callApi({ orderNo: no, actionType: 'SHIP', tracking: t, staffName: document.getElementById('staffName').innerText });
-        }
-
-        function callApi(payload) {
-            document.getElementById('loader').classList.remove('hidden');
+        
+        function updateStatus(no, action) { if(!confirm('ยืนยันการบันทึกสถานะ?')) return; callApi({ orderNo: no, actionType: action, staffName: document.getElementById('staffName').innerText }); }
+        function sendSample(no) { const t = document.getElementById(`track-s-${no}`).value; if(!t) return alert("กรุณาระบุเลข Tracking ของพัสดุตัวอย่าง"); callApi({ orderNo: no, actionType: 'SEND_SAMPLE', tracking: t, staffName: document.getElementById('staffName').innerText }); }
+        function shipOrder(no) { const t = document.getElementById(`track-${no}`).value; if(!t) return alert("กรุณาระบุเลข Tracking สินค้าจริง"); callApi({ orderNo: no, actionType: 'SHIP', tracking: t, staffName: document.getElementById('staffName').innerText }); }
+        
+        function callApi(payload) { 
+            document.getElementById('loader').classList.remove('hidden'); 
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'update_status', data: payload }) })
-            .then(r => r.json()).then(res => {
-                document.getElementById('loader').classList.add('hidden');
-                if (res.status === 'success') { alert("สำเร็จ!"); fetchStaffData(); }
-                else alert("Error: " + res.message);
-            });
+            .then(r => r.json()).then(res => { 
+                document.getElementById('loader').classList.add('hidden'); 
+                if (res.status === 'success') { alert("บันทึกสำเร็จ!"); fetchStaffData(); } 
+                else alert("Error: " + res.message); 
+            }); 
         }
-
-        function register() {
-            const n = document.getElementById('regName').value, p = document.getElementById('regPhone').value;
-            if(!n || !p) return alert("กรอกข้อมูลให้ครบ");
-            document.getElementById('loader').classList.remove('hidden');
+        
+        function register() { 
+            const n = document.getElementById('regName').value, p = document.getElementById('regPhone').value; 
+            if(!n || !p) return alert("กรุณากรอกข้อมูลให้ครบถ้วน"); 
+            document.getElementById('loader').classList.remove('hidden'); 
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'register', data: { userId: userProfile.userId, displayName: userProfile.displayName, realName: n, phone: p } }) })
-            .then(() => location.reload());
+            .then(() => location.reload()); 
         }
-
-        function createOrder() {
+        
+        function createOrder() { 
             const payload = {
                 adminName: document.getElementById('staffName').innerText,
                 phone: document.getElementById('ordPhone').value,
+                batch: document.getElementById('ordBatch').value,
                 style: document.getElementById('ordStyle').value,
                 qty: document.getElementById('ordQty').value,
                 fabric: document.getElementById('ordFabric').value,
                 deliveryDate: document.getElementById('ordDate').value,
+                address: document.getElementById('ordAddress').value,
                 detail: document.getElementById('ordDetail').value
             };
-            if(!payload.phone || !payload.style) return alert("กรุณากรอกข้อมูลให้ครบ");
-            document.getElementById('loader').classList.remove('hidden');
+            if(!payload.phone || !payload.batch || !payload.address) return alert("กรุณากรอก เบอร์โทรลูกค้า, Batch และ ที่อยู่จัดส่ง ให้ครบถ้วน"); 
+            document.getElementById('loader').classList.remove('hidden'); 
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'create_order', data: payload }) })
-            .then(r => r.json()).then(res => {
-                document.getElementById('loader').classList.add('hidden');
-                if(res.status==='success') { alert("เปิดออเดอร์เรียบร้อย!"); fetchStaffData(); document.getElementById('createOrderForm').classList.add('hidden'); }
-                else alert("Error: " + res.message);
-            });
+            .then(r => r.json()).then(res => { 
+                document.getElementById('loader').classList.add('hidden'); 
+                if(res.status==='success') { 
+                    alert("เปิดออเดอร์เรียบร้อย และระบบได้ส่งแจ้งเตือนหาลูกค้าแล้ว!"); 
+                    fetchStaffData(); 
+                    document.getElementById('createOrderForm').classList.add('hidden'); 
+                    document.getElementById('staffStatusFilter').value = "ACTIVE";
+                } 
+                else alert("เกิดข้อผิดพลาด: " + res.message); 
+            }); 
         }
-
-        function fetchOptions() {
+        
+        function fetchOptions() { 
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_options' }) })
-            .then(r => r.json()).then(res => {
-                const s = document.getElementById('ordStyle'), f = document.getElementById('ordFabric');
-                s.innerHTML = '<option value="" disabled selected>เลือก...</option>';
-                f.innerHTML = '<option value="" disabled selected>เลือก...</option>';
-                res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`);
-                res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`);
-            });
+            .then(r => r.json()).then(res => { 
+                const s = document.getElementById('ordStyle'), f = document.getElementById('ordFabric'); 
+                s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ...</option>'; 
+                f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>'; 
+                res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); 
+                res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`); 
+            }); 
         }
     </script>
 </body>
