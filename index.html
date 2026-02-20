@@ -204,7 +204,7 @@
     <script>
         // ================= CONFIGURATION =================
         // *** ใส่ URL Web App ของคุณที่นี่ ***
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbygODb0jEWIHqorcWuPH3uExg5w8GppfhZBgX7pkZl-r2CuASvr0GD62XgHErBInkxlFA/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbwMGcCSiAmemPRl4WUOXaXuwOW-qdg_aUQXbPvuzGhWS0v4ACCb4KLuCyBlZt-EiOx5fQ/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         // =================================================
 
@@ -240,12 +240,30 @@
             });
         }
 
-        // --- Helper: Convert Image to Base64 ---
+        // --- Helper: Convert Image to Base64 (พร้อมฟังก์ชันย่อขนาดรูป ลดปัญหาส่งไฟล์ไม่ผ่าน) ---
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800; // กำหนดความกว้างสูงสุด 800px 
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        // บีบอัดเป็น JPEG (ช่วยลดขนาดไฟล์ ทำให้ส่งเข้า Drive ได้ฉลุย)
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); 
+                        resolve(compressedBase64);
+                    };
+                    img.onerror = error => reject(error);
+                };
                 reader.onerror = error => reject(error);
             });
         }
@@ -603,4 +621,3 @@
     </script>
 </body>
 </html>
-
