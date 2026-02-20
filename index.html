@@ -40,7 +40,7 @@
         .btn-ship { background: linear-gradient(90deg, #FF0080, #9900CC); }
         .btn-merch { background: linear-gradient(90deg, #FF9800, #F57C00); }
         .btn-reject { background: transparent; border: 1px solid var(--danger-color); color: var(--danger-color); }
-        .btn-disabled { background: var(--disable-color) !important; color: #777 !important; cursor: not-allowed; border: 1px solid #444 !important; }
+        .btn-disabled { background: var(--disable-color) !important; color: #777 !important; cursor: not-allowed; border: 1px solid #444 !important; pointer-events: none; }
 
         /* Inputs */
         .input-label { font-size: 13px; color: var(--accent-color); margin-bottom: 5px; display: block; margin-top: 10px; }
@@ -204,7 +204,7 @@
     <script>
         // ================= CONFIGURATION =================
         // *** ใส่ URL Web App ของคุณที่นี่ ***
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbwzCHzfh0diu1klfR4LKp82RZNljIit6l07g7N71P4x9q99LpgYqjyChLGjEEgG3JQEyQ/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbxTfFSG5O-mq6I1OUsK_O5acEJvYUdbDVhLMeQkCukxx979RfTzGaoG_Sq6PeSN_nyYQQ/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         // =================================================
 
@@ -266,6 +266,46 @@
                 };
                 reader.onerror = error => reject(error);
             });
+        }
+
+        let preloadedImages = {}; // ตัวแปรเก็บรูปที่ประมวลผลเสร็จแล้ว
+
+        // ฟังก์ชันประมวลผลภาพและแสดงสถานะให้ User ทราบ
+        async function processImage(input, orderNo, type) {
+            const btnId = type === 's' ? `btn-s-${orderNo}` : `btn-ship-${orderNo}`;
+            const statusId = type === 's' ? `status-s-${orderNo}` : `status-ship-${orderNo}`;
+            const btn = document.getElementById(btnId);
+            const status = document.getElementById(statusId);
+            const key = `${type}-${orderNo}`;
+
+            if (input.files.length > 0) {
+                // 1. ล็อกปุ่มกด และโชว์ข้อความกำลังโหลด
+                btn.classList.add('btn-disabled');
+                btn.disabled = true;
+                status.style.display = 'block';
+                status.style.color = 'var(--accent-color)';
+                status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังประมวลผลภาพ กรุณารอสักครู่...';
+
+                try {
+                    // 2. เริ่มย่อขนาดและแปลงภาพ
+                    const base64 = await getBase64(input.files[0]);
+                    preloadedImages[key] = base64; // เก็บรูปลงหน่วยความจำ
+                    
+                    // 3. ปลดล็อกปุ่ม และแจ้งว่าพร้อมส่ง
+                    status.style.color = 'var(--success-color)';
+                    status.innerHTML = '<i class="fas fa-check-circle"></i> ภาพพร้อมส่งแล้ว กดทำรายการต่อได้เลย';
+                    btn.classList.remove('btn-disabled');
+                    btn.disabled = false;
+                } catch (e) {
+                    status.style.color = 'var(--danger-color)';
+                    status.innerHTML = '<i class="fas fa-times-circle"></i> เกิดข้อผิดพลาด กรุณาเลือกรูปใหม่';
+                    btn.classList.remove('btn-disabled');
+                    btn.disabled = false;
+                }
+            } else {
+                status.style.display = 'none';
+                delete preloadedImages[key];
+            }
         }
 
         // --- STAFF SECTION ---
@@ -382,8 +422,9 @@
                         btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
                             <input type="text" id="track-s-${o.orderNo}" placeholder="ระบุ Tracking ตัวอย่าง" style="font-size:13px; margin-bottom:5px;">
                             <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐานส่งของ:</label>
-                            <input type="file" id="img-s-${o.orderNo}" accept="image/*">
-                            <button class="btn btn-merch" style="margin-top:8px;" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> แจ้งส่งตัวอย่าง</button>
+                            <input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')">
+                            <div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
+                            <button class="btn btn-merch" id="btn-s-${o.orderNo}" style="margin-top:8px;" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> แจ้งส่งตัวอย่าง</button>
                         </div>`;
                     }
 
@@ -412,8 +453,9 @@
                         btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
                             <input type="text" id="track-${o.orderNo}" placeholder="ระบุ Tracking สินค้าจริง" style="font-size:13px; margin-bottom:5px;">
                             <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐานส่งของ:</label>
-                            <input type="file" id="img-${o.orderNo}" accept="image/*">
-                            <button class="btn btn-ship" style="margin-top:8px;" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันจัดส่งลูกค้า</button>
+                            <input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')">
+                            <div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
+                            <button class="btn btn-ship" id="btn-ship-${o.orderNo}" style="margin-top:8px;" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันจัดส่งลูกค้า</button>
                         </div>`;
                     } else if (o.status === 'Shipped') {
                         btns += `<div style="margin-top:10px; font-size:13px; color:var(--success-color); text-align:center; background:#111; padding:8px; border-radius:6px;">✔ จัดส่งสำเร็จแล้ว (Track: ${o.tracking || '-'})</div>`;
@@ -535,28 +577,20 @@
         // ส่งตัวอย่าง (อัปโหลดรูป)
         async function sendSample(no) { 
             const t = document.getElementById(`track-s-${no}`).value; 
-            const fileInput = document.getElementById(`img-s-${no}`);
             if(!t) return alert("กรุณาระบุเลข Tracking ของพัสดุตัวอย่าง"); 
             
-            let base64Img = null;
-            if(fileInput.files.length > 0) {
-                document.getElementById('loader').classList.remove('hidden');
-                base64Img = await getBase64(fileInput.files[0]);
-            }
+            let base64Img = preloadedImages[`s-${no}`] || null; // ดึงรูปที่แปลงรอไว้มาใช้เลย
+            document.getElementById('loader').classList.remove('hidden');
             callApi({ orderNo: no, actionType: 'SEND_SAMPLE', tracking: t, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
         }
         
         // ส่งสินค้าจริง (อัปโหลดรูป)
         async function shipOrder(no) { 
             const t = document.getElementById(`track-${no}`).value; 
-            const fileInput = document.getElementById(`img-${no}`);
             if(!t) return alert("กรุณาระบุเลข Tracking สินค้าจริง"); 
 
-            let base64Img = null;
-            if(fileInput.files.length > 0) {
-                document.getElementById('loader').classList.remove('hidden');
-                base64Img = await getBase64(fileInput.files[0]);
-            }
+            let base64Img = preloadedImages[`ship-${no}`] || null; // ดึงรูปที่แปลงรอไว้มาใช้เลย
+            document.getElementById('loader').classList.remove('hidden');
             callApi({ orderNo: no, actionType: 'SHIP', tracking: t, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
         }
         
@@ -621,8 +655,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
