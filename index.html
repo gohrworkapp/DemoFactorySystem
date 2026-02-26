@@ -50,7 +50,7 @@
         /* Filter & Tabs */
         .filter-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .tab-container { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .tab-btn { background: transparent; border: none; color: #666; font-size: 16px; font-weight: bold; padding: 5px 10px; cursor: pointer; }
+        .tab-btn { background: transparent; border: none; color: #666; font-size: 16px; font-weight: bold; padding: 5px 10px; cursor: pointer; flex: 1; }
         .tab-btn.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
 
         /* Dashboard Stats */
@@ -78,6 +78,9 @@
         .hidden { display: none !important; }
         .flex-row { display: flex; gap: 10px; }
         .status-badge { background:#333; padding:4px 8px; border-radius:6px; font-size:11px; color:var(--accent-color); border:1px solid #555; text-align: right; }
+        
+        .profile-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover; }
+
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
@@ -101,38 +104,45 @@
 
     <div id="viewStaff" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#222; padding:12px; border-radius:8px;">
-            <span><i class="fas fa-user-circle" style="color:var(--accent-color); font-size:18px;"></i> <span id="staffName" style="font-weight:bold; margin-left:5px;">User</span></span>
-            <span id="staffRole" style="font-size:11px; color:#aaa; background:#111; padding:4px 8px; border-radius:4px; border:1px solid #444;">ROLE</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img id="staffProfilePic" src="https://via.placeholder.com/50" class="profile-img">
+                <div>
+                    <div id="staffName" style="font-weight:bold; font-size:15px;">User</div>
+                    <div id="staffRole" style="font-size:11px; color:#aaa;">ROLE</div>
+                </div>
+            </div>
+            <div id="staffTier" style="font-size:12px; background:#111; padding:4px 8px; border-radius:4px; border:1px solid #444;">-</div>
         </div>
 
         <div class="filter-container">
-            <input type="text" id="staffSearch" placeholder="🔍 ค้นหา ชื่อลูกค้า, เบอร์, Batch, Order No..." onkeyup="filterStaffList()">
+            <input type="text" id="staffSearch" placeholder="🔍 ค้นหา ชื่อ, เบอร์, Order No..." onkeyup="filterStaffList()">
             <select id="staffStatusFilter" onchange="filterStaffList()">
                 <option value="ACTIVE">งานที่กำลังดำเนินการ</option>
                 <option value="ALL">งานทั้งหมด</option>
-                <option value="Correction Needed">งานต้องแก้ไข</option>
-                <option value="Order Confirmation">1. ยืนยันออเดอร์</option>
-                <option value="Work Order Review Stage">2. ตรวจสอบ Work Order</option>
-                <option value="Sampling Stage">3. งานตัวอย่าง</option>
-                <option value="Pre-Production Approved">4. อนุมัติแบบ</option>
-                <option value="Bulk Production">5. กำลังผลิต</option>
-                <option value="Quality Control">6. ตรวจสอบคุณภาพ</option>
-                <option value="Shipped">7. จัดส่งแล้ว</option>
+                <option value="Pending Customer Confirmation">1. รอตรวจสอบใบสั่งงาน</option>
+                <option value="Order Confirmation">2. ยืนยันออเดอร์</option>
+                <option value="Work Order Review Stage">3. ตรวจสอบ Work Order</option>
+                <option value="Sampling Stage">4. งานตัวอย่าง</option>
+                <option value="Pre-Production Approved">5. ลูกค้าอนุมัติแบบ</option>
+                <option value="Bulk Production">6. กำลังผลิต</option>
+                <option value="Quality Control">7. ตรวจสอบคุณภาพ</option>
+                <option value="Correction Needed">⚠ งานต้องแก้ไข (QC ตีกลับ)</option>
+                <option value="Shipped">8. จัดส่งแล้ว</option>
             </select>
         </div>
 
         <div id="adminPanel" class="hidden">
             <button class="btn" style="background:#333; border:1px solid #555; margin-bottom:15px;" onclick="document.getElementById('createOrderForm').classList.toggle('hidden')">
-                <i class="fas fa-file-invoice"></i> + สร้างคำสั่งซื้อใหม่
+                <i class="fas fa-file-invoice"></i> + สร้างออเดอร์ใหม่ (Sales)
             </button>
             
             <div id="createOrderForm" class="card hidden">
-                <h4 style="margin-top:0; color:var(--accent-color); border-bottom:1px solid #333; padding-bottom:10px;">เปิดออเดอร์ใหม่ (Sales Order)</h4>
+                <h4 style="margin-top:0; color:var(--accent-color); border-bottom:1px solid #333; padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
                 
-                <label class="input-label">1. เบอร์โทรลูกค้า (เพื่อค้นหาประวัติ)</label>
+                <label class="input-label">1. เบอร์โทรลูกค้า</label>
                 <input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx">
                 
-                <label class="input-label">2. Batch / Lot Reference (เลขใบเสนอราคา/ล็อต)</label>
+                <label class="input-label">2. Batch / Lot Reference</label>
                 <input type="text" id="ordBatch" placeholder="เช่น QT2026-001">
 
                 <div class="flex-row">
@@ -146,19 +156,23 @@
                     </div>
                 </div>
 
-                <label class="input-label">5. ชนิดผ้า (Fabric Reference)</label>
+                <label class="input-label">5. ชนิดผ้า (Fabric)</label>
                 <select id="ordFabric"><option>Loading...</option></select>
 
-                <label class="input-label">6. วันที่กำหนดส่งมอบ (Est. Delivery)</label>
+                <label class="input-label">6. วันที่กำหนดส่งมอบ</label>
                 <input type="date" id="ordDate">
 
-                <label class="input-label">7. ที่อยู่จัดส่ง (Shipping Address)</label>
-                <textarea id="ordAddress" rows="2" placeholder="บ้านเลขที่, ถนน, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์"></textarea>
+                <label class="input-label">7. ที่อยู่จัดส่ง</label>
+                <textarea id="ordAddress" rows="2" placeholder="รายละเอียดที่อยู่..."></textarea>
 
-                <label class="input-label">8. รายละเอียดเพิ่มเติม (Detail)</label>
-                <textarea id="ordDetail" rows="2" placeholder="จุดสกรีน, ขนาดโลโก้, ตำแหน่งปัก..."></textarea>
+                <label class="input-label">8. รายละเอียดเพิ่มเติม</label>
+                <textarea id="ordDetail" rows="2" placeholder="จุดสกรีน, ขนาด..."></textarea>
 
-                <button class="btn btn-main" style="margin-top:15px;" onclick="createOrder()">บันทึกและแจ้งเตือนลูกค้า</button>
+                <label class="input-label">9. แนบใบสั่งงาน (Work Order - รูปภาพ)</label>
+                <input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')">
+                <div id="status-wo-new_wo" style="font-size:12px; margin-top:5px; display:none;"></div>
+
+                <button class="btn btn-main" style="margin-top:15px;" onclick="createOrder()">บันทึก & แจ้งลูกค้ายืนยัน</button>
             </div>
         </div>
 
@@ -166,12 +180,13 @@
     </div>
 
     <div id="viewCustomer" class="hidden">
-        <div style="background:#222; padding:15px; border-radius:12px; margin-bottom:15px; text-align:center; border: 1px solid #444;">
-            <i class="fas fa-user-circle fa-2x" style="color:var(--accent-color); margin-bottom:5px;"></i>
+        <div style="display:flex; flex-direction:column; align-items:center; background:#222; padding:20px 15px; border-radius:12px; margin-bottom:15px; border: 1px solid #444;">
+            <img id="custProfilePic" src="https://via.placeholder.com/80" style="width:70px; height:70px; border-radius:50%; border:3px solid var(--accent-color); margin-bottom:10px;">
             <h3 style="margin:0; color:#fff;" id="custHeaderName">สวัสดีครับ</h3>
+            <div id="custHeaderTier" style="font-size:13px; color:var(--accent-color); margin-top:5px; background:#111; padding:4px 12px; border-radius:12px;">Tier</div>
         </div>
         
-        <div class="tab-container" style="justify-content: center; border:none;">
+        <div class="tab-container">
             <button class="tab-btn active" onclick="switchCustTab('list')">รายการออเดอร์</button>
             <button class="tab-btn" onclick="switchCustTab('dashboard')">ภาพรวม (Dashboard)</button>
         </div>
@@ -190,25 +205,38 @@
 
     <div id="modalFeedback" class="modal">
         <div class="modal-content">
-            <h3 style="color:var(--danger-color); margin-top:0;"><i class="fas fa-exclamation-triangle"></i> แจ้งแก้ไข / ตีกลับงาน</h3>
-            <label class="input-label">ระบุสาเหตุที่ต้องแก้ไข</label>
+            <h3 style="color:var(--danger-color); margin-top:0;"><i class="fas fa-exclamation-triangle"></i> ตีกลับงาน (QC)</h3>
+            <label class="input-label">ระบุสาเหตุที่ต้องให้ PM แก้ไข</label>
             <input type="hidden" id="fbOrderNo">
-            <textarea id="fbReason" rows="4" placeholder="ระบุจุดที่ต้องแก้ไขให้ชัดเจน เพื่อให้ Merchandiser ดำเนินการ..."></textarea>
+            <textarea id="fbReason" rows="4" placeholder="ระบุจุดที่ต้องแก้ไขให้ชัดเจน..."></textarea>
             <div class="flex-row" style="margin-top:15px;">
-                <button class="btn" style="background:#444;" onclick="closeModal()">ยกเลิก</button>
+                <button class="btn" style="background:#444;" onclick="closeModal('modalFeedback')">ยกเลิก</button>
                 <button class="btn" style="background:var(--danger-color);" onclick="confirmRollback()">ยืนยันการส่งกลับ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRejectPP" class="modal">
+        <div class="modal-content">
+            <h3 style="color:var(--danger-color); margin-top:0;"><i class="fas fa-times-circle"></i> ไม่อนุมัติแบบ (PP Reject)</h3>
+            <label class="input-label">ระบุสาเหตุ / จุดที่ต้องการให้แก้ไข</label>
+            <input type="hidden" id="rejPPOrderNo">
+            <textarea id="rejPPReason" rows="4" placeholder="แขนเสื้อสั้นไป, สีโลโก้ไม่ตรง..."></textarea>
+            <div class="flex-row" style="margin-top:15px;">
+                <button class="btn" style="background:#444;" onclick="closeModal('modalRejectPP')">ยกเลิก</button>
+                <button class="btn" style="background:var(--danger-color);" onclick="confirmRejectPP()">แจ้งฝ่ายผลิต</button>
             </div>
         </div>
     </div>
 
     <script>
         // ================= CONFIGURATION =================
-        // *** ใส่ URL Web App ของคุณที่นี่ ***
-        const GAS_API = 'https://script.google.com/macros/s/AKfycby36VokKZp2ekFU7llJ5jOSPEAgpt3oypZq7tvznf7N-oH6RPLgsLKP0fJaDnvL0Ku1Wg/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbwkKthBXAVm3kyVyr8f-PKdMmM2D3Trd1bvvWAs5uS1Q6CmhggJo4YO_rHREeWOBy4EDA/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         // =================================================
 
         let userProfile = {};
+        let linePictureUrl = 'https://via.placeholder.com/80';
         let currentUserRole = '';
         let globalOrders = [];
 
@@ -217,6 +245,7 @@
                 await liff.init({ liffId: LIFF_ID });
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 userProfile = await liff.getProfile();
+                if(userProfile.pictureUrl) linePictureUrl = userProfile.pictureUrl;
                 checkUser();
             } catch(e) { alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); }
         }
@@ -228,8 +257,7 @@
                 document.getElementById('loader').classList.add('hidden');
                 if (res.found) {
                     currentUserRole = res.data.Role;
-                    // ตรวจสอบชื่อ Role แบบเต็ม
-                    if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(currentUserRole)) {
+                    if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser', 'Sales Coordinators'].includes(currentUserRole)) {
                         showStaffDashboard(res.data);
                     } else {
                         showCustomerView(res.data);
@@ -240,7 +268,18 @@
             });
         }
 
-        // --- Helper: Convert Image to Base64 (พร้อมฟังก์ชันย่อขนาดรูป ลดปัญหาส่งไฟล์ไม่ผ่าน) ---
+        function getTierDisplay(tier) {
+            if (tier === 'VVIP') return '👑 VVIP';
+            if (tier === 'VIP') return '⭐️ VIP';
+            return '👤 Regular';
+        }
+
+        // --- Role Access Helper ---
+        function hasAccess(role) {
+            return currentUserRole === role || currentUserRole === 'Admin' || currentUserRole === 'Sales Coordinators';
+        }
+
+        // --- Helper: Convert Image to Base64 ---
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -250,17 +289,13 @@
                     img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800; // กำหนดความกว้างสูงสุด 800px 
+                        const MAX_WIDTH = 800; 
                         const scaleSize = MAX_WIDTH / img.width;
                         canvas.width = MAX_WIDTH;
                         canvas.height = img.height * scaleSize;
-
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        // บีบอัดเป็น JPEG (ช่วยลดขนาดไฟล์ ทำให้ส่งเข้า Drive ได้ฉลุย)
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); 
-                        resolve(compressedBase64);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7)); 
                     };
                     img.onerror = error => reject(error);
                 };
@@ -268,39 +303,34 @@
             });
         }
 
-        let preloadedImages = {}; // ตัวแปรเก็บรูปที่ประมวลผลเสร็จแล้ว
+        let preloadedImages = {}; 
 
-        // ฟังก์ชันประมวลผลภาพและแสดงสถานะให้ User ทราบ
         async function processImage(input, orderNo, type) {
-            const btnId = type === 's' ? `btn-s-${orderNo}` : `btn-ship-${orderNo}`;
-            const statusId = type === 's' ? `status-s-${orderNo}` : `status-ship-${orderNo}`;
-            const btn = document.getElementById(btnId);
+            let btnId = ''; let statusId = '';
+            if(type === 's') { btnId = `btn-s-${orderNo}`; statusId = `status-s-${orderNo}`; }
+            else if(type === 'ship') { btnId = `btn-ship-${orderNo}`; statusId = `status-ship-${orderNo}`; }
+            else if(type === 'wo') { statusId = `status-wo-${orderNo}`; } // For WO upload
+
+            const btn = btnId ? document.getElementById(btnId) : null;
             const status = document.getElementById(statusId);
             const key = `${type}-${orderNo}`;
 
             if (input.files.length > 0) {
-                // 1. ล็อกปุ่มกด และโชว์ข้อความกำลังโหลด
-                btn.classList.add('btn-disabled');
-                btn.disabled = true;
+                if(btn) { btn.classList.add('btn-disabled'); btn.disabled = true; }
                 status.style.display = 'block';
                 status.style.color = 'var(--accent-color)';
-                status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังประมวลผลภาพ กรุณารอสักครู่...';
+                status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังประมวลผลไฟล์...';
 
                 try {
-                    // 2. เริ่มย่อขนาดและแปลงภาพ
                     const base64 = await getBase64(input.files[0]);
-                    preloadedImages[key] = base64; // เก็บรูปลงหน่วยความจำ
-                    
-                    // 3. ปลดล็อกปุ่ม และแจ้งว่าพร้อมส่ง
+                    preloadedImages[key] = base64; 
                     status.style.color = 'var(--success-color)';
-                    status.innerHTML = '<i class="fas fa-check-circle"></i> ภาพพร้อมส่งแล้ว กดทำรายการต่อได้เลย';
-                    btn.classList.remove('btn-disabled');
-                    btn.disabled = false;
+                    status.innerHTML = '<i class="fas fa-check-circle"></i> ไฟล์พร้อมส่งแล้ว';
+                    if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 } catch (e) {
                     status.style.color = 'var(--danger-color)';
-                    status.innerHTML = '<i class="fas fa-times-circle"></i> เกิดข้อผิดพลาด กรุณาเลือกรูปใหม่';
-                    btn.classList.remove('btn-disabled');
-                    btn.disabled = false;
+                    status.innerHTML = '<i class="fas fa-times-circle"></i> เกิดข้อผิดพลาด กรุณาเลือกไฟล์ใหม่';
+                    if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 }
             } else {
                 status.style.display = 'none';
@@ -313,8 +343,10 @@
             document.getElementById('viewStaff').classList.remove('hidden');
             document.getElementById('staffName').innerText = data.RealName;
             document.getElementById('staffRole').innerText = data.Role;
+            document.getElementById('staffTier').innerText = getTierDisplay(data.Tier);
+            document.getElementById('staffProfilePic').src = linePictureUrl;
 
-            if (data.Role === 'Sales Admin' || data.Role === 'Admin') {
+            if (hasAccess('Sales Admin')) {
                 document.getElementById('adminPanel').classList.remove('hidden');
                 fetchOptions();
             }
@@ -325,9 +357,22 @@
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_all_orders' }) })
             .then(r => r.json()).then(res => {
                 globalOrders = res.orders;
-                document.getElementById('staffStatusFilter').value = "ACTIVE"; // ค่าเริ่มต้น
+                document.getElementById('staffStatusFilter').value = "ACTIVE"; 
                 filterStaffList();
             });
+        }
+
+        // Toggle Delivery Inputs (Messenger vs Parcel)
+        function toggleDelivery(no, method, type) {
+            const trackDiv = document.getElementById(`box-track-${type}-${no}`);
+            const phoneDiv = document.getElementById(`box-phone-${type}-${no}`);
+            if(method === 'Messenger') {
+                trackDiv.style.display = 'none';
+                phoneDiv.style.display = 'block';
+            } else {
+                trackDiv.style.display = 'block';
+                phoneDiv.style.display = 'none';
+            }
         }
 
         function filterStaffList() {
@@ -337,141 +382,136 @@
             
             let filtered = globalOrders;
 
-            // 1. กรองด้วย Status
             if (statusFilter === 'ACTIVE') {
-                filtered = filtered.filter(o => o.status !== 'Shipped'); // ซ่อนงานที่จบแล้ว
+                filtered = filtered.filter(o => o.status !== 'Shipped'); 
             } else if (statusFilter !== 'ALL') {
                 filtered = filtered.filter(o => o.status.includes(statusFilter));
             }
 
-            // 2. กรองด้วย Keyword (Search)
             if (keyword) {
                 filtered = filtered.filter(o => 
                     o.orderNo.toLowerCase().includes(keyword) || 
                     (o.custName && o.custName.toLowerCase().includes(keyword)) ||
-                    (o.custPhone && o.custPhone.includes(keyword)) ||
-                    (o.batch && o.batch.toLowerCase().includes(keyword))
+                    (o.custPhone && o.custPhone.includes(keyword))
                 );
             }
 
-            if (filtered.length === 0) { list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงานที่ตรงกับเงื่อนไข</div>'; return; }
+            if (filtered.length === 0) { list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; return; }
 
             let html = '';
             filtered.forEach(o => {
                 let btns = '';
                 
-                // ฟังก์ชันเช็คว่าขั้นตอนผ่านไปหรือยัง
                 const isPassed = (current, target) => {
-                    const steps = [
-                        'Order Confirmation', 
-                        'Work Order Review Stage', 
-                        'Sampling Stage', 
-                        'Pre-Production Approved', 
-                        'Bulk Production (50%)', 
-                        'Quality Control Passed', 
-                        'Shipped'
-                    ];
+                    const steps = ['Pending Customer Confirmation', 'Order Confirmation', 'Work Order Review Stage', 'Sampling Stage', 'Pre-Production Approved', 'Bulk Production (50%)', 'Quality Control Passed', 'Shipped'];
                     return steps.indexOf(current) >= steps.indexOf(target);
                 };
 
-                // ข้อมูลลูกค้าแบบย่อ
                 const custInfo = `
                     <div class="cust-info">
-                        <div style="font-size:14px; margin-bottom:5px;">👤 <b>${o.custName}</b> <a href="tel:${o.custPhone}" style="color:var(--accent-color); text-decoration:none; margin-left:10px;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
-                        <div style="font-size:12px; color:#aaa; border-top:1px dashed #444; padding-top:5px;">📍 <b>จัดส่ง:</b> ${o.address || '-'}</div>
+                        <div style="font-size:14px; margin-bottom:5px;">👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${getTierDisplay(o.tier)}</span></div>
+                        <div style="font-size:13px;"><a href="tel:${o.custPhone}" style="color:var(--accent-color); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                        <div style="font-size:12px; color:#aaa; border-top:1px dashed #444; padding-top:5px; margin-top:5px;">📍 <b>จัดส่ง:</b> ${o.address || '-'}</div>
                     </div>`;
 
-                // --- กรณีติดปัญหา (Correction Needed) ---
+                // --- กรณีรอตรวจสอบ / ตีกลับจากลูกค้า ---
+                if (o.status === 'Pending Customer Confirmation') {
+                    btns += `<div style="color:var(--accent-color); font-size:12px; text-align:center; margin-top:10px;">⏳ รอให้ลูกค้ายืนยันออเดอร์</div>`;
+                }
+                
+                if (o.status === 'PP Rejected') {
+                    btns += `<div style="background:var(--danger-color); color:#fff; padding:10px; border-radius:8px; margin-top:8px; font-size:12px;">
+                        <b>ลูกค้ายกเลิก/ไม่อนุมัติแบบ:</b> ${o.ppFeedback || '-'}
+                    </div>`;
+                }
+
+                // --- กรณีติดปัญหา (Correction Needed จาก QC) กลับไปให้ PM ---
                 if (o.status === 'Correction Needed') {
-                    if (currentUserRole === 'Merchandiser' || currentUserRole === 'Admin') {
+                    if (hasAccess('Production Manager')) {
                         html += `<div class="card" style="border:1px solid var(--danger-color)">
-                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ ต้องแก้ไข (${o.orderNo})</strong><span class="status-badge" style="background:var(--danger-color)">Fix Needed</span></div>
+                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ PM ต้องแก้ไข (${o.orderNo})</strong><span class="status-badge" style="background:var(--danger-color)">Fix Needed</span></div>
                             ${custInfo}
-                            <p style="font-size:13px; color:#fff; background:#333; padding:10px; border-radius:6px; border-left:3px solid var(--danger-color);"><b>สาเหตุที่ต้องแก้:</b> ${o.feedback}</p>
+                            <p style="font-size:13px; color:#fff; background:#333; padding:10px; border-radius:6px; border-left:3px solid var(--danger-color);"><b>สาเหตุจาก QC:</b> ${o.feedback}</p>
                             <button class="btn" style="background:var(--success-color);" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')"><i class="fas fa-check-circle"></i> แก้ไขเสร็จสิ้น (ส่ง QC ตรวจใหม่)</button>
                         </div>`;
                     } else {
                         html += `<div class="card" style="border:1px solid var(--danger-color)">
-                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ รอ Merchandiser แก้ไข (${o.orderNo})</strong></div>
+                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ รอ PM แก้ไข (${o.orderNo})</strong></div>
                             <p style="font-size:12px; color:#aaa;">เหตุผลการตีกลับ: ${o.feedback}</p>
                         </div>`;
                     }
-                    return; // ข้ามการวาดการ์ดปกติไปเลย
+                    return; 
                 }
 
-                // --- ปุ่มสำหรับ Production Manager ---
-                if (currentUserRole === 'Production Manager' || currentUserRole === 'Admin') {
-                    if (isPassed(o.status, 'Work Order Review Stage')) {
-                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ตรวจสอบ WO แล้ว</button>`;
-                    } else {
+                // --- ปุ่ม Production Manager ---
+                if (hasAccess('Production Manager')) {
+                    if (o.status === 'Order Confirmation') {
                         btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')"><i class="fas fa-clipboard-check"></i> อนุมัติ Work Order</button>`;
-                    }
-                    
-                    if (isPassed(o.status, 'Bulk Production (50%)')) {
-                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> อัปเดตผลิต 50% แล้ว</button>`;
-                    } else if (isPassed(o.status, 'Pre-Production Approved')) {
+                    } else if (o.status === 'Pre-Production Approved') {
                         btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')"><i class="fas fa-bolt"></i> แจ้งผลิตเสร็จ 50%</button>`;
                     }
                 }
 
-                // --- ปุ่มสำหรับ Merchandiser ---
-                if (currentUserRole === 'Merchandiser' || currentUserRole === 'Admin') {
-                    if (isPassed(o.status, 'Sampling Stage')) {
-                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ส่งตัวอย่างแล้ว</button>`;
-                    } else if (isPassed(o.status, 'Work Order Review Stage')) {
+                // --- ปุ่ม Merchandiser ---
+                if (hasAccess('Merchandiser')) {
+                    if (o.status === 'Work Order Review Stage') {
                         btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
-                            <input type="text" id="track-s-${o.orderNo}" placeholder="ระบุ Tracking ตัวอย่าง" style="font-size:13px; margin-bottom:5px;">
-                            <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐานส่งของ:</label>
+                            <label style="font-size:12px; color:var(--accent-color);">วิธีส่งตัวอย่าง:</label>
+                            <select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px;">
+                                <option value="Parcel">ส่งพัสดุ (J&T)</option>
+                                <option value="Messenger">ส่งแมสเซ็นเจอร์</option>
+                            </select>
+                            
+                            <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" placeholder="ระบุ Tracking J&T" style="margin-bottom:5px;"></div>
+                            <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" placeholder="ระบุเบอร์โทรแมสเซ็นเจอร์" style="margin-bottom:5px;"></div>
+                            
+                            <label style="font-size:12px; color:#aaa;">แนบหลักฐานการส่ง:</label>
                             <input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')">
                             <div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
                             <button class="btn btn-merch" id="btn-s-${o.orderNo}" style="margin-top:8px;" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> แจ้งส่งตัวอย่าง</button>
                         </div>`;
                     }
-
-                    if (isPassed(o.status, 'Pre-Production Approved')) {
-                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ลูกค้าอนุมัติแบบแล้ว</button>`;
-                    } else if(isPassed(o.status, 'Sampling Stage')) {
-                        btns += `<button class="btn btn-qc" onclick="updateStatus('${o.orderNo}', 'PP_APPROVE')"><i class="fas fa-thumbs-up"></i> ยืนยันลูกค้าอนุมัติ (PP)</button>`;
-                    }
                 }
 
-                // --- ปุ่มสำหรับ Quality Control ---
-                if (currentUserRole === 'Quality Control' || currentUserRole === 'Admin') {
-                    if (isPassed(o.status, 'Quality Control Passed')) {
-                        btns += `<button class="btn btn-disabled"><i class="fas fa-check"></i> ผ่านการตรวจ QC แล้ว</button>`;
-                    } else if(isPassed(o.status, 'Bulk Production (50%)')) {
+                // --- ปุ่ม Quality Control ---
+                if (hasAccess('Quality Control')) {
+                    if (o.status === 'Bulk Production (50%)') {
                         btns += `<div class="flex-row">
                             <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')"><i class="fas fa-check-circle"></i> ให้ผ่าน QC</button>
-                            <button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')"><i class="fas fa-undo"></i> ตีกลับ</button>
+                            <button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')"><i class="fas fa-undo"></i> ตีกลับให้ PM</button>
                         </div>`;
                     }
                 }
 
-                // --- ปุ่มสำหรับ Sales Admin ---
-                if (currentUserRole === 'Sales Admin' || currentUserRole === 'Admin') {
-                    if (o.status !== 'Shipped' && isPassed(o.status, 'Quality Control Passed')) {
+                // --- ปุ่ม Sales Admin ---
+                if (hasAccess('Sales Admin')) {
+                    if (o.status === 'Quality Control Passed') {
                         btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
-                            <input type="text" id="track-${o.orderNo}" placeholder="ระบุ Tracking สินค้าจริง" style="font-size:13px; margin-bottom:5px;">
-                            <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐานส่งของ:</label>
+                            <label style="font-size:12px; color:var(--accent-color);">วิธีจัดส่งสินค้า:</label>
+                            <select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px;">
+                                <option value="Parcel">ส่งพัสดุ (J&T)</option>
+                                <option value="Messenger">ส่งแมสเซ็นเจอร์</option>
+                            </select>
+
+                            <div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" placeholder="ระบุ Tracking J&T" style="margin-bottom:5px;"></div>
+                            <div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" placeholder="ระบุเบอร์โทรแมสเซ็นเจอร์" style="margin-bottom:5px;"></div>
+                            
+                            <label style="font-size:12px; color:#aaa;">แนบหลักฐานจัดส่ง:</label>
                             <input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')">
                             <div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
                             <button class="btn btn-ship" id="btn-ship-${o.orderNo}" style="margin-top:8px;" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันจัดส่งลูกค้า</button>
                         </div>`;
                     } else if (o.status === 'Shipped') {
-                        btns += `<div style="margin-top:10px; font-size:13px; color:var(--success-color); text-align:center; background:#111; padding:8px; border-radius:6px;">✔ จัดส่งสำเร็จแล้ว (Track: ${o.tracking || '-'})</div>`;
+                        let delText = o.deliveryMethod === 'Messenger' ? `Messenger: ${o.messengerPhone}` : `J&T: ${o.tracking}`;
+                        btns += `<div style="margin-top:10px; font-size:13px; color:var(--success-color); text-align:center; background:#111; padding:8px; border-radius:6px;">✔ จัดส่งแล้ว (${delText})</div>`;
                     }
                 }
 
-                // การแสดงรูปลิงก์ที่อัปโหลดไว้แล้ว
-                let extraImages = '';
-                if(o.sampleImage && o.sampleImage !== '-') {
-                    extraImages += `<br><a href="${o.sampleImage}" target="_blank" style="color:var(--accent-color); font-size:11px; text-decoration:none;"><i class="fas fa-image"></i> รูปตัวอย่างพัสดุ</a>`;
-                }
-                if(o.shipImage && o.shipImage !== '-') {
-                    extraImages += `<br><a href="${o.shipImage}" target="_blank" style="color:var(--accent-color); font-size:11px; text-decoration:none;"><i class="fas fa-image"></i> รูปพัสดุจัดส่ง</a>`;
-                }
+                let extraLinks = '';
+                if(o.woUrl && o.woUrl !== '-') extraLinks += `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-color); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (WO)</a>`;
+                if(o.sampleImage && o.sampleImage !== '-') extraLinks += `<br><a href="${o.sampleImage}" target="_blank" style="color:#00B9F2; font-size:11px; text-decoration:none;"><i class="fas fa-image"></i> รูปพัสดุตัวอย่าง</a>`;
+                if(o.shipImage && o.shipImage !== '-') extraLinks += `<br><a href="${o.shipImage}" target="_blank" style="color:#FF0080; font-size:11px; text-decoration:none;"><i class="fas fa-image"></i> รูปพัสดุจัดส่ง</a>`;
 
-                // การ์ดหลัก
                 html += `
                 <div class="card">
                     <div class="card-header">
@@ -488,7 +528,7 @@
                         <div style="text-align:right;">
                             ส่งมอบ: <span style="color:#fff;">${o.delivery}</span><br>
                             <span style="font-size:11px; color:#666;">อัปเดต: ${o.updatedDate}</span>
-                            ${extraImages}
+                            ${extraLinks}
                         </div>
                     </div>
                     ${btns}
@@ -501,13 +541,15 @@
         function showCustomerView(data) {
             document.getElementById('viewCustomer').classList.remove('hidden');
             document.getElementById('custHeaderName').innerText = "คุณ " + data.RealName;
+            document.getElementById('custHeaderTier').innerText = getTierDisplay(data.Tier);
+            document.getElementById('custProfilePic').src = linePictureUrl;
             
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_my_orders', data: { userId: userProfile.userId } }) })
             .then(r => r.json()).then(res => {
                 let confirm = 0, prod = 0, done = 0;
                 res.orders.forEach(o => {
                     if(o.status === 'Shipped') done++;
-                    else if(o.status === 'Order Confirmation') confirm++;
+                    else if(o.status === 'Order Confirmation' || o.status === 'Pending Customer Confirmation') confirm++;
                     else prod++;
                 });
                 document.getElementById('stat-confirm').innerText = confirm;
@@ -533,19 +575,49 @@
         }
 
         function renderCustCard(o) {
+            // Find current active step index to attach the date
+            let currentStepIdx = 0;
+            if (['Order Confirmation', 'Work Order Review Stage', 'Sampling Stage', 'Pre-Production Approved', 'PP Rejected'].includes(o.status)) currentStepIdx = 1;
+            if (['Bulk Production (50%)'].includes(o.status)) currentStepIdx = 2;
+            if (['Quality Control Passed', 'Correction Needed'].includes(o.status)) currentStepIdx = 3;
+            if (o.status === 'Shipped') currentStepIdx = 4;
+
             const steps = [
-                { label: 'รับออเดอร์', active: true }, 
-                { label: 'เตรียมงาน', active: ['Work Order Review Stage', 'Sampling Stage', 'Pre-Production Approved', 'Bulk Production (50%)', 'Quality Control Passed', 'Shipped'].includes(o.status) },
-                { label: 'กำลังผลิต', active: ['Bulk Production (50%)', 'Quality Control Passed', 'Shipped'].includes(o.status) },
-                { label: 'ตรวจสอบ', active: ['Quality Control Passed', 'Shipped'].includes(o.status) },
-                { label: 'ส่งมอบ', active: ['Shipped'].includes(o.status) }
+                { label: 'รับออเดอร์', active: true, showDate: currentStepIdx === 0 }, 
+                { label: 'เตรียมงาน', active: currentStepIdx >= 1, showDate: currentStepIdx === 1 },
+                { label: 'กำลังผลิต', active: currentStepIdx >= 2, showDate: currentStepIdx === 2 },
+                { label: 'ตรวจสอบ', active: currentStepIdx >= 3, showDate: currentStepIdx === 3 },
+                { label: 'ส่งมอบ', active: currentStepIdx === 4, showDate: currentStepIdx === 4 }
             ];
 
             let progressHtml = '<div class="stepper-wrapper">';
             steps.forEach(s => { 
-                progressHtml += `<div class="stepper-item ${s.active ? 'active' : ''}"><div class="step-counter"></div><div class="step-name">${s.label}</div></div>`; 
+                const dateHtml = s.showDate ? `<br><span style="color:#aaa; font-size:9px;">${o.updatedDate}</span>` : '';
+                progressHtml += `<div class="stepper-item ${s.active ? 'active' : ''}"><div class="step-counter"></div><div class="step-name">${s.label}${dateHtml}</div></div>`; 
             });
             progressHtml += '</div>';
+
+            let actionHtml = '';
+            
+            // ลูกค้ายืนยันออเดอร์
+            if (o.status === 'Pending Customer Confirmation') {
+                actionHtml = `<div style="margin-top:15px; padding-top:15px; border-top:1px solid #444;">
+                    <p style="font-size:13px; color:var(--accent-color); margin-bottom:10px; text-align:center;">กรุณาตรวจสอบใบสั่งงานและยืนยันออเดอร์</p>
+                    ${o.woUrl !== '-' ? `<a href="${o.woUrl}" target="_blank" class="btn" style="background:#333; text-align:center; display:block; text-decoration:none; margin-bottom:8px; border:1px solid #555;"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</a>` : ''}
+                    <button class="btn btn-main" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง</button>
+                </div>`;
+            }
+
+            // ลูกค้าอนุมัติตัวแบบ
+            if (o.status === 'Sampling Stage') {
+                actionHtml = `<div style="margin-top:15px; padding-top:15px; border-top:1px solid #444;">
+                    <p style="font-size:13px; color:var(--accent-color); margin-bottom:10px; text-align:center;">กรุณาตรวจสอบตัวอย่างและอนุมัติการผลิต</p>
+                    <div class="flex-row">
+                        <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'PP_APPROVE')"><i class="fas fa-thumbs-up"></i> อนุมัติผลิต</button>
+                        <button class="btn btn-reject" style="flex:1;" onclick="openRejectPP('${o.orderNo}')"><i class="fas fa-times"></i> ไม่อนุมัติ</button>
+                    </div>
+                </div>`;
+            }
 
             return `
                 <div class="card">
@@ -558,40 +630,61 @@
                         📅 กำหนดส่ง: <span style="color:#fff">${o.delivery}</span>
                     </div>
                     ${progressHtml}
+                    ${actionHtml}
                 </div>`;
         }
 
         // --- ACTIONS ---
         function openFeedback(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('modalFeedback').classList.add('show'); }
-        function closeModal() { document.getElementById('modalFeedback').classList.remove('show'); }
+        function openRejectPP(no) { document.getElementById('rejPPOrderNo').value = no; document.getElementById('modalRejectPP').classList.add('show'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+        
         function confirmRollback() { 
             const no = document.getElementById('fbOrderNo').value;
             const reason = document.getElementById('fbReason').value;
             if(!reason) return alert("กรุณาระบุสาเหตุที่ต้องแก้ไขให้ชัดเจน"); 
             callApi({ orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: document.getElementById('staffName').innerText }); 
-            closeModal(); 
+            closeModal('modalFeedback'); 
         }
-        
-        function updateStatus(no, action) { if(!confirm('ยืนยันการบันทึกสถานะ?')) return; callApi({ orderNo: no, actionType: action, staffName: document.getElementById('staffName').innerText }); }
-        
-        // ส่งตัวอย่าง (อัปโหลดรูป)
-        async function sendSample(no) { 
-            const t = document.getElementById(`track-s-${no}`).value; 
-            if(!t) return alert("กรุณาระบุเลข Tracking ของพัสดุตัวอย่าง"); 
-            
-            let base64Img = preloadedImages[`s-${no}`] || null; // ดึงรูปที่แปลงรอไว้มาใช้เลย
-            document.getElementById('loader').classList.remove('hidden');
-            callApi({ orderNo: no, actionType: 'SEND_SAMPLE', tracking: t, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
-        }
-        
-        // ส่งสินค้าจริง (อัปโหลดรูป)
-        async function shipOrder(no) { 
-            const t = document.getElementById(`track-${no}`).value; 
-            if(!t) return alert("กรุณาระบุเลข Tracking สินค้าจริง"); 
 
-            let base64Img = preloadedImages[`ship-${no}`] || null; // ดึงรูปที่แปลงรอไว้มาใช้เลย
+        function confirmRejectPP() { 
+            const no = document.getElementById('rejPPOrderNo').value;
+            const reason = document.getElementById('rejPPReason').value;
+            if(!reason) return alert("กรุณาระบุสาเหตุที่ไม่อนุมัติให้ชัดเจน"); 
+            callApi({ orderNo: no, actionType: 'PP_REJECT', reason: reason }); 
+            closeModal('modalRejectPP'); 
+        }
+        
+        function updateStatus(no, action) { 
+            if(!confirm('ยืนยันการทำรายการ?')) return; 
+            const staffName = document.getElementById('staffName') ? document.getElementById('staffName').innerText : 'Customer';
+            callApi({ orderNo: no, actionType: action, staffName: staffName }); 
+        }
+        
+        async function sendSample(no) { 
+            const method = document.getElementById(`del-s-${no}`).value;
+            const track = document.getElementById(`track-s-${no}`).value; 
+            const phone = document.getElementById(`phone-s-${no}`).value; 
+
+            if(method === 'Parcel' && !track) return alert("กรุณาระบุเลข Tracking J&T"); 
+            if(method === 'Messenger' && !phone) return alert("กรุณาระบุเบอร์โทรศัพท์แมสเซ็นเจอร์"); 
+
+            let base64Img = preloadedImages[`s-${no}`] || null; 
             document.getElementById('loader').classList.remove('hidden');
-            callApi({ orderNo: no, actionType: 'SHIP', tracking: t, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
+            callApi({ orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: method, tracking: track, messengerPhone: phone, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
+        }
+        
+        async function shipOrder(no) { 
+            const method = document.getElementById(`del-ship-${no}`).value;
+            const track = document.getElementById(`track-ship-${no}`).value; 
+            const phone = document.getElementById(`phone-ship-${no}`).value; 
+
+            if(method === 'Parcel' && !track) return alert("กรุณาระบุเลข Tracking J&T"); 
+            if(method === 'Messenger' && !phone) return alert("กรุณาระบุเบอร์โทรศัพท์แมสเซ็นเจอร์"); 
+
+            let base64Img = preloadedImages[`ship-${no}`] || null; 
+            document.getElementById('loader').classList.remove('hidden');
+            callApi({ orderNo: no, actionType: 'SHIP', deliveryMethod: method, tracking: track, messengerPhone: phone, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
         }
         
         function callApi(payload) { 
@@ -599,7 +692,7 @@
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'update_status', data: payload }) })
             .then(r => r.json()).then(res => { 
                 document.getElementById('loader').classList.add('hidden'); 
-                if (res.status === 'success') { alert("บันทึกสำเร็จ!"); fetchStaffData(); } 
+                if (res.status === 'success') { alert("บันทึกสำเร็จ!"); location.reload(); } 
                 else alert("Error: " + res.message); 
             }).catch(e => {
                 document.getElementById('loader').classList.add('hidden'); 
@@ -616,6 +709,8 @@
         }
         
         function createOrder() { 
+            let woImg = preloadedImages['wo-new_wo'] || null;
+
             const payload = {
                 adminName: document.getElementById('staffName').innerText,
                 phone: document.getElementById('ordPhone').value,
@@ -625,7 +720,8 @@
                 fabric: document.getElementById('ordFabric').value,
                 deliveryDate: document.getElementById('ordDate').value,
                 address: document.getElementById('ordAddress').value,
-                detail: document.getElementById('ordDetail').value
+                detail: document.getElementById('ordDetail').value,
+                woImage: woImg
             };
             if(!payload.phone || !payload.batch || !payload.address) return alert("กรุณากรอก เบอร์โทรลูกค้า, Batch และ ที่อยู่จัดส่ง ให้ครบถ้วน"); 
             document.getElementById('loader').classList.remove('hidden'); 
@@ -633,10 +729,8 @@
             .then(r => r.json()).then(res => { 
                 document.getElementById('loader').classList.add('hidden'); 
                 if(res.status==='success') { 
-                    alert("เปิดออเดอร์เรียบร้อย และระบบได้ส่งแจ้งเตือนหาลูกค้าแล้ว!"); 
-                    fetchStaffData(); 
-                    document.getElementById('createOrderForm').classList.add('hidden'); 
-                    document.getElementById('staffStatusFilter').value = "ACTIVE";
+                    alert("เปิดออเดอร์เรียบร้อย ลูกค้าจะได้รับข้อความแจ้งเตือนให้กดยืนยันครับ"); 
+                    location.reload(); 
                 } 
                 else alert("เกิดข้อผิดพลาด: " + res.message); 
             }); 
@@ -655,4 +749,3 @@
     </script>
 </body>
 </html>
-
