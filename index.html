@@ -9,31 +9,78 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        :root {
-            --bg-color: #000000;
-            --card-bg: #1A1A1A;
-            --input-bg: #2A2A2A;
-            --text-main: #FFFFFF;
-            --brand-grad: linear-gradient(90deg, #FFC805 0%, #FF0080 50%, #00B9F2 100%);
-            --accent-color: #FFC805;
-            --success-color: #00C851;
-            --danger-color: #ff4444;
-            --disable-color: #333333;
+        :root { 
+            --bg-color: #000000; 
+            --card-bg: #1A1A1A; 
+            --input-bg: #2A2A2A; 
+            --text-main: #FFFFFF; 
+            --brand-grad: linear-gradient(90deg, #FFC805 0%, #FF0080 50%, #00B9F2 100%); 
+            --accent-color: #FFC805; 
+            --success-color: #00C851; 
+            --danger-color: #ff4444; 
+            --disable-color: #333333; 
         }
 
-        body {
-            background-color: var(--bg-color); color: var(--text-main);
-            font-family: 'Kanit', sans-serif; margin: 0; padding: 15px; padding-bottom: 80px;
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Kanit', sans-serif; 
+            margin: 0; 
+            padding: 15px; 
+            padding-bottom: 80px; 
         }
 
-        .brand-title { font-size: 24px; font-weight: bold; background: var(--brand-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 5px; }
-        
-        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #333; }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 8px; }
-        .cust-info { font-size: 13px; color: #ddd; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-color); }
+        .brand-title { 
+            font-size: 24px; 
+            font-weight: bold; 
+            background: var(--brand-grad); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-align: center; 
+            margin-bottom: 5px; 
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            border: 1px solid #333; 
+        }
+
+        .card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 8px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 8px; 
+        }
+
+        .cust-info { 
+            font-size: 13px; 
+            color: #ddd; 
+            margin-bottom: 10px; 
+            background: #222; 
+            padding: 10px; 
+            border-radius: 8px; 
+            border-left: 3px solid var(--accent-color); 
+        }
 
         /* Buttons */
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 14px; transition: 0.2s; box-sizing: border-box; }
+        .btn { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 8px; 
+            font-size: 14px; 
+            transition: 0.2s; 
+            box-sizing: border-box; /* สำคัญ: ช่วยไม่ให้ปุ่มล้นขอบ */
+        }
         .btn-main { background: var(--brand-grad); }
         .btn-pm { background: linear-gradient(90deg, #00B9F2, #0055ff); }
         .btn-qc { background: linear-gradient(90deg, #00C851, #007E33); }
@@ -43,10 +90,26 @@
         .btn-disabled { background: var(--disable-color) !important; color: #777 !important; cursor: not-allowed; border: 1px solid #444 !important; pointer-events: none; }
 
         /* Inputs */
-        .input-label { font-size: 13px; color: var(--accent-color); margin-bottom: 5px; display: block; margin-top: 10px; }
-        input, select, textarea { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid #444; border-radius: 8px; color: #fff; box-sizing: border-box; font-family: 'Kanit'; font-size: 14px; }
+        .input-label { 
+            font-size: 13px; 
+            color: var(--accent-color); 
+            margin-bottom: 5px; 
+            display: block; 
+            margin-top: 10px; 
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            background: var(--input-bg); 
+            border: 1px solid #444; 
+            border-radius: 8px; 
+            color: #fff; 
+            box-sizing: border-box; /* สำคัญ: ช่วยไม่ให้ Input ล้นขอบ */
+            font-family: 'Kanit'; 
+            font-size: 14px; 
+        }
         input[type="file"] { padding: 8px; font-size: 12px; }
-        
+
         /* Filter & Tabs */
         .filter-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .tab-container { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
@@ -78,15 +141,17 @@
         .hidden { display: none !important; }
         .flex-row { display: flex; gap: 10px; }
         .status-badge { background:#333; padding:4px 8px; border-radius:6px; font-size:11px; color:var(--accent-color); border:1px solid #555; text-align: right; }
-        
         .profile-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover; }
-
+        
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
-    <div id="loader"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--accent-color)"></i><div style="font-size:12px; color:#aaa; margin-top:10px;">กำลังประมวลผล...</div></div>
+    <div id="loader">
+        <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--accent-color)"></i>
+        <div style="font-size:12px; color:#aaa; margin-top:10px;">กำลังประมวลผล...</div>
+    </div>
 
     <div class="brand-title">DEMO FACTORY</div>
     <div style="text-align:center; color:#666; font-size:12px; margin-bottom:20px;">Smart Production System</div>
@@ -231,7 +296,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbxBjPpu6FHYbAe44mWsHUgxWJJv4r9NVFlbsxNseL_qF6odFRQTCGINCxOl8vSa0cuN2Q/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbxfQWmUsQ0fc8iLhN5z_Kfng_obvPHCg2ZyaDa6awVrCRxzYqzArWWSv95R-Cro0i_x/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         // =================================================
 
@@ -243,17 +308,25 @@
         async function main() {
             try {
                 await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) { liff.login(); return; }
+                if (!liff.isLoggedIn()) { 
+                    liff.login(); 
+                    return; 
+                }
                 userProfile = await liff.getProfile();
-                if(userProfile.pictureUrl) linePictureUrl = userProfile.pictureUrl;
+                if(userProfile.pictureUrl) {
+                    linePictureUrl = userProfile.pictureUrl;
+                }
                 checkUser();
-            } catch(e) { alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); }
+            } catch(e) { 
+                alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); 
+            }
         }
         main();
 
         function checkUser() {
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_user', data: { userId: userProfile.userId } }) })
-            .then(r => r.json()).then(res => {
+            .then(r => r.json())
+            .then(res => {
                 document.getElementById('loader').classList.add('hidden');
                 if (res.found) {
                     currentUserRole = res.data.Role;
@@ -274,12 +347,10 @@
             return '👤 Regular';
         }
 
-        // --- Role Access Helper ---
         function hasAccess(role) {
             return currentUserRole === role || currentUserRole === 'Admin' || currentUserRole === 'Sales Coordinators';
         }
 
-        // --- Helper: Convert Image to Base64 ---
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -338,7 +409,6 @@
             }
         }
 
-        // --- STAFF SECTION ---
         function showStaffDashboard(data) {
             document.getElementById('viewStaff').classList.remove('hidden');
             document.getElementById('staffName').innerText = data.RealName;
@@ -355,7 +425,8 @@
 
         function fetchStaffData() {
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_all_orders' }) })
-            .then(r => r.json()).then(res => {
+            .then(r => r.json())
+            .then(res => {
                 globalOrders = res.orders;
                 document.getElementById('staffStatusFilter').value = "ACTIVE"; 
                 filterStaffList();
@@ -395,17 +466,15 @@
                 );
             }
 
-            if (filtered.length === 0) { list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; return; }
+            if (filtered.length === 0) { 
+                list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; 
+                return; 
+            }
 
             let html = '';
             filtered.forEach(o => {
                 let btns = '';
                 
-                const isPassed = (current, target) => {
-                    const steps = ['Pending Customer Confirmation', 'Order Confirmation', 'Work Order Review Stage', 'Sampling Stage', 'Pre-Production Approved', 'Bulk Production (50%)', 'Quality Control Passed', 'Shipped'];
-                    return steps.indexOf(current) >= steps.indexOf(target);
-                };
-
                 const custInfo = `
                     <div class="cust-info">
                         <div style="font-size:14px; margin-bottom:5px;">👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${getTierDisplay(o.tier)}</span></div>
@@ -413,7 +482,6 @@
                         <div style="font-size:12px; color:#aaa; border-top:1px dashed #444; padding-top:5px; margin-top:5px;">📍 <b>จัดส่ง:</b> ${o.address || '-'}</div>
                     </div>`;
 
-                // --- กรณีรอตรวจสอบ / ตีกลับจากลูกค้า ---
                 if (o.status === 'Pending Customer Confirmation') {
                     btns += `<div style="color:var(--accent-color); font-size:12px; text-align:center; margin-top:10px;">⏳ รอให้ลูกค้ายืนยันออเดอร์</div>`;
                 }
@@ -424,7 +492,6 @@
                     </div>`;
                 }
 
-                // --- กรณีติดปัญหา (Correction Needed จาก QC) ---
                 if (o.status === 'Correction Needed') {
                     if (hasAccess('Production Manager')) {
                         html += `<div class="card" style="border:1px solid var(--danger-color)">
@@ -442,7 +509,6 @@
                     return; 
                 }
 
-                // --- ปุ่ม Production Manager ---
                 if (hasAccess('Production Manager')) {
                     if (o.status === 'Order Confirmation') {
                         btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')"><i class="fas fa-clipboard-check"></i> อนุมัติ Work Order</button>`;
@@ -451,7 +517,6 @@
                     }
                 }
 
-                // --- ปุ่ม Merchandiser ---
                 if (hasAccess('Merchandiser')) {
                     if (o.status === 'Work Order Review Stage') {
                         btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
@@ -472,7 +537,6 @@
                     }
                 }
 
-                // --- ปุ่ม Quality Control ---
                 if (hasAccess('Quality Control')) {
                     if (o.status === 'Bulk Production (50%)') {
                         btns += `<div class="flex-row">
@@ -482,7 +546,6 @@
                     }
                 }
 
-                // --- ปุ่ม Sales Admin ---
                 if (hasAccess('Sales Admin')) {
                     if (o.status === 'Quality Control Passed') {
                         btns += `<div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
@@ -536,7 +599,6 @@
             list.innerHTML = html;
         }
 
-        // --- CUSTOMER SECTION ---
         function showCustomerView(data) {
             document.getElementById('viewCustomer').classList.remove('hidden');
             document.getElementById('custHeaderName').innerText = "คุณ " + data.RealName;
@@ -544,7 +606,8 @@
             document.getElementById('custProfilePic').src = linePictureUrl;
             
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_my_orders', data: { userId: userProfile.userId } }) })
-            .then(r => r.json()).then(res => {
+            .then(r => r.json())
+            .then(res => {
                 let confirm = 0, prod = 0, done = 0;
                 res.orders.forEach(o => {
                     if(o.status === 'Shipped') done++;
@@ -556,7 +619,10 @@
                 document.getElementById('stat-done').innerText = done;
 
                 const list = document.getElementById('customerOrderList');
-                if (res.orders.length === 0) { list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">คุณยังไม่มีรายการสั่งผลิต</div>'; return; }
+                if (res.orders.length === 0) { 
+                    list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">คุณยังไม่มีรายการสั่งผลิต</div>'; 
+                    return; 
+                }
                 list.innerHTML = res.orders.map(o => renderCustCard(o)).join('');
             });
         }
@@ -580,17 +646,18 @@
             if (['Quality Control Passed', 'Correction Needed'].includes(o.status)) currentStepIdx = 3;
             if (o.status === 'Shipped') currentStepIdx = 4;
 
+            // ดึงวันที่จากฐานข้อมูลมาแสดงในแต่ละ Step ตรงนี้
             const steps = [
-                { label: 'รับออเดอร์', active: true, showDate: currentStepIdx === 0 }, 
-                { label: 'เตรียมงาน', active: currentStepIdx >= 1, showDate: currentStepIdx === 1 },
-                { label: 'กำลังผลิต', active: currentStepIdx >= 2, showDate: currentStepIdx === 2 },
-                { label: 'ตรวจสอบ', active: currentStepIdx >= 3, showDate: currentStepIdx === 3 },
-                { label: 'ส่งมอบ', active: currentStepIdx === 4, showDate: currentStepIdx === 4 }
+                { label: 'รับออเดอร์', active: true, dateText: o.startDate }, 
+                { label: 'เตรียมงาน', active: currentStepIdx >= 1, dateText: o.prepDate },
+                { label: 'กำลังผลิต', active: currentStepIdx >= 2, dateText: o.prodDate },
+                { label: 'ตรวจสอบ', active: currentStepIdx >= 3, dateText: o.qcDate },
+                { label: 'ส่งมอบ', active: currentStepIdx === 4, dateText: o.shipDate }
             ];
 
             let progressHtml = '<div class="stepper-wrapper">';
             steps.forEach(s => { 
-                const dateHtml = s.showDate ? `<br><span style="color:#aaa; font-size:9px;">${o.updatedDate}</span>` : '';
+                const dateHtml = (s.active && s.dateText && s.dateText !== '-') ? `<br><span style="color:#aaa; font-size:9px;">${s.dateText}</span>` : '';
                 progressHtml += `<div class="stepper-item ${s.active ? 'active' : ''}"><div class="step-counter"></div><div class="step-name">${s.label}${dateHtml}</div></div>`; 
             });
             progressHtml += '</div>';
@@ -630,16 +697,30 @@
                 </div>`;
         }
 
-        // --- ACTIONS ---
-        function openFeedback(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('modalFeedback').classList.add('show'); }
-        function openRejectPP(no) { document.getElementById('rejPPOrderNo').value = no; document.getElementById('modalRejectPP').classList.add('show'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+        function openFeedback(no) { 
+            document.getElementById('fbOrderNo').value = no; 
+            document.getElementById('modalFeedback').classList.add('show'); 
+        }
+
+        function openRejectPP(no) { 
+            document.getElementById('rejPPOrderNo').value = no; 
+            document.getElementById('modalRejectPP').classList.add('show'); 
+        }
+
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('show'); 
+        }
         
         function confirmRollback() { 
             const no = document.getElementById('fbOrderNo').value;
             const reason = document.getElementById('fbReason').value;
             if(!reason) return alert("กรุณาระบุสาเหตุที่ต้องแก้ไขให้ชัดเจน"); 
-            callApi({ orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: document.getElementById('staffName').innerText }); 
+            callApi({ 
+                orderNo: no, 
+                actionType: 'ROLLBACK', 
+                reason: reason, 
+                staffName: document.getElementById('staffName').innerText 
+            }); 
             closeModal('modalFeedback'); 
         }
 
@@ -647,14 +728,22 @@
             const no = document.getElementById('rejPPOrderNo').value;
             const reason = document.getElementById('rejPPReason').value;
             if(!reason) return alert("กรุณาระบุสาเหตุที่ไม่อนุมัติให้ชัดเจน"); 
-            callApi({ orderNo: no, actionType: 'PP_REJECT', reason: reason }); 
+            callApi({ 
+                orderNo: no, 
+                actionType: 'PP_REJECT', 
+                reason: reason 
+            }); 
             closeModal('modalRejectPP'); 
         }
         
         function updateStatus(no, action) { 
             if(!confirm('ยืนยันการทำรายการ?')) return; 
             const staffName = document.getElementById('staffName') ? document.getElementById('staffName').innerText : 'Customer';
-            callApi({ orderNo: no, actionType: action, staffName: staffName }); 
+            callApi({ 
+                orderNo: no, 
+                actionType: action, 
+                staffName: staffName 
+            }); 
         }
         
         async function sendSample(no) { 
@@ -667,7 +756,15 @@
 
             let base64Img = preloadedImages[`s-${no}`] || null; 
             document.getElementById('loader').classList.remove('hidden');
-            callApi({ orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: method, tracking: track, messengerPhone: phone, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
+            callApi({ 
+                orderNo: no, 
+                actionType: 'SEND_SAMPLE', 
+                deliveryMethod: method, 
+                tracking: track, 
+                messengerPhone: phone, 
+                image: base64Img, 
+                staffName: document.getElementById('staffName').innerText 
+            }); 
         }
         
         async function shipOrder(no) { 
@@ -680,16 +777,29 @@
 
             let base64Img = preloadedImages[`ship-${no}`] || null; 
             document.getElementById('loader').classList.remove('hidden');
-            callApi({ orderNo: no, actionType: 'SHIP', deliveryMethod: method, tracking: track, messengerPhone: phone, image: base64Img, staffName: document.getElementById('staffName').innerText }); 
+            callApi({ 
+                orderNo: no, 
+                actionType: 'SHIP', 
+                deliveryMethod: method, 
+                tracking: track, 
+                messengerPhone: phone, 
+                image: base64Img, 
+                staffName: document.getElementById('staffName').innerText 
+            }); 
         }
         
         function callApi(payload) { 
             document.getElementById('loader').classList.remove('hidden'); 
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'update_status', data: payload }) })
-            .then(r => r.json()).then(res => { 
+            .then(r => r.json())
+            .then(res => { 
                 document.getElementById('loader').classList.add('hidden'); 
-                if (res.status === 'success') { alert("บันทึกสำเร็จ!"); location.reload(); } 
-                else alert("Error: " + res.message); 
+                if (res.status === 'success') { 
+                    alert("บันทึกสำเร็จ!"); 
+                    location.reload(); 
+                } else {
+                    alert("Error: " + res.message); 
+                }
             }).catch(e => {
                 document.getElementById('loader').classList.add('hidden'); 
                 alert("การอัปโหลดไฟล์อาจใช้เวลาสักครู่ กรุณารีเฟรชหน้าจอ");
@@ -697,10 +807,18 @@
         }
         
         function register() { 
-            const n = document.getElementById('regName').value, p = document.getElementById('regPhone').value; 
+            const n = document.getElementById('regName').value;
+            const p = document.getElementById('regPhone').value; 
             if(!n || !p) return alert("กรุณากรอกข้อมูลให้ครบถ้วน"); 
+            
             document.getElementById('loader').classList.remove('hidden'); 
-            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'register', data: { userId: userProfile.userId, displayName: userProfile.displayName, realName: n, phone: p } }) })
+            fetch(GAS_API, { 
+                method: 'POST', 
+                body: JSON.stringify({ 
+                    action: 'register', 
+                    data: { userId: userProfile.userId, displayName: userProfile.displayName, realName: n, phone: p } 
+                }) 
+            })
             .then(() => location.reload()); 
         }
         
@@ -719,25 +837,35 @@
                 detail: document.getElementById('ordDetail').value,
                 woImage: woImg
             };
-            if(!payload.phone || !payload.batch || !payload.address) return alert("กรุณากรอก เบอร์โทรลูกค้า, Batch และ ที่อยู่จัดส่ง ให้ครบถ้วน"); 
+            
+            if(!payload.phone || !payload.batch || !payload.address) {
+                return alert("กรุณากรอก เบอร์โทรลูกค้า, Batch และ ที่อยู่จัดส่ง ให้ครบถ้วน"); 
+            }
+            
             document.getElementById('loader').classList.remove('hidden'); 
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'create_order', data: payload }) })
-            .then(r => r.json()).then(res => { 
+            .then(r => r.json())
+            .then(res => { 
                 document.getElementById('loader').classList.add('hidden'); 
-                if(res.status==='success') { 
+                if(res.status === 'success') { 
                     alert("เปิดออเดอร์เรียบร้อย ลูกค้าจะได้รับข้อความแจ้งเตือนให้กดยืนยันครับ"); 
                     location.reload(); 
-                } 
-                else alert("เกิดข้อผิดพลาด: " + res.message); 
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + res.message); 
+                }
             }); 
         }
         
         function fetchOptions() { 
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_options' }) })
-            .then(r => r.json()).then(res => { 
-                const s = document.getElementById('ordStyle'), f = document.getElementById('ordFabric'); 
+            .then(r => r.json())
+            .then(res => { 
+                const s = document.getElementById('ordStyle');
+                const f = document.getElementById('ordFabric'); 
+                
                 s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ...</option>'; 
                 f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>'; 
+                
                 res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); 
                 res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`); 
             }); 
@@ -745,4 +873,3 @@
     </script>
 </body>
 </html>
-
