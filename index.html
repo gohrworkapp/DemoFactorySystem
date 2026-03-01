@@ -79,7 +79,7 @@
             margin-top: 8px; 
             font-size: 14px; 
             transition: 0.2s; 
-            box-sizing: border-box; /* สำคัญ: ช่วยไม่ให้ปุ่มล้นขอบ */
+            box-sizing: border-box;
         }
         .btn-main { background: var(--brand-grad); }
         .btn-pm { background: linear-gradient(90deg, #00B9F2, #0055ff); }
@@ -104,7 +104,7 @@
             border: 1px solid #444; 
             border-radius: 8px; 
             color: #fff; 
-            box-sizing: border-box; /* สำคัญ: ช่วยไม่ให้ Input ล้นขอบ */
+            box-sizing: border-box;
             font-family: 'Kanit'; 
             font-size: 14px; 
         }
@@ -191,7 +191,8 @@
                 <option value="Pre-Production Approved">5. ลูกค้าอนุมัติแบบ</option>
                 <option value="Bulk Production">6. กำลังผลิต</option>
                 <option value="Quality Control">7. ตรวจสอบคุณภาพ</option>
-                <option value="Correction Needed">⚠ งานต้องแก้ไข (QC ตีกลับ)</option>
+                <option value="PP Rejected">⚠ งานแก้ไขตัวแบบ (PP Reject)</option>
+                <option value="Correction Needed">⚠ งานแก้ไข (QC ตีกลับ)</option>
                 <option value="Shipped">8. จัดส่งแล้ว</option>
             </select>
         </div>
@@ -296,7 +297,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbxfQWmUsQ0fc8iLhN5z_Kfng_obvPHCg2ZyaDa6awVrCRxzYqzArWWSv95R-Cro0i_x/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbz1WONtl2DViFQm-idic9VkOBAYMUjODJuAfcP3kKWCJwyPZ4JFB6od8ZMNCwqqkcXi2g/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         // =================================================
 
@@ -341,9 +342,11 @@
             });
         }
 
+        // ฟังก์ชันดึงรูปไอคอน Tier รวมถึงระดับ Staff
         function getTierDisplay(tier) {
             if (tier === 'VVIP') return '👑 VVIP';
             if (tier === 'VIP') return '⭐️ VIP';
+            if (tier === 'Staff') return '👔 Staff';
             return '👤 Regular';
         }
 
@@ -485,13 +488,26 @@
                 if (o.status === 'Pending Customer Confirmation') {
                     btns += `<div style="color:var(--accent-color); font-size:12px; text-align:center; margin-top:10px;">⏳ รอให้ลูกค้ายืนยันออเดอร์</div>`;
                 }
-                
+
+                // --- งานแก้ไขตัวแบบ (PP Reject) ที่ต้องให้ PM จัดการ ---
                 if (o.status === 'PP Rejected') {
-                    btns += `<div style="background:var(--danger-color); color:#fff; padding:10px; border-radius:8px; margin-top:8px; font-size:12px;">
-                        <b>ลูกค้ายกเลิก/ไม่อนุมัติแบบ:</b> ${o.ppFeedback || '-'}
-                    </div>`;
+                    if (hasAccess('Production Manager')) {
+                        html += `<div class="card" style="border:1px solid var(--danger-color)">
+                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ PM ต้องแก้ไขตัวแบบ (${o.orderNo})</strong><span class="status-badge" style="background:var(--danger-color)">PP Rejected</span></div>
+                            ${custInfo}
+                            <p style="font-size:13px; color:#fff; background:#333; padding:10px; border-radius:6px; border-left:3px solid var(--danger-color);"><b>สาเหตุจากลูกค้า:</b> ${o.ppFeedback}</p>
+                            <button class="btn" style="background:var(--success-color);" onclick="updateStatus('${o.orderNo}', 'FIX_PP_REJECT')"><i class="fas fa-check-circle"></i> แก้ไขตัวแบบเสร็จสิ้น (ส่งให้ฝ่าย Merch)</button>
+                        </div>`;
+                    } else {
+                        html += `<div class="card" style="border:1px solid var(--danger-color)">
+                            <div class="card-header"><strong style="color:var(--danger-color)">⚠ รอ PM แก้ไขตัวแบบ (${o.orderNo})</strong><span class="status-badge" style="background:var(--danger-color)">PP Rejected</span></div>
+                            <p style="font-size:12px; color:#aaa;">สาเหตุจากลูกค้า: ${o.ppFeedback}</p>
+                        </div>`;
+                    }
+                    return; 
                 }
 
+                // --- กรณีติดปัญหา (Correction Needed จาก QC) ---
                 if (o.status === 'Correction Needed') {
                     if (hasAccess('Production Manager')) {
                         html += `<div class="card" style="border:1px solid var(--danger-color)">
@@ -646,7 +662,6 @@
             if (['Quality Control Passed', 'Correction Needed'].includes(o.status)) currentStepIdx = 3;
             if (o.status === 'Shipped') currentStepIdx = 4;
 
-            // ดึงวันที่จากฐานข้อมูลมาแสดงในแต่ละ Step ตรงนี้
             const steps = [
                 { label: 'รับออเดอร์', active: true, dateText: o.startDate }, 
                 { label: 'เตรียมงาน', active: currentStepIdx >= 1, dateText: o.prepDate },
@@ -679,6 +694,14 @@
                         <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'PP_APPROVE')"><i class="fas fa-thumbs-up"></i> อนุมัติผลิต</button>
                         <button class="btn btn-reject" style="flex:1;" onclick="openRejectPP('${o.orderNo}')"><i class="fas fa-times"></i> ไม่อนุมัติ</button>
                     </div>
+                </div>`;
+            }
+
+            // แสดงสถานะกรณีลูกค้ากดไม่อนุมัติ (PP Reject) ให้รอทางโรงงานแก้ไข
+            if (o.status === 'PP Rejected') {
+                actionHtml = `<div style="margin-top:15px; padding-top:15px; border-top:1px solid #444; text-align:center;">
+                    <p style="font-size:13px; color:var(--danger-color); margin-bottom:5px;"><i class="fas fa-tools"></i> โรงงานกำลังดำเนินการแก้ไขตัวแบบ</p>
+                    <p style="font-size:11px; color:#aaa;">สาเหตุที่ตีกลับ: ${o.ppFeedback}</p>
                 </div>`;
             }
 
