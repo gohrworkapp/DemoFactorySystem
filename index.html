@@ -139,8 +139,8 @@
         .modal-box { width: 100%; max-width: 400px; background: #222; padding: 24px; border-radius: 20px; }
 
         /* Map Placeholder */
-        .map-placeholder { background: url('https://via.placeholder.com/600x300?text=MAP+VIEW') center/cover; height: 180px; border-radius: 20px; margin-bottom: 20px; border: 2px solid #555; position: relative; }
-        .map-pin { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent-red); font-size: 40px; }
+        .map-placeholder { background: #333; height: 150px; border-radius: 20px; margin-bottom: 20px; border: 1px dashed #777; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color:#aaa; }
+        .map-pin { color: var(--accent-red); font-size: 32px; margin-bottom: 5px; }
 
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .divider { border-top: 1px dotted #666; margin: 30px 0; }
@@ -168,9 +168,9 @@
         <div style="text-align: center; font-size:13px; color:var(--text-muted); margin-bottom: 40px; font-weight:500;">Already Registered? Log in here.</div>
         
         <label class="input-label">NAME</label>
-        <input type="text" id="regName" placeholder="Jiara Martins">
+        <input type="text" id="regName" placeholder="Your full name">
         <label class="input-label">BRAND NAME</label>
-        <input type="text" id="regBrand" placeholder="AWESOME.SCREEN">
+        <input type="text" id="regBrand" placeholder="Your brand name">
         <label class="input-label">PHONE NUMBER</label>
         <input type="tel" id="regPhone" placeholder="08xxxxxxxx">
         <label class="input-label">EMAIL ADDRESS</label>
@@ -220,7 +220,7 @@
             <div class="profile-img-container">
                 <img id="profilePicLg" src="https://via.placeholder.com/100" class="profile-img">
             </div>
-            <div class="tier-badge"><i class="fas fa-crown"></i> <span id="profileTier">VVIP</span></div>
+            <div class="tier-badge" id="profileTier"><i class="fas fa-user"></i> Regular</div>
             <h3 class="profile-name" id="profileName">User Name</h3>
             <div class="profile-id" id="profileId">Customer ID: CUST-0000</div>
 
@@ -305,27 +305,27 @@
 
     <div id="viewEditProfile" class="full-view">
         <div class="topbar" style="background:var(--bg-color); position:sticky; top:0; z-index:910;">
-            <h2 style="font-size:24px;">Profile</h2>
+            <h2 style="font-size:20px;">Profile</h2>
         </div>
         
         <div class="container" style="padding-top:10px;">
             <div style="text-align:center; margin-bottom:20px;">
                 <img id="epPic" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
-                <div style="margin-top:5px;"><span style="color:#FFF; font-weight:bold; font-size:16px;"><i class="fas fa-crown"></i> <span id="epTier">VVIP</span></span></div>
+                <div style="margin-top:5px;"><span class="tier-badge" id="epTier" style="font-size:16px;">VVIP</span></div>
                 <h3 style="margin:0; font-size:22px;" id="epHeaderName">User Name</h3>
                 <div style="font-size:12px; color:#FFF; font-weight:600;" id="epHeaderId">Customer ID: CUST-0000</div>
             </div>
 
             <div class="action-pill" style="margin-bottom:30px; cursor:default;">
                 <div class="icon"><i class="fas fa-pen"></i></div>
-                <div class="text" style="font-size:18px;">Edit Profile</div>
+                <div class="text" style="font-size:16px;">Edit Profile</div>
             </div>
 
-            <label class="input-label">NAME*</label><input type="text" id="epName" placeholder="Jiara Martins">
-            <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand" placeholder="AWESOME.SCREEN">
+            <label class="input-label">NAME*</label><input type="text" id="epName" placeholder="Your full name">
+            <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand" placeholder="Your brand name">
             <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone"></div>
-                <div style="flex:1;"><label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail"></div>
+                <div style="flex:1;"><label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone" placeholder="08xxxxxxxx"></div>
+                <div style="flex:1;"><label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail" placeholder="your@email.com"></div>
             </div>
             <label class="input-label">ADDRESS*</label><input type="text" id="epPerAddress">
             <div class="flex-row">
@@ -388,16 +388,17 @@
                 <div style="flex:1;"><label class="input-label">COUNTRY</label><input type="text" id="epShipCountry" value="Thailand"></div>
             </div>
 
-            <label class="input-label">SHIPPING LOCATION</label>
-            <input type="text" placeholder="Search Address" style="background:#B0B0B0; text-align:center; margin-bottom:15px; color:#333; font-weight:600;">
+            <label class="input-label">SHIPPING LOCATION (พิกัด GPS)</label>
+            <input type="text" id="epLocation" placeholder="พิกัดจะแสดงที่นี่เมื่อกด My Location" readonly style="background:#444; color:#FFF; text-align:center; margin-bottom:15px; font-weight:600;">
             
             <div class="map-placeholder">
                 <i class="fas fa-map-marker-alt map-pin"></i>
+                <div id="mapStatus" style="font-size:12px; font-weight:600; margin-top:30px;">รอระบุตำแหน่ง...</div>
             </div>
 
             <div class="flex-row" style="margin-bottom: 30px;">
-                <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:13px; border-radius:30px;"><i class="fas fa-location-arrow"></i> My Location</button>
-                <button class="btn btn-pink" style="flex:1.5; font-size:13px; background:#FF4D6D; border-radius:30px;">Select Delivery Location</button>
+                <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:13px; border-radius:30px;" onclick="getLocation()"><i class="fas fa-location-arrow"></i> My Location</button>
+                <button class="btn btn-pink" style="flex:1.5; font-size:13px; background:#FF4D6D; border-radius:30px;" onclick="window.open('https://maps.google.com', '_blank')">Open Map</button>
             </div>
 
             <div class="flex-row" style="padding-bottom: 20px;">
@@ -417,7 +418,8 @@
             <div style="text-align:center; font-size:18px; font-weight:700; margin-bottom:5px; color:#FFF;"><i class="fas fa-times-circle" style="color:var(--accent-red);"></i> ไม่อนุมัติ (Not Approved)</div>
             <div style="font-size:12px; text-align:center; color:var(--text-muted); margin-bottom: 15px; font-weight:500;">ระบุสาเหตุ จุดที่ต้องการแก้ไข<br>Please specify the reason and the areas to revise.</div>
             <input type="hidden" id="rejOrderNo">
-            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป...&#10;Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
+            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป...
+Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
             <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
                 <button class="btn btn-dark" onclick="closeModal('modalReject')">Cancel</button>
                 <button class="btn btn-reject" onclick="confirmReject()">แจ้งฝ่ายผลิต / Notify Production</button>
@@ -451,7 +453,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbwjqf62cEhOWlpnPsOyd9g2aRWpcpbP0W5br__pfScVzmeJlxKRcU3J9_de1y9G3fcb0w/exec'; // <--- เปลี่ยนใส่ Web App URL ของคุณที่นี่
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbyH6MW5PHgN9oAPBpDNOPR9Z-SZ4VLYhiVFndMoZ3GAnsV1BG-GUshKNSQUV49QOTHCTw/exec'; // <--- เปลี่ยนใส่ Web App URL ของคุณที่นี่
         const LIFF_ID = '2009142530-l2sIA52W'; // <--- เปลี่ยนใส่ LIFF ID ของคุณที่นี่
         // =================================================
 
@@ -467,7 +469,40 @@
             return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
         }
 
-        // Base64 Image Processor (For WO, Sample, Shipped Images)
+        // --- ฟังก์ชันดึงพิกัด GPS ---
+        function getLocation() {
+            if (navigator.geolocation) {
+                document.getElementById('mapStatus').innerText = "กำลังค้นหาตำแหน่ง...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        const coordsStr = `${lat},${lng}`;
+                        document.getElementById('mapStatus').innerText = `พิกัด: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+                        document.getElementById('mapStatus').style.color = 'var(--accent-green)';
+                        document.getElementById('epLocation').value = coordsStr;
+                    },
+                    (error) => {
+                        document.getElementById('mapStatus').innerText = "ไม่สามารถดึงตำแหน่งได้ กรุณาอนุญาต Location";
+                        document.getElementById('mapStatus').style.color = 'var(--accent-red)';
+                    },
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                alert("เบราว์เซอร์ของคุณไม่รองรับการระบุตำแหน่ง");
+            }
+        }
+
+        // --- ฟังก์ชันแสดงไอคอน Tier ---
+        function getTierIcon(tier) {
+            if (tier === 'VVIP') return '<i class="fas fa-crown"></i> ' + tier;
+            if (tier === 'VIP') return '<i class="fas fa-star"></i> ' + tier;
+            if (tier === 'Regular') return '<i class="fas fa-user"></i> ' + tier;
+            if (tier === 'Staff' || tier === 'Admin') return 'Staff';
+            return '<i class="fas fa-user"></i> ' + (tier || 'Regular');
+        }
+
+        // Base64 Image Processor
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader(); reader.readAsDataURL(file);
@@ -601,7 +636,9 @@
             switchTab('Profile'); 
             document.getElementById('profileName').innerText = dbUserData.RealName || userProfile.displayName;
             document.getElementById('profileId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
-            document.getElementById('profileTier').innerText = dbUserData.Tier || 'VVIP';
+            
+            // ใช้ getTierIcon เพื่อแสดงรูปมงกุฎ/ดาว ตามระดับ
+            document.getElementById('profileTier').innerHTML = getTierIcon(dbUserData.Tier);
             document.getElementById('profilePicLg').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
             
             fetchCustomerOrders();
@@ -648,21 +685,21 @@
                 stepperHtml += '</div>';
 
                 let actionHtml = '';
-                // [PAGE 10] Action: Order Received (Confirm WO)
+                // Action: Order Received (Confirm WO)
                 if (o.status === 'Order Received' || o.status === 'Pending Customer Confirmation') {
                     actionHtml = `<div style="margin-top: 20px; text-align:center;"><div style="font-size:11px; color:#FFC805; margin-bottom:12px;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
                     ${o.woUrl !== '-' ? `<button class="btn btn-outline" style="margin-bottom:10px; font-size:13px; padding:12px;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
                     <button class="btn btn-green" style="font-size:13px; padding:12px;" onclick="confirmWOAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button></div>`;
                 }
 
-                // [PAGE 17] Action: Preparation (Approve Sample)
+                // Action: Preparation (Approve Sample)
                 if (o.status === 'Preparation' && o.sampleImage && o.sampleImage !== '-') {
                     actionHtml = `<div style="margin-top: 20px; text-align:center;"><div style="font-size:11px; color:#FFC805; margin-bottom:12px;">ตัวอย่างถูกจัดส่งแล้ว กรุณาตรวจสอบและคอนเฟิร์ม<br>The sample has been shipped. Please review and confirm.</div>
                     <button class="btn btn-green" style="margin-bottom:10px; font-size:13px; padding:12px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต / Approve Production</button>
                     <button class="btn btn-reject" style="font-size:13px; padding:12px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button></div>`;
                 }
 
-                // [PAGE 21] Revision History
+                // Revision History
                 let revHtml = '';
                 if (o.revCount > 0 && o.revHistory.length > 0) {
                     let itemsHtml = ''; let imagesHtml = '';
@@ -713,18 +750,16 @@
         function openEditProfile() {
             document.getElementById('epHeaderName').innerText = dbUserData.RealName || userProfile.displayName;
             document.getElementById('epHeaderId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
-            document.getElementById('epTier').innerText = dbUserData.Tier || 'VVIP';
+            
+            // แสดง Icon ตาม Tier
+            document.getElementById('epTier').innerHTML = getTierIcon(dbUserData.Tier);
             document.getElementById('epPic').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
 
+            // ดึงข้อมูลเก่ามาใส่ฟอร์ม (ถ้ามี)
             document.getElementById('epName').value = dbUserData.RealName || '';
             document.getElementById('epBrand').value = dbUserData.BrandName || '';
             document.getElementById('epPhone').value = dbUserData.Phone || '';
             document.getElementById('epEmail').value = dbUserData.Email || '';
-            
-            document.getElementById('epPerAddress').value = dbUserData.ShipAddress || '';
-            document.getElementById('epPerCity').value = dbUserData.ShipCity || '';
-            document.getElementById('epPerProv').value = dbUserData.ShipProvince || '';
-            document.getElementById('epPerZip').value = dbUserData.ShipZip || '';
             
             document.getElementById('epShipName').value = dbUserData.ShipName || '';
             document.getElementById('epShipPhone').value = dbUserData.ShipPhone || '';
@@ -745,12 +780,18 @@
 
         function saveProfile() {
             const payload = {
-                userId: userProfile.userId, realName: document.getElementById('epName').value,
-                brandName: document.getElementById('epBrand').value, phone: document.getElementById('epPhone').value,
-                email: document.getElementById('epEmail').value, shipName: document.getElementById('epShipName').value,
-                shipAddress: document.getElementById('epShipAddress').value, shipCity: document.getElementById('epShipCity').value,
-                shipProvince: document.getElementById('epShipProv').value, shipZip: document.getElementById('epShipZip').value,
-                shipPhone: document.getElementById('epShipPhone').value
+                userId: userProfile.userId, 
+                realName: document.getElementById('epName').value,
+                brandName: document.getElementById('epBrand').value, 
+                phone: document.getElementById('epPhone').value,
+                email: document.getElementById('epEmail').value, 
+                shipName: document.getElementById('epShipName').value,
+                shipAddress: document.getElementById('epShipAddress').value, 
+                shipCity: document.getElementById('epShipCity').value,
+                shipProvince: document.getElementById('epShipProv').value, 
+                shipZip: document.getElementById('epShipZip').value,
+                shipPhone: document.getElementById('epShipPhone').value,
+                shipLocation: document.getElementById('epLocation').value // พิกัด GPS ที่ได้จากการกด My Location
             };
             callBackend('update_profile', payload, (res) => {
                 if(res.status === 'success') { alert("Profile Updated!"); closeEditProfile(); checkUser(); }
@@ -814,7 +855,7 @@
             let html = ''; const role = dbUserData.Role;
             filtered.forEach(o => {
                 let btns = '';
-                // Staff Action Buttons Matrix
+                // Staff Action Buttons
                 if (['Admin', 'Production Manager'].includes(role) && o.status === 'Order Received') {
                     btns += `<button class="btn btn-outline" style="border:1px solid var(--accent-blue); color:var(--accent-blue); padding:12px; font-size:13px;" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')">ยืนยันรับงาน (แทนลูกค้า)</button>`;
                 }
