@@ -68,7 +68,7 @@
         .global-footer div { font-size: 9px; font-weight: 500; color: #FFF; }
 
         /* --- Content Container --- */
-        .content-area { padding: 0 20px 20px 20px; min-height: calc(100vh - 120px); display: flex; flex-direction: column; }
+        .content-area { padding: 0 30px 20px 30px; /* เพิ่ม padding ซ้ายขวาเป็น 30px */ min-height: calc(100vh - 120px); display: flex; flex-direction: column; }
 
         /* --- Typography & Elements --- */
         h3 { font-size: 24px; font-weight: 600; margin: 0 0 5px 0; }
@@ -139,8 +139,19 @@
         .modal-box { width: 100%; max-width: 400px; background: #222; padding: 24px; border-radius: 20px; }
 
         /* Map Placeholder */
-        .map-placeholder { background: #333; height: 150px; border-radius: 20px; margin-bottom: 20px; border: 1px dashed #777; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color:#aaa; }
-        .map-pin { color: var(--accent-red); font-size: 32px; margin-bottom: 5px; }
+        .map-placeholder { 
+            height: 180px; /* เพิ่มความสูงเพื่อให้เห็นแผนที่ชัดเจนขึ้น */
+            border-radius: 20px; 
+            margin-bottom: 20px; 
+            border: 2px solid #555; 
+            position: relative; 
+            overflow: hidden; /* ซ่อนส่วนที่ล้นของแผนที่ */
+        }
+        .map-placeholder iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .divider { border-top: 1px dotted #666; margin: 30px 0; }
@@ -308,105 +319,107 @@
             <h2 style="font-size:20px;">Profile</h2>
         </div>
         
-        <div class="container" style="padding-top:10px;">
-            <div style="text-align:center; margin-bottom:20px;">
+        <div class="content-area" style="padding-top:10px;"> <div style="text-align:center; margin-bottom:20px;">
                 <img id="epPic" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
                 <div style="margin-top:5px;"><span class="tier-badge" id="epTier" style="font-size:16px;">VVIP</span></div>
                 <h3 style="margin:0; font-size:22px;" id="epHeaderName">User Name</h3>
                 <div style="font-size:12px; color:#FFF; font-weight:600;" id="epHeaderId">Customer ID: CUST-0000</div>
             </div>
 
-            <div class="action-pill" style="margin-bottom:30px; cursor:default;">
-                <div class="icon"><i class="fas fa-pen"></i></div>
-                <div class="text" style="font-size:16px;">Edit Profile</div>
+            <div style="background:#888; border-radius: 20px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="background: #444; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: var(--accent-red);">
+                    <i class="fas fa-pen"></i>
+                </div>
+                <div style="font-size: 16px; font-weight: 500; color: #FFF;">Edit Profile</div>
             </div>
 
-            <label class="input-label">NAME*</label><input type="text" id="epName" placeholder="Your full name">
-            <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand" placeholder="Your brand name">
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone" placeholder="08xxxxxxxx"></div>
-                <div style="flex:1;"><label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail" placeholder="your@email.com"></div>
-            </div>
-            <label class="input-label">ADDRESS*</label><input type="text" id="epPerAddress">
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epPerCity"></div>
-                <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epPerProv"></div>
-            </div>
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epPerZip"></div>
-                <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epPerCountry" value="Thailand"></div>
-            </div>
+            <div style="background: #333; padding: 20px; border-radius: 20px;">
+                <label class="input-label" style="margin-top: 0;">NAME*</label><input type="text" id="epName" placeholder="Your full name">
+                <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand" placeholder="Your brand name">
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone" placeholder="08xxxxxxxx"></div>
+                    <div style="flex:1;"><label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail" placeholder="your@email.com"></div>
+                </div>
+                <label class="input-label">ADDRESS*</label><input type="text" id="epPerAddress">
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epPerCity"></div>
+                    <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epPerProv"></div>
+                </div>
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epPerZip"></div>
+                    <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epPerCountry" value="Thailand"></div>
+                </div>
 
-            <div class="divider"></div>
+                <div class="divider"></div>
 
-            <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">BILLING ADDRESS (FOR TAX INVOICE)</div>
-            <label class="checkbox-container">
-                <input type="checkbox" id="cbSameShip1">
-                <div class="checkmark"></div>
-                <span class="checkbox-label">Same as Shipping Address</span>
-            </label>
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">COMPANY NAME</label><input type="text" id="epBillComp"></div>
-                <div style="flex:1;"><label class="input-label">PHONE NUMBER</label><input type="text" id="epBillPhone"></div>
-            </div>
-            <label class="input-label">TAX ID</label><input type="text" id="epBillTax">
-            <label class="input-label">ADDRESS*</label><input type="text" id="epBillAddress">
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epBillCity"></div>
-                <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epBillProv"></div>
-            </div>
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epBillZip"></div>
-                <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epBillCountry" value="Thailand"></div>
-            </div>
+                <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">BILLING ADDRESS (FOR TAX INVOICE)</div>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="cbSameShip1">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Same as Shipping Address</span>
+                </label>
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">COMPANY NAME</label><input type="text" id="epBillComp"></div>
+                    <div style="flex:1;"><label class="input-label">PHONE NUMBER</label><input type="text" id="epBillPhone"></div>
+                </div>
+                <label class="input-label">TAX ID</label><input type="text" id="epBillTax">
+                <label class="input-label">ADDRESS*</label><input type="text" id="epBillAddress">
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epBillCity"></div>
+                    <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epBillProv"></div>
+                </div>
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epBillZip"></div>
+                    <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epBillCountry" value="Thailand"></div>
+                </div>
 
-            <div class="divider"></div>
+                <div class="divider"></div>
 
-            <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">SHIPPING ADDRESS</div>
-            <label class="checkbox-container">
-                <input type="checkbox" id="cbSameShip2">
-                <div class="checkmark"></div>
-                <span class="checkbox-label">Same as Shipping Address</span>
-            </label>
-            <label class="checkbox-container">
-                <input type="checkbox" id="cbSameBill">
-                <div class="checkmark"></div>
-                <span class="checkbox-label">Same as Billing Address</span>
-            </label>
+                <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">SHIPPING ADDRESS</div>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="cbSameShip2">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Same as Shipping Address</span>
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="cbSameBill">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Same as Billing Address</span>
+                </label>
 
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">RECIPIENT NAME</label><input type="text" id="epShipName"></div>
-                <div style="flex:1;"><label class="input-label">PHONE NO.</label><input type="text" id="epShipPhone"></div>
-            </div>
-            <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress">
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">CITY / DISTRICT</label><input type="text" id="epShipCity"></div>
-                <div style="flex:1;"><label class="input-label">PROVINCE / STATE</label><input type="text" id="epShipProv"></div>
-            </div>
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">POSTAL CODE</label><input type="text" id="epShipZip"></div>
-                <div style="flex:1;"><label class="input-label">COUNTRY</label><input type="text" id="epShipCountry" value="Thailand"></div>
-            </div>
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">RECIPIENT NAME</label><input type="text" id="epShipName"></div>
+                    <div style="flex:1;"><label class="input-label">PHONE NO.</label><input type="text" id="epShipPhone"></div>
+                </div>
+                <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress">
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">CITY / DISTRICT</label><input type="text" id="epShipCity"></div>
+                    <div style="flex:1;"><label class="input-label">PROVINCE / STATE</label><input type="text" id="epShipProv"></div>
+                </div>
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">POSTAL CODE</label><input type="text" id="epShipZip"></div>
+                    <div style="flex:1;"><label class="input-label">COUNTRY</label><input type="text" id="epShipCountry" value="Thailand"></div>
+                </div>
 
-            <label class="input-label">SHIPPING LOCATION (พิกัด GPS)</label>
-            <input type="text" id="epLocation" placeholder="พิกัดจะแสดงที่นี่เมื่อกด My Location" readonly style="background:#444; color:#FFF; text-align:center; margin-bottom:15px; font-weight:600;">
+                <label class="input-label">SHIPPING LOCATION (พิกัด GPS)</label>
+                <input type="text" id="epLocation" placeholder="Search Address" readonly style="text-align:center; margin-bottom:15px; font-weight:600;">
+                
+                <div class="map-placeholder" id="mapDisplay">
+                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5866160161474!2d100.53696807490074!3d13.743452486648712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2992db54e58f3%3A0xc3b5ed1eb10aab64!2sPratunam%20Market!5e0!3m2!1sen!2sth!4v1716373801234!5m2!1sen!2sth" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <div class="flex-row" style="margin-bottom: 30px;">
+                    <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:13px; border-radius:30px;" onclick="getLocation()"><i class="fas fa-location-arrow"></i> My Location</button>
+                    <button class="btn btn-pink" style="flex:1.5; font-size:13px; background:#FF4D6D; border-radius:30px;" onclick="openMap()">Open Map</button>
+                </div>
+
+                <div class="flex-row" style="padding-bottom: 20px;">
+                    <button class="btn btn-dark" onclick="closeEditProfile()" style="background:#000; border-radius:30px;">Cancel</button>
+                    <button class="btn btn-green" onclick="saveProfile()" style="border-radius:30px;">Save Changes</button>
+                </div>
+            </div>
             
-            <div class="map-placeholder">
-                <i class="fas fa-map-marker-alt map-pin"></i>
-                <div id="mapStatus" style="font-size:12px; font-weight:600; margin-top:30px;">รอระบุตำแหน่ง...</div>
-            </div>
-
-            <div class="flex-row" style="margin-bottom: 30px;">
-                <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:13px; border-radius:30px;" onclick="getLocation()"><i class="fas fa-location-arrow"></i> My Location</button>
-                <button class="btn btn-pink" style="flex:1.5; font-size:13px; background:#FF4D6D; border-radius:30px;" onclick="window.open('https://maps.google.com', '_blank')">Open Map</button>
-            </div>
-
-            <div class="flex-row" style="padding-bottom: 20px;">
-                <button class="btn btn-dark" onclick="closeEditProfile()" style="background:#000; border-radius:30px;">Cancel</button>
-                <button class="btn btn-green" onclick="saveProfile()" style="border-radius:30px;">Save Changes</button>
-            </div>
-            
-            <div style="text-align:center; padding-bottom:30px;">
+            <div style="text-align:center; padding-top:20px; padding-bottom:30px;">
                 <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" style="width:20px; border-radius:50%; vertical-align:middle; margin-right:5px;">
                 <span style="font-size:9px; color:#FFF;">Powered by AWESOME.SCREEN CO., LTD.</span>
             </div>
@@ -454,13 +467,15 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
     <script>
         // ================= CONFIGURATION =================
         const GAS_API = 'https://script.google.com/macros/s/AKfycbyH6MW5PHgN9oAPBpDNOPR9Z-SZ4VLYhiVFndMoZ3GAnsV1BG-GUshKNSQUV49QOTHCTw/exec'; // <--- เปลี่ยนใส่ Web App URL ของคุณที่นี่
-        const LIFF_ID = '2009142530-l2sIA52W'; // <--- เปลี่ยนใส่ LIFF ID ของคุณที่นี่
+        const LIFF_ID = '2009142530'; // <--- เปลี่ยนใส่ LIFF ID ของคุณที่นี่
         // =================================================
 
         let userProfile = {};
         let dbUserData = {};
         let globalOrders = [];
         let preloadedImages = {}; 
+        let currentLat = null;
+        let currentLng = null;
 
         // Utilities
         function formatDateTime(ts) {
@@ -472,24 +487,41 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
         // --- ฟังก์ชันดึงพิกัด GPS ---
         function getLocation() {
             if (navigator.geolocation) {
-                document.getElementById('mapStatus').innerText = "กำลังค้นหาตำแหน่ง...";
+                document.getElementById('epLocation').value = "กำลังค้นหาตำแหน่ง...";
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        const coordsStr = `${lat},${lng}`;
-                        document.getElementById('mapStatus').innerText = `พิกัด: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-                        document.getElementById('mapStatus').style.color = 'var(--accent-green)';
+                        currentLat = position.coords.latitude;
+                        currentLng = position.coords.longitude;
+                        const coordsStr = `${currentLat},${currentLng}`;
+                        
                         document.getElementById('epLocation').value = coordsStr;
+                        
+                        // อัปเดตแผนที่ให้ชี้ไปที่พิกัดที่ได้
+                        updateMap(currentLat, currentLng);
                     },
                     (error) => {
-                        document.getElementById('mapStatus').innerText = "ไม่สามารถดึงตำแหน่งได้ กรุณาอนุญาต Location";
-                        document.getElementById('mapStatus').style.color = 'var(--accent-red)';
+                        document.getElementById('epLocation').value = "ไม่สามารถดึงตำแหน่งได้";
+                        alert("กรุณาอนุญาตให้เข้าถึงตำแหน่ง (Location) ในการตั้งค่าของอุปกรณ์");
                     },
                     { enableHighAccuracy: true }
                 );
             } else {
                 alert("เบราว์เซอร์ของคุณไม่รองรับการระบุตำแหน่ง");
+            }
+        }
+
+        // อัปเดต iFrame แผนที่
+        function updateMap(lat, lng) {
+             const mapDisplay = document.getElementById('mapDisplay');
+             mapDisplay.innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`;
+        }
+
+        // เปิดแผนที่ Google Maps (ในหน้าต่างใหม่)
+        function openMap() {
+            if (currentLat && currentLng) {
+                window.open(`https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLng}`, '_blank');
+            } else {
+                alert("กรุณากดปุ่ม My Location เพื่อค้นหาตำแหน่งก่อน");
             }
         }
 
@@ -502,7 +534,7 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
             return '<i class="fas fa-user"></i> ' + (tier || 'Regular');
         }
 
-        // Base64 Image Processor
+        // Base64 Image Processor (For WO, Sample, Shipped Images)
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader(); reader.readAsDataURL(file);
@@ -768,6 +800,18 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
             document.getElementById('epShipProv').value = dbUserData.ShipProvince || '';
             document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
             
+            // นำพิกัดมาแสดงถ้ามี
+            if (dbUserData.ShipLocation) {
+                document.getElementById('epLocation').value = dbUserData.ShipLocation;
+                // อัปเดตแผนที่
+                const coords = dbUserData.ShipLocation.split(',');
+                if (coords.length === 2) {
+                    currentLat = coords[0];
+                    currentLng = coords[1];
+                    updateMap(currentLat, currentLng);
+                }
+            }
+            
             document.getElementById('viewApp').classList.add('hidden');
             document.getElementById('viewEditProfile').classList.add('show');
             window.scrollTo(0,0);
@@ -791,7 +835,7 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
                 shipProvince: document.getElementById('epShipProv').value, 
                 shipZip: document.getElementById('epShipZip').value,
                 shipPhone: document.getElementById('epShipPhone').value,
-                shipLocation: document.getElementById('epLocation').value // พิกัด GPS ที่ได้จากการกด My Location
+                shipLocation: document.getElementById('epLocation').value // พิกัด GPS 
             };
             callBackend('update_profile', payload, (res) => {
                 if(res.status === 'success') { alert("Profile Updated!"); closeEditProfile(); checkUser(); }
