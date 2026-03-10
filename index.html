@@ -10,15 +10,17 @@
 
     <style>
         :root { 
-            --bg-color: #161616; 
+            --bg-color: #191919; 
             --card-bg: #222222; 
-            --input-bg: #B0B0B0; 
+            --input-bg: #8A8A8A; 
             --text-main: #FFFFFF; 
-            --text-muted: #999999;
+            --text-muted: #AAAAAA;
             --accent-green: #00E676; 
-            --accent-red: #FF4444; 
-            --text-pink: #FF4D6D;
+            --accent-red: #FF4D6D; 
+            --accent-blue: #00B9F2;
             --border-color: #333333;
+            --sidebar-bg: #D9D9D9; 
+            --sidebar-text: #111111;
         }
 
         body { 
@@ -27,82 +29,128 @@
             font-family: 'Inter', 'Kanit', sans-serif; 
             margin: 0; 
             padding: 0; 
-            padding-bottom: 40px; 
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .container { padding: 20px; }
         .hidden { display: none !important; }
         .flex-row { display: flex; gap: 10px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         
+        /* --- Topbar --- */
+        .topbar { position: sticky; top: 0; left: 0; width: 100%; height: 60px; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 900; }
+        .topbar h2 { margin: 0; font-size: 20px; font-weight: 700; color: #FFF; letter-spacing: 0.5px; }
+        .menu-btn { position: absolute; left: 20px; background: #FFF; color: #000; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        
+        /* --- Sidebar Overlay & Menu --- */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 998; display: none; transition: 0.3s; }
+        .overlay.show { display: block; }
+        
+        .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: var(--sidebar-bg); z-index: 1000; transition: 0.3s ease-in-out; display: flex; flex-direction: column; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
+        .sidebar.open { left: 0; }
+        
+        .sidebar-header { padding: 20px 20px 10px 20px; }
+        .sidebar-menu { flex: 1; padding: 10px 25px; display: flex; flex-direction: column; gap: 25px; }
+        .sidebar-item { display: flex; align-items: center; gap: 15px; color: var(--sidebar-text); font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .sidebar-item i { font-size: 22px; width: 24px; text-align: center; }
+        
+        .sidebar-footer { padding: 20px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .sidebar-user { display: flex; align-items: center; gap: 10px; }
+        .sidebar-user img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        .sidebar-user-info { display: flex; flex-direction: column; }
+        .sidebar-user-info .name { color: #000; font-size: 14px; font-weight: 800; line-height: 1.2; }
+        .sidebar-user-info .id { font-size: 10px; font-weight: 600; color: #333; }
+        .sidebar-powered { font-size: 8px; font-weight: 600; color: #555; padding-left: 40px;}
+
+        /* --- Global Footer --- */
+        .global-footer { padding: 20px; display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
+        .global-footer img { width: 24px; height: auto; border-radius: 50%; }
+        .global-footer div { font-size: 9px; font-weight: 500; color: #FFF; }
+
+        /* --- Content Container --- */
+        .content-area { padding: 0 20px 20px 20px; min-height: calc(100vh - 120px); display: flex; flex-direction: column; }
+
         /* --- Typography & Elements --- */
         h3 { font-size: 24px; font-weight: 600; margin: 0 0 5px 0; }
-        .input-label { font-size: 12px; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; margin-top: 15px; }
+        .input-label { font-size: 10px; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; margin-top: 15px; font-weight: 600; }
         
-        /* Inputs matching Page 1 */
-        input, select, textarea { 
-            width: 100%; padding: 16px; background: var(--input-bg); 
-            border: none; border-radius: 12px; color: #111; 
-            font-family: 'Inter', 'Kanit', sans-serif; font-size: 15px; font-weight: 500; outline: none;
-        }
-        input::placeholder, textarea::placeholder { color: #555; }
-        
-        /* Buttons */
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; }
+        input, select, textarea { width: 100%; padding: 14px 16px; background: var(--input-bg); border: none; border-radius: 20px; color: #FFF; font-family: 'Inter', 'Kanit', sans-serif; font-size: 14px; font-weight: 500; outline: none; box-sizing: border-box; }
+        input::placeholder, textarea::placeholder { color: #DDDDDD; font-weight: 400; }
+        input:focus, textarea:focus { border: 1px solid var(--accent-green); }
+        .dark-input { background: #333; color: #FFF; }
+
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 20px; color: white; font-weight: 600; cursor: pointer; font-size: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; box-sizing: border-box; }
         .btn-outline { background: transparent; border: 1.5px solid #FFF; color: #FFF; }
         .btn-green { background: var(--accent-green); color: #000; }
-        .btn-dark { background: #333333; color: #FFF; }
+        .btn-dark { background: #000; color: #FFF; }
+        .btn-pink { background: var(--text-pink); color: #FFF; }
         .btn-reject { background: transparent; border: 1.5px solid var(--accent-red); color: var(--accent-red); }
-        .btn-disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 
-        /* --- Header area --- */
-        .profile-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; margin-top: 10px; }
-        .gradient-text { background: linear-gradient(90deg, #FFC805, #FF0080, #00B9F2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 22px; }
-        .profile-img-container { position: relative; }
-        .profile-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
-        .tier-badge { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); background: #111; border: 1px solid #333; color: #FFF; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+        .checkbox-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; cursor: pointer; }
+        .checkbox-container input { display: none; }
+        .checkmark { width: 22px; height: 22px; background: #FFF; border-radius: 4px; display: flex; justify-content: center; align-items: center; }
+        .checkbox-container input:checked + .checkmark::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; color: #000; font-size: 14px; }
+        .checkbox-label { font-size: 12px; color: #FFF; font-weight: 600; }
 
-        /* --- Navigation Tabs (Top) --- */
-        .top-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .nav-item { background: var(--card-bg); border-radius: 16px; padding: 15px; text-align: center; color: #FFF; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
-        .nav-item i { font-size: 24px; color: var(--text-muted); }
-        .nav-item span { font-size: 12px; font-weight: 500; }
-        .nav-item.active i { color: var(--text-pink); }
+        /* --- Profile Header --- */
+        .profile-img-container { position: relative; margin: 0 auto; width: 100px; height: 100px; margin-top: 20px; }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .tier-badge { display: inline-block; background: transparent; color: #FFF; font-size: 16px; font-weight: 700; margin-top: 10px; text-align: center; width: 100%; }
+        .profile-name { text-align: center; font-size: 24px; font-weight: 700; margin: 5px 0 0 0; }
+        .profile-id { text-align: center; font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 25px; }
+
+        /* --- Cards & Buttons (Profile View) --- */
+        .action-pill { background: #888888; border-radius: 30px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer; }
+        .action-pill .icon { background: #444; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: var(--accent-red); }
+        .action-pill .text { font-size: 16px; font-weight: 500; color: #FFF; }
+
+        .settings-card { background: #2A2A2A; border-radius: 20px; padding: 10px; margin-bottom: 20px; }
+        .setting-row { padding: 10px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #444; cursor: pointer; }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-row .icon { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; color: #FFF; }
+        .setting-row .text { font-size: 14px; font-weight: 500; color: #FFF; }
         
-        .search-bar { background: var(--card-bg); border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; margin-bottom: 20px; border: 1px solid var(--border-color); }
-        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; }
-        .search-bar input::placeholder { color: #666; }
-        .search-bar i { color: #666; margin-left: 10px; font-size: 18px;}
+        .bg-pink { background: #FF4D6D; }
+        .bg-gray-red { background: #555; color: #FF4D6D !important; }
+        .bg-gray-pink { background: #555; color: #FF4D6D !important; }
 
-        /* --- Order Card --- */
-        .order-card { background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 20px; }
-        .inner-box { background: #2A2A2E; border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; margin-top: 15px; }
-        .wo-thumbnail { width: 70px; height: 85px; background: #FFF; border-radius: 8px; object-fit: cover; border: 1px solid #ddd; }
-
-        /* --- Stepper (Timeline) --- */
+        /* --- Stepper & Orders --- */
+        .order-card { background: #2A2A2A; border-radius: 20px; padding: 20px; margin-bottom: 20px; }
         .stepper-wrapper { display: flex; justify-content: space-between; margin: 25px 0 10px 0; position: relative; }
         .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; z-index: 2; }
-        .stepper-item::after { content: ""; position: absolute; top: 10px; left: 50%; width: 100%; height: 4px; background: #444; z-index: -1; }
+        .stepper-item::after { content: ""; position: absolute; top: 12px; left: 50%; width: 100%; height: 4px; background: #444; z-index: -1; }
         .stepper-item:last-child::after { content: none; }
-        .step-counter { width: 24px; height: 24px; border-radius: 50%; background: #444; }
+        .step-counter { width: 28px; height: 28px; border-radius: 50%; background: #444; }
         .stepper-item.completed .step-counter, .stepper-item.active .step-counter { background: var(--accent-green); }
         .stepper-item.completed::after { background: var(--accent-green); }
-        .step-name { margin-top: 8px; font-size: 9px; color: var(--text-main); text-align: center; font-weight: 500; line-height: 1.2; }
-        .step-date { font-size: 8px; color: var(--text-muted); margin-top: 2px; }
+        .step-name { margin-top: 10px; font-size: 10px; color: var(--text-main); text-align: center; font-weight: 600; line-height: 1.2; }
+        
+        .search-bar { background: #2A2A2A; border-radius: 16px; padding: 15px 20px; display: flex; align-items: center; margin-bottom: 20px; }
+        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; font-size: 15px; }
+        .search-bar i { color: #888; font-size: 20px; }
 
-        /* --- Revision History Box --- */
-        .revision-box { border: 1px solid var(--accent-red); border-radius: 12px; padding: 12px; margin-top: 15px; }
+        /* --- Full Screen View (Edit Profile) --- */
+        .full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 950; display: none; overflow-y: auto; padding-bottom: 40px; }
+        .full-view.show { display: block; }
+        
+        /* Modal Center (Reject & Staff) */
+        .modal-center { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1001; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-center.show { display: flex; }
+        .modal-box { width: 100%; max-width: 400px; background: #222; padding: 24px; border-radius: 20px; }
+
+        /* Map Placeholder */
+        .map-placeholder { background: url('https://via.placeholder.com/600x300?text=MAP+VIEW') center/cover; height: 180px; border-radius: 20px; margin-bottom: 20px; border: 2px solid #555; position: relative; }
+        .map-pin { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent-red); font-size: 40px; }
+
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        .divider { border-top: 1px dotted #666; margin: 30px 0; }
+
+        /* Revision History Box */
+        .revision-box { border: 1px solid var(--accent-red); border-radius: 12px; padding: 12px; margin-top: 15px; background: rgba(255, 77, 109, 0.05); }
         .revision-title { color: var(--accent-red); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
         .revision-item { font-size: 11px; color: #DDD; margin-bottom: 4px; }
         .revision-images { display: flex; gap: 8px; overflow-x: auto; margin-top: 10px; }
         .rev-img-box { width: 60px; height: 60px; background: #333; border-radius: 8px; flex-shrink: 0; object-fit: cover; }
-
-        /* Modal */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal.show { display: flex; }
-        .modal-content { width: 100%; max-width: 400px; background: var(--card-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
-
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
 <body>
@@ -112,127 +160,137 @@
         <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Loading AWESOME.SCREEN...</div>
     </div>
 
-    <div id="viewRegister" class="container hidden">
-        <div style="text-align: center; margin: 40px 0 30px 0;">
-            <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="AWESOME.SCREEN" style="max-width: 80%; height: auto;" onerror="this.outerHTML='<h2 style=\'color:#FFF; letter-spacing:2px;\'>AWESOME.SCREEN</h2>'">
+    <div id="viewRegister" class="container hidden" style="padding-top: 60px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
         </div>
-        
-        <h3>Create new<br>Account</h3>
-        <div style="font-size:13px; color:var(--text-muted); margin-bottom: 30px;">Already Registered? Log in here.</div>
+        <h3 style="text-align: center; font-size:28px;">Create new<br>Account</h3>
+        <div style="text-align: center; font-size:13px; color:var(--text-muted); margin-bottom: 40px; font-weight:500;">Already Registered? Log in here.</div>
         
         <label class="input-label">NAME</label>
         <input type="text" id="regName" placeholder="Jiara Martins">
-        
         <label class="input-label">BRAND NAME</label>
         <input type="text" id="regBrand" placeholder="AWESOME.SCREEN">
-        
         <label class="input-label">PHONE NUMBER</label>
-        <input type="tel" id="regPhone" placeholder="089065063">
-        
+        <input type="tel" id="regPhone" placeholder="08xxxxxxxx">
         <label class="input-label">EMAIL ADDRESS</label>
-        <input type="email" id="regEmail" placeholder="panrapee.pukkajiam@gmail.com">
+        <input type="email" id="regEmail" placeholder="your@email.com">
         
-        <button class="btn btn-outline" style="margin-top: 30px;" onclick="register()">sign up</button>
+        <button class="btn btn-outline" style="margin-top: 40px;" onclick="register()">sign up</button>
     </div>
 
-    <div id="viewApp" class="container hidden">
+    <div id="viewApp" class="hidden">
         
-        <div class="profile-header">
-            <div>
-                <div style="display:flex; align-items:center; gap:5px;">
-                    <div class="gradient-text">Welcome back</div>
+        <div class="topbar">
+            <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <h2 id="topbarTitle">Profile</h2>
+        </div>
+
+        <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        <div class="sidebar" id="sidebarMenu">
+            <div class="sidebar-header">
+                <button class="menu-btn" style="position:static;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-item" onclick="switchTab('Orders')"><i class="fas fa-list-alt"></i> Orders</div>
+                <div class="sidebar-item" onclick="switchTab('Overview')"><i class="fas fa-search"></i> Overview</div>
+                <div class="sidebar-item" onclick="switchTab('Profile')"><i class="fas fa-user"></i> Profile</div>
+                
+                <div id="navAdminCreate" class="sidebar-item hidden" onclick="switchTab('CreateOrder')" style="color:var(--accent-red); margin-top:20px;">
+                    <i class="fas fa-plus-circle"></i> Create Order
                 </div>
-                <div id="headerName" style="font-size:18px; font-weight:600; margin-top:5px;">User Name</div>
-                <div id="headerBrand" style="font-size:15px; font-weight:500;">Brand name</div>
-                <div id="headerId" style="font-size:12px; font-weight:600; margin-top:5px;">Customer ID: CUST-0000</div>
+                <div id="navAdminList" class="sidebar-item hidden" onclick="switchTab('StaffOrders')" style="color:var(--accent-blue);">
+                    <i class="fas fa-tasks"></i> All Orders
+                </div>
             </div>
+            
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo" id="sidebarPic">
+                    <div class="sidebar-user-info">
+                        <div class="name" id="sidebarName">Name</div>
+                        <div class="id" id="sidebarId">ID</div>
+                    </div>
+                </div>
+                <div class="sidebar-powered">Powered by AWESOME.SCREEN CO., LTD.</div>
+            </div>
+        </div>
+
+        <div id="tabProfile" class="content-area">
             <div class="profile-img-container">
-                <img id="headerPic" src="https://via.placeholder.com/100" class="profile-img">
-                <div class="tier-badge"><i class="fas fa-crown" style="font-size:8px;"></i> <span id="headerTier">VVIP</span></div>
+                <img id="profilePicLg" src="https://via.placeholder.com/100" class="profile-img">
+            </div>
+            <div class="tier-badge"><i class="fas fa-crown"></i> <span id="profileTier">VVIP</span></div>
+            <h3 class="profile-name" id="profileName">User Name</h3>
+            <div class="profile-id" id="profileId">Customer ID: CUST-0000</div>
+
+            <div class="action-pill" onclick="openEditProfile()">
+                <div class="icon"><i class="fas fa-pen"></i></div>
+                <div class="text">Edit Profile</div>
+            </div>
+
+            <h4 style="margin: 10px 0 15px 5px; color:var(--text-main); font-weight:700; font-size:18px;">General Settings</h4>
+            <div class="settings-card">
+                <div class="setting-row">
+                    <div class="icon bg-pink"><i class="fas fa-question"></i></div>
+                    <div class="text">About</div>
+                </div>
+                <div class="setting-row">
+                    <div class="icon bg-gray-red"><i class="fas fa-exclamation"></i></div>
+                    <div class="text">Terms & Conditions</div>
+                </div>
+                <div class="setting-row">
+                    <div class="icon bg-gray-pink"><i class="fas fa-lock"></i></div>
+                    <div class="text">Privacy Policy</div>
+                </div>
+            </div>
+            
+            <div class="global-footer">
+                <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo">
+                <div>Powered by AWESOME.SCREEN CO., LTD.</div>
             </div>
         </div>
 
-        <div style="font-size:16px; font-weight:600; margin-bottom:15px;">Your Order Process Now</div>
-
-        <div class="top-nav">
-            <div class="nav-item active" onclick="switchTab('Orders', this)">
-                <i class="fas fa-list-alt"></i><span>Orders</span>
-            </div>
-            <div class="nav-item" onclick="switchTab('Overview', this)">
-                <i class="fas fa-search"></i><span>Overview</span>
-            </div>
-            <div class="nav-item" onclick="switchTab('Profile', this)">
-                <i class="fas fa-user"></i><span>Profile</span>
-            </div>
-        </div>
-
-        <div id="tabOrders">
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()" style="font-weight: 400; padding:0;">
+        <div id="tabOrders" class="content-area hidden">
+            <div class="search-bar" style="margin-top:10px;">
+                <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()">
                 <i class="fas fa-search"></i>
             </div>
-            
-            <div class="flex-between" style="margin-bottom: 15px;">
-                <span style="font-weight: 600; font-size: 15px;">Transaction</span>
-                <span style="font-size: 12px; color: var(--text-muted);">Sort by Latest ▾</span>
+            <div class="flex-between" style="margin-bottom: 20px;">
+                <span style="font-weight: 700; font-size: 16px;">Transaction</span>
+                <span style="font-size: 13px; color: var(--text-muted); font-weight:500;">Sort by Latest ▾</span>
             </div>
-            
             <div id="orderListContainer"></div>
         </div>
 
-        <div id="tabOverview" class="hidden">
-            <div class="order-card" style="text-align:center; padding: 40px 20px;">
-                <i class="fas fa-chart-pie fa-3x" style="color:var(--text-muted); margin-bottom: 15px;"></i>
+        <div id="tabOverview" class="content-area hidden">
+            <div class="order-card" style="text-align:center; padding: 60px 20px; margin-top:20px;">
+                <i class="fas fa-chart-pie fa-4x" style="color:#444; margin-bottom: 20px;"></i>
                 <h3 style="color:#FFF;">Overview</h3>
-                <p class="text-muted">Summary and statistics will be available here.</p>
+                <p class="text-muted">Summary and statistics will be available here soon.</p>
             </div>
         </div>
 
-        <div id="tabProfile" class="hidden">
-            <div class="order-card" style="padding: 0; overflow: hidden; margin-top:10px;">
-                <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px; cursor:pointer;" onclick="openEditProfile()">
-                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--text-pink);"><i class="fas fa-pen"></i></div>
-                    <div style="font-weight:500;">Edit Profile</div>
+        <div id="tabCreateOrder" class="content-area hidden">
+            <div class="order-card" style="margin-top:10px;">
+                <h4 style="margin-top:0; color:var(--accent-green); border-bottom:1px solid #444; padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
+                <label class="input-label" style="color:#aaa;">1. เบอร์โทรลูกค้า</label><input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx" class="dark-input">
+                <label class="input-label" style="color:#aaa;">2. Batch</label><input type="text" id="ordBatch" placeholder="QT2026-001" class="dark-input">
+                <div class="flex-row">
+                    <div style="flex:1"><label class="input-label" style="color:#aaa;">3. ทรงเสื้อ</label><select id="ordStyle" class="dark-input"></select></div>
+                    <div style="flex:1"><label class="input-label" style="color:#aaa;">4. จำนวน</label><input type="number" id="ordQty" placeholder="100" class="dark-input"></div>
                 </div>
-            </div>
-
-            <h4 style="margin: 20px 0 10px 0; color:var(--text-main); font-weight:600;">General Settings</h4>
-            <div class="order-card" style="padding: 0; overflow: hidden;">
-                <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
-                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#FF44A0;"><i class="fas fa-question"></i></div>
-                    <div style="font-weight:500;">About</div>
-                </div>
-                <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
-                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#FF4444;"><i class="fas fa-exclamation"></i></div>
-                    <div style="font-weight:500;">Terms & Conditions</div>
-                </div>
-                <div style="padding: 15px; display:flex; align-items:center; gap:15px;">
-                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#A044FF;"><i class="fas fa-lock"></i></div>
-                    <div style="font-weight:500;">Privacy Policy</div>
-                </div>
+                <label class="input-label" style="color:#aaa;">5. ชนิดผ้า</label><select id="ordFabric" class="dark-input"></select>
+                <label class="input-label" style="color:#aaa;">6. วันที่ส่งมอบ</label><input type="date" id="ordDate" class="dark-input">
+                <label class="input-label" style="color:#aaa;">7. รายละเอียด</label><textarea id="ordDetail" rows="2" class="dark-input"></textarea>
+                <label class="input-label" style="color:#aaa;">8. แนบใบสั่งงาน (WO)</label><input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" style="padding:10px; font-size:12px; background:#333; color:#fff;">
+                <div id="status-wo-new_wo" style="font-size:12px; margin-top:5px; display:none;"></div>
+                <button class="btn btn-green" style="margin-top:20px;" onclick="createOrder()">บันทึก & แจ้งลูกค้า</button>
             </div>
         </div>
 
-        <div style="text-align:center; margin-top:20px; font-size:11px; color:#555;">
-            Powered by AWESOME.SCREEN CO., LTD.
-        </div>
-    </div>
-
-    <div id="viewStaff" class="container hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:var(--card-bg); padding:15px; border-radius:16px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img id="staffProfilePic" src="https://via.placeholder.com/50" class="profile-img" style="border:2px solid var(--accent-green);">
-                <div>
-                    <div id="staffName" style="font-weight:bold; font-size:16px;">User</div>
-                    <div id="staffRole" style="font-size:12px; color:var(--text-muted);">ROLE</div>
-                </div>
-            </div>
-            <div id="staffTier" style="background:#333; padding:4px 8px; border-radius:8px; font-size:11px;">Staff</div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-            <input type="text" id="staffSearch" placeholder="🔍 Search Order No, Name..." onkeyup="filterStaffList()" style="background:#333; color:#FFF; padding:12px;">
-            <select id="staffStatusFilter" onchange="filterStaffList()" style="background:#333; color:#FFF; padding:12px;">
+        <div id="tabStaffOrders" class="content-area hidden">
+            <select id="staffStatusFilter" onchange="filterStaffList()" class="dark-input" style="margin:10px 0 20px 0;">
                 <option value="ACTIVE">Active Orders</option>
                 <option value="ALL">All Orders</option>
                 <option value="Order Received">1. Order Received</option>
@@ -241,79 +299,149 @@
                 <option value="Quality Check">4. Quality Check</option>
                 <option value="Delivered">5. Delivered</option>
             </select>
+            <div id="staffTaskList">Loading...</div>
         </div>
-
-        <div id="adminPanel" class="hidden">
-            <button class="btn btn-dark" style="margin-bottom:15px; border:1px solid var(--accent-green);" onclick="document.getElementById('createOrderForm').classList.toggle('hidden')">
-                <i class="fas fa-plus"></i> Create New Order
-            </button>
-            <div id="createOrderForm" class="order-card hidden">
-                <h4 style="margin-top:0; color:var(--accent-green); border-bottom:1px solid #444; padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
-                <label style="font-size:11px; color:#aaa; margin-top:10px; display:block;">1. เบอร์โทรลูกค้า</label><input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;">
-                <label style="font-size:11px; color:#aaa;">2. Batch</label><input type="text" id="ordBatch" placeholder="QT2026-001" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;">
-                <div class="flex-row">
-                    <div style="flex:1"><label style="font-size:11px; color:#aaa;">3. ทรงเสื้อ</label><select id="ordStyle" style="background:#333; color:#fff; padding:10px;"></select></div>
-                    <div style="flex:1"><label style="font-size:11px; color:#aaa;">4. จำนวน</label><input type="number" id="ordQty" placeholder="100" style="background:#333; color:#fff; padding:10px;"></div>
-                </div>
-                <label style="font-size:11px; color:#aaa; margin-top:8px; display:block;">5. ชนิดผ้า</label><select id="ordFabric" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;"></select>
-                <label style="font-size:11px; color:#aaa;">6. วันที่ส่งมอบ</label><input type="date" id="ordDate" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;">
-                <label style="font-size:11px; color:#aaa;">7. รายละเอียด</label><textarea id="ordDetail" rows="2" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;"></textarea>
-                <label style="font-size:11px; color:#aaa;">8. แนบใบสั่งงาน (WO)</label><input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" style="font-size:11px;">
-                <div id="status-wo-new_wo" style="font-size:11px; margin-top:5px; display:none;"></div>
-                <button class="btn btn-green" style="margin-top:15px;" onclick="createOrder()">บันทึก & แจ้งลูกค้า</button>
-            </div>
-        </div>
-
-        <div id="staffTaskList">Loading tasks...</div>
     </div>
 
-    <div id="modalReject" class="modal">
-        <div class="modal-content">
-            <div style="text-align:center; color:var(--text-main); font-size:18px; font-weight:600; margin-bottom:5px;">ไม่อนุมัติ (PP Reject)</div>
-            <div style="font-size:13px; color:var(--text-main); margin-bottom: 2px;">ระบุสาเหตุ จุดที่ต้องการแก้ไข</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-bottom: 15px;">Please specify the reason and the areas that need to be revised</div>
+    <div id="viewEditProfile" class="full-view">
+        <div class="topbar" style="background:var(--bg-color); position:sticky; top:0; z-index:910;">
+            <h2 style="font-size:24px;">Profile</h2>
+        </div>
+        
+        <div class="container" style="padding-top:10px;">
+            <div style="text-align:center; margin-bottom:20px;">
+                <img id="epPic" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
+                <div style="margin-top:5px;"><span style="color:#FFF; font-weight:bold; font-size:16px;"><i class="fas fa-crown"></i> <span id="epTier">VVIP</span></span></div>
+                <h3 style="margin:0; font-size:22px;" id="epHeaderName">User Name</h3>
+                <div style="font-size:12px; color:#FFF; font-weight:600;" id="epHeaderId">Customer ID: CUST-0000</div>
+            </div>
+
+            <div class="action-pill" style="margin-bottom:30px; cursor:default;">
+                <div class="icon"><i class="fas fa-pen"></i></div>
+                <div class="text" style="font-size:18px;">Edit Profile</div>
+            </div>
+
+            <label class="input-label">NAME*</label><input type="text" id="epName" placeholder="Jiara Martins">
+            <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand" placeholder="AWESOME.SCREEN">
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone"></div>
+                <div style="flex:1;"><label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail"></div>
+            </div>
+            <label class="input-label">ADDRESS*</label><input type="text" id="epPerAddress">
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epPerCity"></div>
+                <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epPerProv"></div>
+            </div>
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epPerZip"></div>
+                <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epPerCountry" value="Thailand"></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">BILLING ADDRESS (FOR TAX INVOICE)</div>
+            <label class="checkbox-container">
+                <input type="checkbox" id="cbSameShip1">
+                <div class="checkmark"></div>
+                <span class="checkbox-label">Same as Shipping Address</span>
+            </label>
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">COMPANY NAME</label><input type="text" id="epBillComp"></div>
+                <div style="flex:1;"><label class="input-label">PHONE NUMBER</label><input type="text" id="epBillPhone"></div>
+            </div>
+            <label class="input-label">TAX ID</label><input type="text" id="epBillTax">
+            <label class="input-label">ADDRESS*</label><input type="text" id="epBillAddress">
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epBillCity"></div>
+                <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epBillProv"></div>
+            </div>
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epBillZip"></div>
+                <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epBillCountry" value="Thailand"></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">SHIPPING ADDRESS</div>
+            <label class="checkbox-container">
+                <input type="checkbox" id="cbSameShip2">
+                <div class="checkmark"></div>
+                <span class="checkbox-label">Same as Shipping Address</span>
+            </label>
+            <label class="checkbox-container">
+                <input type="checkbox" id="cbSameBill">
+                <div class="checkmark"></div>
+                <span class="checkbox-label">Same as Billing Address</span>
+            </label>
+
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">RECIPIENT NAME</label><input type="text" id="epShipName"></div>
+                <div style="flex:1;"><label class="input-label">PHONE NO.</label><input type="text" id="epShipPhone"></div>
+            </div>
+            <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress">
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">CITY / DISTRICT</label><input type="text" id="epShipCity"></div>
+                <div style="flex:1;"><label class="input-label">PROVINCE / STATE</label><input type="text" id="epShipProv"></div>
+            </div>
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">POSTAL CODE</label><input type="text" id="epShipZip"></div>
+                <div style="flex:1;"><label class="input-label">COUNTRY</label><input type="text" id="epShipCountry" value="Thailand"></div>
+            </div>
+
+            <label class="input-label">SHIPPING LOCATION</label>
+            <input type="text" placeholder="Search Address" style="background:#B0B0B0; text-align:center; margin-bottom:15px; color:#333; font-weight:600;">
             
+            <div class="map-placeholder">
+                <i class="fas fa-map-marker-alt map-pin"></i>
+            </div>
+
+            <div class="flex-row" style="margin-bottom: 30px;">
+                <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:13px; border-radius:30px;"><i class="fas fa-location-arrow"></i> My Location</button>
+                <button class="btn btn-pink" style="flex:1.5; font-size:13px; background:#FF4D6D; border-radius:30px;">Select Delivery Location</button>
+            </div>
+
+            <div class="flex-row" style="padding-bottom: 20px;">
+                <button class="btn btn-dark" onclick="closeEditProfile()" style="background:#000; border-radius:30px;">Cancel</button>
+                <button class="btn btn-green" onclick="saveProfile()" style="border-radius:30px;">Save Changes</button>
+            </div>
+            
+            <div style="text-align:center; padding-bottom:30px;">
+                <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" style="width:20px; border-radius:50%; vertical-align:middle; margin-right:5px;">
+                <span style="font-size:9px; color:#FFF;">Powered by AWESOME.SCREEN CO., LTD.</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalReject" class="modal-center">
+        <div class="modal-box">
+            <div style="text-align:center; font-size:18px; font-weight:700; margin-bottom:5px; color:#FFF;"><i class="fas fa-times-circle" style="color:var(--accent-red);"></i> ไม่อนุมัติ (Not Approved)</div>
+            <div style="font-size:12px; text-align:center; color:var(--text-muted); margin-bottom: 15px; font-weight:500;">ระบุสาเหตุ จุดที่ต้องการแก้ไข<br>Please specify the reason and the areas to revise.</div>
             <input type="hidden" id="rejOrderNo">
-            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป, สีโลโก้ไม่ตรง...&#10;Sleeves are too short, The logo color is incorrect..."></textarea>
-            
+            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป...&#10;Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
             <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
                 <button class="btn btn-dark" onclick="closeModal('modalReject')">Cancel</button>
-                <button class="btn btn-reject" style="background:transparent;" onclick="confirmReject()">แจ้งฝ่ายผลิต / Notify Production</button>
+                <button class="btn btn-reject" onclick="confirmReject()">แจ้งฝ่ายผลิต / Notify Production</button>
             </div>
         </div>
     </div>
 
-    <div id="modalProfile" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-top:0; text-align:center;">Edit Profile</h3>
-            <label class="input-label">NAME*</label><input type="text" id="epName">
-            <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand">
-            <label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone">
-            <label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail">
-
-            <div class="flex-row" style="margin-top: 25px;">
-                <button class="btn btn-dark" onclick="closeModal('modalProfile')">Cancel</button>
-                <button class="btn btn-green" onclick="saveProfile()">Save Changes</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modalFeedback" class="modal">
-        <div class="modal-content">
-            <h3 style="color:var(--accent-red); margin-top:0;">ตีกลับงาน (QC)</h3>
+    <div id="modalFeedback" class="modal-center">
+        <div class="modal-box">
+            <h3 style="color:var(--accent-red); margin-top:0; text-align:center;">ตีกลับงาน (QC)</h3>
             <input type="hidden" id="fbOrderNo">
-            <textarea id="fbReason" rows="4" placeholder="ระบุสาเหตุ..."></textarea>
+            <textarea id="fbReason" rows="4" placeholder="ระบุสาเหตุ..." style="background:#444; color:#FFF;"></textarea>
             <div class="flex-row" style="margin-top:15px;">
                 <button class="btn btn-dark" onclick="closeModal('modalFeedback')">ยกเลิก</button>
                 <button class="btn btn-reject" onclick="confirmRollback()">ยืนยัน</button>
             </div>
         </div>
     </div>
-    <div id="modalFixPP" class="modal">
-        <div class="modal-content">
-            <h3 style="color:var(--accent-green); margin-top:0;">บันทึกการแก้ไขแบบ</h3>
+
+    <div id="modalFixPP" class="modal-center">
+        <div class="modal-box">
+            <h3 style="color:var(--accent-green); margin-top:0; text-align:center;">บันทึกการแก้ไขแบบ</h3>
             <input type="hidden" id="fixPPOrderNo">
-            <textarea id="fixPPDetail" rows="4" placeholder="รายละเอียด..."></textarea>
+            <textarea id="fixPPDetail" rows="4" placeholder="รายละเอียด..." style="background:#444; color:#FFF;"></textarea>
             <div class="flex-row" style="margin-top:15px;">
                 <button class="btn btn-dark" onclick="closeModal('modalFixPP')">ยกเลิก</button>
                 <button class="btn btn-green" onclick="confirmFixPP()">บันทึก</button>
@@ -323,8 +451,8 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbwjqf62cEhOWlpnPsOyd9g2aRWpcpbP0W5br__pfScVzmeJlxKRcU3J9_de1y9G3fcb0w/exec'; // <--- แก้ไขตรงนี้
-        const LIFF_ID = '2009142530-l2sIA52W'; // <--- แก้ไขตรงนี้
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbwjqf62cEhOWlpnPsOyd9g2aRWpcpbP0W5br__pfScVzmeJlxKRcU3J9_de1y9G3fcb0w/exec'; // <--- เปลี่ยนใส่ Web App URL ของคุณที่นี่
+        const LIFF_ID = '2009142530-l2sIA52W'; // <--- เปลี่ยนใส่ LIFF ID ของคุณที่นี่
         // =================================================
 
         let userProfile = {};
@@ -334,28 +462,21 @@
 
         // Utilities
         function formatDateTime(ts) {
-            if(!ts) return "";
-            const d = new Date(ts);
-            if(isNaN(d.getTime())) return "";
+            if(!ts) return ""; const d = new Date(ts); if(isNaN(d.getTime())) return "";
             const pad = n => String(n).padStart(2, '0');
             return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
         }
 
+        // Base64 Image Processor (For WO, Sample, Shipped Images)
         function getBase64(file) {
             return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
+                const reader = new FileReader(); reader.readAsDataURL(file);
                 reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
+                    const img = new Image(); img.src = event.target.result;
                     img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800; 
-                        const scaleSize = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const canvas = document.createElement('canvas'); const MAX_WIDTH = 800; 
+                        const scaleSize = MAX_WIDTH / img.width; canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize;
+                        const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         resolve(canvas.toDataURL('image/jpeg', 0.7)); 
                     };
                     img.onerror = error => reject(error);
@@ -370,62 +491,43 @@
             else if(type === 'ship') { btnId = `btn-ship-${orderNo}`; statusId = `status-ship-${orderNo}`; }
             else if(type === 'wo') { statusId = `status-wo-${orderNo}`; } 
 
-            const btn = btnId ? document.getElementById(btnId) : null;
-            const status = document.getElementById(statusId);
+            const btn = btnId ? document.getElementById(btnId) : null; const status = document.getElementById(statusId);
             const key = `${type}-${orderNo}`;
 
             if (input.files.length > 0) {
                 if(btn) { btn.classList.add('btn-disabled'); btn.disabled = true; }
-                status.style.display = 'block';
-                status.style.color = '#FFC805';
-                status.innerHTML = 'กำลังประมวลผล...';
+                status.style.display = 'block'; status.style.color = '#FFC805'; status.innerHTML = 'กำลังประมวลผล...';
                 try {
-                    const base64 = await getBase64(input.files[0]);
-                    preloadedImages[key] = base64; 
-                    status.style.color = 'var(--accent-green)';
-                    status.innerHTML = 'ไฟล์พร้อมส่ง';
+                    const base64 = await getBase64(input.files[0]); preloadedImages[key] = base64; 
+                    status.style.color = 'var(--accent-green)'; status.innerHTML = 'ไฟล์พร้อมส่ง';
                     if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 } catch (e) {
-                    status.style.color = 'var(--accent-red)';
-                    status.innerHTML = 'เกิดข้อผิดพลาด';
+                    status.style.color = 'var(--accent-red)'; status.innerHTML = 'เกิดข้อผิดพลาด';
                     if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 }
-            } else {
-                status.style.display = 'none';
-                delete preloadedImages[key];
-            }
+            } else { status.style.display = 'none'; delete preloadedImages[key]; }
         }
 
         // ================= CORE SYSTEM =================
-
         async function main() {
             try {
                 await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) { 
-                    liff.login(); 
-                    return; 
-                }
+                if (!liff.isLoggedIn()) { liff.login(); return; }
                 userProfile = await liff.getProfile();
                 checkUser();
-            } catch(e) { 
-                alert("LIFF Init Error"); 
-            }
+            } catch(e) { alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); }
         }
         main();
 
         function callBackend(action, data, callback) {
             document.getElementById('loader').classList.remove('hidden');
-            fetch(GAS_API, {
-                method: 'POST',
-                body: JSON.stringify({ action: action, data: data })
-            })
-            .then(r => r.json())
-            .then(res => {
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: action, data: data }) })
+            .then(r => r.json()).then(res => {
                 document.getElementById('loader').classList.add('hidden');
                 if(callback) callback(res);
             }).catch(e => {
-                document.getElementById('loader').classList.add('hidden');
-                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+                document.getElementById('loader').classList.add('hidden'); alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+                console.error(e);
             });
         }
 
@@ -433,10 +535,23 @@
             callBackend('get_user', { userId: userProfile.userId }, (res) => {
                 if (res.found) {
                     dbUserData = res.data;
+                    document.getElementById('viewApp').classList.remove('hidden');
+                    
+                    // Setup Sidebar Info
+                    document.getElementById('sidebarPic').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
+                    document.getElementById('sidebarName').innerText = dbUserData.RealName || userProfile.displayName;
+                    document.getElementById('sidebarId').innerText = "ID: " + (dbUserData.CustomerID || '-');
+                    
                     const role = dbUserData.Role;
-                    if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser', 'Sales Coordinators'].includes(role)) {
-                        showStaffDashboard(dbUserData);
+                    // Check if User is Staff
+                    if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(role)) {
+                        document.getElementById('navAdminCreate').classList.remove('hidden');
+                        document.getElementById('navAdminList').classList.remove('hidden');
+                        switchTab('StaffOrders');
+                        fetchOptions();
+                        fetchStaffData();
                     } else {
+                        // User is Customer
                         setupCustomerView();
                     }
                 } else {
@@ -447,28 +562,47 @@
 
         function register() {
             const payload = {
-                userId: userProfile.userId,
-                realName: document.getElementById('regName').value,
-                brandName: document.getElementById('regBrand').value,
-                phone: document.getElementById('regPhone').value,
+                userId: userProfile.userId, realName: document.getElementById('regName').value,
+                brandName: document.getElementById('regBrand').value, phone: document.getElementById('regPhone').value,
                 email: document.getElementById('regEmail').value
             };
             if(!payload.realName || !payload.phone) return alert("กรุณากรอกชื่อและเบอร์โทรศัพท์");
-            callBackend('register', payload, (res) => {
-                if(res.status === 'success') location.reload();
-            });
+            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); });
+        }
+
+        // ================= NAVIGATION =================
+        function toggleSidebar() {
+            document.getElementById('sidebarMenu').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        }
+
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.getElementById('tabProfile').classList.add('hidden');
+            document.getElementById('tabOrders').classList.add('hidden');
+            document.getElementById('tabOverview').classList.add('hidden');
+            document.getElementById('tabCreateOrder').classList.add('hidden');
+            document.getElementById('tabStaffOrders').classList.add('hidden');
+            
+            // Close Sidebar
+            document.getElementById('sidebarMenu').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+
+            // Show selected tab & Update Title
+            document.getElementById('tab' + tabId).classList.remove('hidden');
+            let title = tabId;
+            if(tabId === 'StaffOrders') title = 'All Orders';
+            if(tabId === 'CreateOrder') title = 'Create Order';
+            document.getElementById('topbarTitle').innerText = title;
         }
 
         // ================= CUSTOMER LOGIC =================
-
         function setupCustomerView() {
-            document.getElementById('viewApp').classList.remove('hidden');
-            
-            document.getElementById('headerName').innerText = dbUserData.RealName || userProfile.displayName;
-            document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand';
-            document.getElementById('headerId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
-            document.getElementById('headerTier').innerText = dbUserData.Tier;
-            document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
+            switchTab('Profile'); 
+            document.getElementById('profileName').innerText = dbUserData.RealName || userProfile.displayName;
+            document.getElementById('profileId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
+            document.getElementById('profileTier').innerText = dbUserData.Tier || 'VVIP';
+            document.getElementById('profilePicLg').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
             
             fetchCustomerOrders();
         }
@@ -487,97 +621,59 @@
 
         function renderCustomerOrders(orders) {
             const container = document.getElementById('orderListContainer');
-            if (orders.length === 0) {
-                container.innerHTML = '<div class="order-card text-center text-muted" style="padding:40px;">No transactions found.</div>';
-                return;
-            }
+            if (orders.length === 0) { container.innerHTML = '<div class="order-card text-center text-muted">No transactions found.</div>'; return; }
 
             let html = '';
             orders.forEach(o => {
                 const currentStep = getStepIndex(o.status);
                 let statusColor = 'var(--text-main)';
-                if(o.status === 'Order Received') statusColor = 'var(--accent-green)';
-                if(o.status === 'Preparation') statusColor = '#FFC805'; // Yellowish
-                if(o.status === 'In Production') statusColor = '#FFC805';
+                if(o.status === 'Order Received' || o.status === 'Delivered') statusColor = 'var(--accent-green)';
+                if(o.status === 'Preparation' || o.status === 'In Production') statusColor = '#FFC805';
                 if(o.status === 'Quality Check') statusColor = '#00B9F2';
-                if(o.status === 'Delivered') statusColor = 'var(--accent-green)';
 
                 const steps = [
-                    { name: 'Order Received', date: o.dateReceived },
+                    { name: 'Order<br>Received', date: o.dateReceived },
                     { name: 'Preparation', date: o.datePrep },
-                    { name: 'In Production', date: o.dateProd },
-                    { name: 'Quality Check', date: o.dateQC },
+                    { name: 'In<br>Production', date: o.dateProd },
+                    { name: 'Quality<br>Check', date: o.dateQC },
                     { name: 'Delivered', date: o.dateDelivered }
                 ];
 
                 let stepperHtml = '<div class="stepper-wrapper">';
                 steps.forEach((s, idx) => {
                     const stepNum = idx + 1;
-                    let stateClass = '';
-                    if (stepNum < currentStep) stateClass = 'completed';
-                    else if (stepNum === currentStep) stateClass = 'active';
-                    
-                    let label = s.name;
-                    if(label === 'Order Received') label = 'Order<br>Received';
-                    if(label === 'In Production') label = 'In<br>Production';
-                    if(label === 'Quality Check') label = 'Quality<br>Check';
-
-                    stepperHtml += `
-                        <div class="stepper-item ${stateClass}">
-                            <div class="step-counter"></div>
-                            <div class="step-name">${label}</div>
-                            <div class="step-date">${s.date !== '-' ? s.date : ''}</div>
-                        </div>
-                    `;
+                    let stateClass = stepNum < currentStep ? 'completed' : (stepNum === currentStep ? 'active' : '');
+                    stepperHtml += `<div class="stepper-item ${stateClass}"><div class="step-counter"></div><div class="step-name">${s.name}</div><div class="step-date">${s.date !== '-' ? s.date : ''}</div></div>`;
                 });
                 stepperHtml += '</div>';
 
                 let actionHtml = '';
-                
+                // [PAGE 10] Action: Order Received (Confirm WO)
                 if (o.status === 'Order Received' || o.status === 'Pending Customer Confirmation') {
-                    actionHtml = `
-                        <div style="margin-top: 20px; text-align:center;">
-                            <div style="font-size:12px; color:#FFC805; margin-bottom:12px;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
-                            ${o.woUrl !== '-' ? `<button class="btn btn-outline" style="margin-bottom:10px; font-size:14px; padding:12px;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
-                            <button class="btn btn-green" style="font-size:14px; padding:12px;" onclick="confirmWOAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button>
-                        </div>
-                    `;
+                    actionHtml = `<div style="margin-top: 20px; text-align:center;"><div style="font-size:11px; color:#FFC805; margin-bottom:12px;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
+                    ${o.woUrl !== '-' ? `<button class="btn btn-outline" style="margin-bottom:10px; font-size:13px; padding:12px;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
+                    <button class="btn btn-green" style="font-size:13px; padding:12px;" onclick="confirmWOAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button></div>`;
                 }
 
+                // [PAGE 17] Action: Preparation (Approve Sample)
                 if (o.status === 'Preparation' && o.sampleImage && o.sampleImage !== '-') {
-                    actionHtml = `
-                        <div style="margin-top: 20px; text-align:center;">
-                            <div style="font-size:12px; color:#FFC805; margin-bottom:12px;">ตัวอย่างถูกจัดส่งแล้ว กรุณาตรวจสอบและคอนเฟิร์ม<br>The sample has been shipped. Please review and confirm.</div>
-                            <button class="btn btn-green" style="margin-bottom:10px; font-size:14px; padding:12px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต / Approve Production</button>
-                            <button class="btn btn-reject" style="font-size:14px; padding:12px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button>
-                        </div>
-                    `;
+                    actionHtml = `<div style="margin-top: 20px; text-align:center;"><div style="font-size:11px; color:#FFC805; margin-bottom:12px;">ตัวอย่างถูกจัดส่งแล้ว กรุณาตรวจสอบและคอนเฟิร์ม<br>The sample has been shipped. Please review and confirm.</div>
+                    <button class="btn btn-green" style="margin-bottom:10px; font-size:13px; padding:12px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต / Approve Production</button>
+                    <button class="btn btn-reject" style="font-size:13px; padding:12px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button></div>`;
                 }
 
+                // [PAGE 21] Revision History
                 let revHtml = '';
                 if (o.revCount > 0 && o.revHistory.length > 0) {
-                    let itemsHtml = '';
-                    let imagesHtml = '';
+                    let itemsHtml = ''; let imagesHtml = '';
                     o.revHistory.forEach(r => {
                         itemsHtml += `<div class="revision-item">• Revision ${r.round} (Not Approved) : ${r.rejectReason}</div>`;
                         if(r.fixDetail) itemsHtml += `<div class="revision-item" style="color:var(--accent-green);">• Revised : ${r.fixDetail}</div>`;
                     });
-                    
                     if(o.sampleImage && o.sampleImage !== '-') {
-                         imagesHtml = `
-                         <div class="revision-images">
-                             <img src="${o.sampleImage}" class="rev-img-box" onclick="window.open('${o.sampleImage}')">
-                         </div>`;
+                         imagesHtml = `<div class="revision-images"><img src="${o.sampleImage}" class="rev-img-box" onclick="window.open('${o.sampleImage}')"></div>`;
                     }
-
-                    revHtml = `
-                        <div class="revision-box">
-                            <div class="revision-title"><i class="fas fa-arrow-right"></i> Revision History (${o.revCount} time)</div>
-                            ${itemsHtml}
-                            <hr style="border-top:1px dashed #444; margin:8px 0;">
-                            ${imagesHtml}
-                        </div>
-                    `;
+                    revHtml = `<div class="revision-box"><div class="revision-title"><i class="fas fa-arrow-right"></i> Revision History (${o.revCount} time)</div>${itemsHtml}<hr style="border-top:1px dashed #444; margin:8px 0;">${imagesHtml}</div>`;
                 }
 
                 html += `
@@ -585,41 +681,25 @@
                         <div class="flex-between" style="margin-bottom: 12px;">
                             <div style="display:flex; align-items:center; gap:12px;">
                                 <i class="fas fa-tshirt" style="font-size:24px; color:#DDD;"></i>
-                                <div>
-                                    <div style="font-size:16px; font-weight:600;">${o.orderNo}</div>
-                                    <div style="font-size:11px; color:var(--text-muted);">${o.dateReceived}</div>
-                                </div>
+                                <div><div style="font-size:16px; font-weight:700;">${o.orderNo}</div><div style="font-size:11px; color:var(--text-muted); font-weight:500;">${o.dateReceived}</div></div>
                             </div>
-                            <div style="color:${statusColor}; font-size:14px; font-weight:600;">${o.status}</div>
+                            <div style="color:${statusColor}; font-size:14px; font-weight:700;">${o.status}</div>
                         </div>
-
-                        <div class="inner-box">
+                        <div style="background:#333; border-radius:16px; padding:16px; display:flex; justify-content:space-between; margin-top:15px;">
                             <div>
-                                <div style="color:var(--text-pink); font-size:16px; font-weight:600; margin-bottom:10px;">${o.style} <span style="color:var(--text-muted); font-size:13px; font-weight:400;">(${o.qty} pcs)</span></div>
-                                <div style="font-size:13px; color:var(--text-main);">Estimated Delivery:</div>
-                                <div style="font-size:16px; font-weight:500;">${o.delivery}</div>
+                                <div style="color:var(--text-pink); font-size:16px; font-weight:700; margin-bottom:10px;">${o.style} <span style="color:var(--text-muted); font-size:13px; font-weight:400;">(${o.qty} pcs)</span></div>
+                                <div style="font-size:12px; color:var(--text-main); font-weight:500;">Estimated Delivery:</div><div style="font-size:16px; font-weight:600;">${o.delivery}</div>
                             </div>
-                            ${o.woUrl !== '-' ? `<img src="https://via.placeholder.com/70x85?text=WO" class="wo-thumbnail" onclick="window.open('${o.woUrl}','_blank')" style="cursor:pointer;">` : '<div class="wo-thumbnail" style="display:flex; align-items:center; justify-content:center; color:#ccc; font-size:10px;">No WO</div>'}
+                            ${o.woUrl !== '-' ? `<div style="text-align:center;"><img src="https://via.placeholder.com/70x85?text=WO" style="width:60px; height:75px; border-radius:8px; object-fit:cover; cursor:pointer; border:1px solid #555;" onclick="window.open('${o.woUrl}','_blank')"><div style="font-size:8px; margin-top:4px; color:#aaa;">ดูใบสั่งงาน</div></div>` : ''}
                         </div>
-
                         ${stepperHtml}
                         ${revHtml}
                         ${actionHtml}
-                        
-                        ${o.status === 'Delivered' ? `<div style="text-align:center; color:var(--accent-green); font-size:13px; margin-top:20px; font-weight:600;">Thank you for using AWESOME.SCREEN</div>` : ''}
+                        ${o.status === 'Delivered' ? `<div style="text-align:center; color:var(--accent-green); font-size:13px; margin-top:20px; font-weight:700;">Thank you for using AWESOME.SCREEN</div>` : ''}
                     </div>
                 `;
             });
             container.innerHTML = html;
-        }
-
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('tabOrders').classList.add('hidden');
-            document.getElementById('tabOverview').classList.add('hidden');
-            document.getElementById('tabProfile').classList.add('hidden');
-            document.getElementById('tab' + tabId).classList.remove('hidden');
         }
 
         function filterOrders() {
@@ -629,66 +709,66 @@
             renderCustomerOrders(filtered);
         }
 
+        // ================= EDIT PROFILE (Full View) =================
         function openEditProfile() {
+            document.getElementById('epHeaderName').innerText = dbUserData.RealName || userProfile.displayName;
+            document.getElementById('epHeaderId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
+            document.getElementById('epTier').innerText = dbUserData.Tier || 'VVIP';
+            document.getElementById('epPic').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
+
             document.getElementById('epName').value = dbUserData.RealName || '';
             document.getElementById('epBrand').value = dbUserData.BrandName || '';
             document.getElementById('epPhone').value = dbUserData.Phone || '';
             document.getElementById('epEmail').value = dbUserData.Email || '';
-            document.getElementById('modalProfile').classList.add('show');
+            
+            document.getElementById('epPerAddress').value = dbUserData.ShipAddress || '';
+            document.getElementById('epPerCity').value = dbUserData.ShipCity || '';
+            document.getElementById('epPerProv').value = dbUserData.ShipProvince || '';
+            document.getElementById('epPerZip').value = dbUserData.ShipZip || '';
+            
+            document.getElementById('epShipName').value = dbUserData.ShipName || '';
+            document.getElementById('epShipPhone').value = dbUserData.ShipPhone || '';
+            document.getElementById('epShipAddress').value = dbUserData.ShipAddress || '';
+            document.getElementById('epShipCity').value = dbUserData.ShipCity || '';
+            document.getElementById('epShipProv').value = dbUserData.ShipProvince || '';
+            document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
+            
+            document.getElementById('viewApp').classList.add('hidden');
+            document.getElementById('viewEditProfile').classList.add('show');
+            window.scrollTo(0,0);
+        }
+
+        function closeEditProfile() { 
+            document.getElementById('viewEditProfile').classList.remove('show'); 
+            document.getElementById('viewApp').classList.remove('hidden');
         }
 
         function saveProfile() {
             const payload = {
                 userId: userProfile.userId, realName: document.getElementById('epName').value,
                 brandName: document.getElementById('epBrand').value, phone: document.getElementById('epPhone').value,
-                email: document.getElementById('epEmail').value
+                email: document.getElementById('epEmail').value, shipName: document.getElementById('epShipName').value,
+                shipAddress: document.getElementById('epShipAddress').value, shipCity: document.getElementById('epShipCity').value,
+                shipProvince: document.getElementById('epShipProv').value, shipZip: document.getElementById('epShipZip').value,
+                shipPhone: document.getElementById('epShipPhone').value
             };
             callBackend('update_profile', payload, (res) => {
-                if(res.status === 'success') { alert("Profile Updated Successfully!"); closeModal('modalProfile'); checkUser(); }
+                if(res.status === 'success') { alert("Profile Updated!"); closeEditProfile(); checkUser(); }
             });
         }
 
-        function confirmWOAction(orderNo) {
-            callBackend('update_status', { orderNo: orderNo, actionType: 'CUST_CONFIRM_WO', staffName: 'Customer' }, (res) => {
-                if(res.status === 'success') fetchCustomerOrders();
-            });
-        }
-
-        function approveAction(orderNo) {
-            callBackend('update_status', { orderNo: orderNo, actionType: 'PP_APPROVE', staffName: 'Customer' }, (res) => {
-                if(res.status === 'success') fetchCustomerOrders();
-            });
-        }
-
-        function openRejectModal(orderNo) {
-            document.getElementById('rejOrderNo').value = orderNo;
-            document.getElementById('rejReason').value = '';
-            document.getElementById('modalReject').classList.add('show');
-        }
-
+        // ================= CUSTOMER ACTIONS =================
+        function confirmWOAction(no) { callBackend('update_status', { orderNo: no, actionType: 'CUST_CONFIRM_WO' }, () => fetchCustomerOrders()); }
+        function approveAction(no) { callBackend('update_status', { orderNo: no, actionType: 'PP_APPROVE' }, () => fetchCustomerOrders()); }
+        function openRejectModal(no) { document.getElementById('rejOrderNo').value = no; document.getElementById('rejReason').value = ''; document.getElementById('modalReject').classList.add('show'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
         function confirmReject() {
-            const orderNo = document.getElementById('rejOrderNo').value;
-            const reason = document.getElementById('rejReason').value;
-            if(!reason) return alert("กรุณาระบุสาเหตุ");
-            callBackend('update_status', { orderNo: orderNo, actionType: 'PP_REJECT', reason: reason, staffName: 'Customer' }, (res) => {
-                if(res.status === 'success') { closeModal('modalReject'); fetchCustomerOrders(); }
-            });
+            const no = document.getElementById('rejOrderNo').value; const r = document.getElementById('rejReason').value;
+            if(!r) return alert("ระบุสาเหตุ");
+            callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); });
         }
 
-        // ================= STAFF LOGIC =================
-        function showStaffDashboard(data) {
-            document.getElementById('viewStaff').classList.remove('hidden');
-            document.getElementById('staffName').innerText = data.RealName;
-            document.getElementById('staffRole').innerText = data.Role;
-            document.getElementById('staffProfilePic').src = userProfile.pictureUrl || 'https://via.placeholder.com/50';
-
-            if (['Admin', 'Sales Admin'].includes(data.Role)) {
-                document.getElementById('adminPanel').classList.remove('hidden');
-                fetchOptions();
-            }
-            fetchStaffData();
-        }
-
+        // ================= STAFF ACTIONS & LOGIC =================
         function fetchStaffData() {
             callBackend('get_all_orders', {}, (res) => {
                 globalOrders = res.orders;
@@ -699,8 +779,7 @@
 
         function fetchOptions() { 
             callBackend('get_options', {}, (res) => { 
-                const s = document.getElementById('ordStyle');
-                const f = document.getElementById('ordFabric'); 
+                const s = document.getElementById('ordStyle'); const f = document.getElementById('ordFabric'); 
                 s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ...</option>'; 
                 f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>'; 
                 res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); 
@@ -711,15 +790,9 @@
         function createOrder() { 
             let woImg = preloadedImages['wo-new_wo'] || null;
             const payload = {
-                adminName: document.getElementById('staffName').innerText,
-                phone: document.getElementById('ordPhone').value,
-                batch: document.getElementById('ordBatch').value,
-                style: document.getElementById('ordStyle').value,
-                qty: document.getElementById('ordQty').value,
-                fabric: document.getElementById('ordFabric').value,
-                deliveryDate: document.getElementById('ordDate').value,
-                detail: document.getElementById('ordDetail').value,
-                woImage: woImg
+                adminName: dbUserData.RealName, phone: document.getElementById('ordPhone').value, batch: document.getElementById('ordBatch').value,
+                style: document.getElementById('ordStyle').value, qty: document.getElementById('ordQty').value, fabric: document.getElementById('ordFabric').value,
+                deliveryDate: document.getElementById('ordDate').value, detail: document.getElementById('ordDetail').value, woImage: woImg
             };
             if(!payload.phone || !payload.batch) return alert("กรุณากรอก เบอร์โทรลูกค้า และ Batch ให้ครบถ้วน"); 
             callBackend('create_order', payload, (res) => { 
@@ -729,73 +802,57 @@
         }
 
         function filterStaffList() {
-            const keyword = document.getElementById('staffSearch').value.toLowerCase();
             const statusFilter = document.getElementById('staffStatusFilter').value;
             const list = document.getElementById('staffTaskList');
-            
             let filtered = globalOrders;
-            if (statusFilter === 'ACTIVE') {
-                filtered = filtered.filter(o => o.status !== 'Delivered'); 
-            } else if (statusFilter !== 'ALL') {
-                filtered = filtered.filter(o => o.status.includes(statusFilter));
-            }
-            if (keyword) {
-                filtered = filtered.filter(o => o.orderNo.toLowerCase().includes(keyword) || (o.custName && o.custName.toLowerCase().includes(keyword)) || (o.custPhone && o.custPhone.includes(keyword)));
-            }
+            
+            if (statusFilter === 'ACTIVE') { filtered = filtered.filter(o => o.status !== 'Delivered'); } 
+            else if (statusFilter !== 'ALL') { filtered = filtered.filter(o => o.status.includes(statusFilter)); }
 
-            if (filtered.length === 0) { 
-                list.innerHTML = '<div class="order-card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; 
-                return; 
-            }
+            if (filtered.length === 0) { list.innerHTML = '<div class="order-card text-center" style="color:#666;">ไม่พบรายการงาน</div>'; return; }
 
-            let html = '';
-            const role = document.getElementById('staffRole').innerText;
-
+            let html = ''; const role = dbUserData.Role;
             filtered.forEach(o => {
                 let btns = '';
-
-                // Staff Action Buttons
+                // Staff Action Buttons Matrix
                 if (['Admin', 'Production Manager'].includes(role) && o.status === 'Order Received') {
-                    btns += `<button class="btn btn-dark" style="border:1px solid #00B9F2; color:#00B9F2;" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')">ยืนยันรับงาน (แทนลูกค้า)</button>`;
+                    btns += `<button class="btn btn-outline" style="border:1px solid var(--accent-blue); color:var(--accent-blue); padding:12px; font-size:13px;" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')">ยืนยันรับงาน (แทนลูกค้า)</button>`;
                 }
                 if (['Admin', 'Merchandiser'].includes(role) && o.status === 'Preparation') {
                     if(o.ppFeedback && o.ppFeedback !== '-') {
-                         btns += `<div style="padding:10px; border:1px solid var(--accent-red); border-radius:8px; margin-top:10px;"><div style="color:var(--accent-red); font-size:12px; margin-bottom:5px;">⚠ ลูกค้าตีกลับแบบ: ${o.ppFeedback}</div><button class="btn btn-green" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้แบบเสร็จสิ้น</button></div>`;
+                         btns += `<div style="padding:10px; border:1px solid var(--accent-red); border-radius:12px; margin-top:10px;"><div style="color:var(--accent-red); font-size:12px; margin-bottom:5px;">⚠ ลูกค้าตีกลับแบบ: ${o.ppFeedback}</div><button class="btn btn-green" style="padding:10px; font-size:13px;" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้แบบเสร็จสิ้น</button></div>`;
                     } else {
-                        btns += `<div style="background:#333; padding:10px; border-radius:8px; margin-top:8px;"><label class="input-label">ส่งตัวอย่าง:</label><select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div><div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div><label class="input-label">แนบสลิป:</label><input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="padding:8px;"><div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:10px;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่าง</button></div>`;
+                        btns += `<div style="background:#333; padding:15px; border-radius:12px; margin-top:8px;"><label class="input-label" style="margin-top:0;">ส่งตัวอย่าง:</label><select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px; background:#444; color:#FFF; padding:10px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><label class="input-label">แนบสลิป:</label><input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="padding:8px; font-size:12px; background:#444; color:#FFF;"><div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:15px; font-size:13px; padding:12px;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่าง</button></div>`;
                     }
                 }
                 if (['Admin', 'Quality Control'].includes(role) && o.status === 'In Production') {
                     if(o.feedback && o.feedback !== '-') {
                         btns += `<div style="color:#FFC805; font-size:12px; text-align:center; padding:10px;">รอ PM แก้ไขงาน</div>`;
                     } else {
-                        btns += `<div class="flex-row"><button class="btn btn-green" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')">ผ่าน QC</button><button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')">ตีกลับ PM</button></div>`;
+                        btns += `<div class="flex-row"><button class="btn btn-green" style="flex:2; font-size:13px; padding:12px;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')">ผ่าน QC</button><button class="btn btn-reject" style="flex:1; font-size:13px; padding:12px;" onclick="openFeedback('${o.orderNo}')">ตีกลับ PM</button></div>`;
                     }
                 }
                 if (['Admin', 'Production Manager'].includes(role) && o.status === 'In Production' && o.feedback && o.feedback !== '-') {
-                    btns += `<button class="btn btn-green" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้ไขงานเสร็จ (ส่ง QC ใหม่)</button>`;
+                    btns += `<button class="btn btn-green" style="font-size:13px; padding:12px;" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้ไขงานเสร็จ (ส่ง QC ใหม่)</button>`;
                 }
                 if (['Admin', 'Sales Admin'].includes(role) && o.status === 'Quality Check') {
-                    btns += `<div style="background:#333; padding:10px; border-radius:8px; margin-top:8px;"><label class="input-label">จัดส่งสินค้า:</label><select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div><div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div><label class="input-label">แนบสลิปจัดส่ง:</label><input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="padding:8px;"><div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-green" id="btn-ship-${o.orderNo}" style="margin-top:10px;" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งลูกค้า</button></div>`;
+                    btns += `<div style="background:#333; padding:15px; border-radius:12px; margin-top:8px;"><label class="input-label" style="margin-top:0;">จัดส่งสินค้า:</label><select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px; background:#444; color:#FFF; padding:10px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><label class="input-label">แนบสลิปจัดส่ง:</label><input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="padding:8px; font-size:12px; background:#444; color:#FFF;"><div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-green" id="btn-ship-${o.orderNo}" style="margin-top:15px; font-size:13px; padding:12px;" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งลูกค้า</button></div>`;
                 }
 
                 html += `
                 <div class="order-card">
                     <div class="flex-between" style="border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom:10px;">
-                        <div>
-                            <strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong>
-                            <div style="font-size:10px; color:var(--text-muted);">Sales: ${o.salesOwner}</div>
-                        </div>
+                        <div><strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong><div style="font-size:10px; color:var(--text-muted);">Sales: ${o.salesOwner}</div></div>
                         <div style="color:var(--accent-green); font-size:12px; font-weight:bold;">${o.status}</div>
                     </div>
                     <div style="font-size: 13px; color: #ddd; background: #111; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-green); margin-bottom:10px;">
                         <div>👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${o.tier}</span></div>
-                        <div style="color:var(--text-muted);">Brand: ${o.custBrand}</div>
-                        <div><a href="tel:${o.custPhone}" style="color:var(--accent-green); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                        <div style="color:var(--text-muted); font-size:11px;">Brand: ${o.custBrand}</div>
+                        <div style="margin-top:5px;"><a href="tel:${o.custPhone}" style="color:var(--accent-green); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
                     </div>
                     <div style="font-size:13px; color:#ccc; display:flex; justify-content:space-between; line-height:1.6; margin-bottom:10px;">
                         <div>Style: <span style="color:#fff;">${o.style}</span><br>Qty: <span style="color:#fff;">${o.qty} pcs</span><br>Batch: <span style="color:#fff;">${o.batch || '-'}</span></div>
-                        <div style="text-align:right;">Est: <span style="color:#fff;">${o.delivery}</span><br><span style="font-size:10px; color:#666;">Upd: ${o.updatedDate}</span>${o.woUrl !== '-' ? `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-green); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> WO PDF</a>` : ''}</div>
+                        <div style="text-align:right;">Est: <span style="color:#fff;">${o.delivery}</span><br><span style="font-size:10px; color:#666;">Upd: ${o.updatedDate}</span>${o.woUrl !== '-' ? `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-blue); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> WO PDF</a>` : ''}</div>
                     </div>
                     ${btns}
                 </div>`;
@@ -810,55 +867,32 @@
 
         function updateStatus(no, action) { 
             if(!confirm('ยืนยันการทำรายการ?')) return; 
-            callBackend('update_status', { orderNo: no, actionType: action, staffName: document.getElementById('staffName').innerText }, (res) => {
-                if(res.status === 'success') { alert('บันทึกสำเร็จ'); fetchStaffData(); }
-            }); 
+            callBackend('update_status', { orderNo: no, actionType: action, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { alert('บันทึกสำเร็จ'); fetchStaffData(); } }); 
         }
 
         function openFeedback(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('modalFeedback').classList.add('show'); }
         function openFixPP(no) { document.getElementById('fixPPOrderNo').value = no; document.getElementById('modalFixPP').classList.add('show'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
         function confirmRollback() { 
             const no = document.getElementById('fbOrderNo').value; const reason = document.getElementById('fbReason').value;
             if(!reason) return alert("ระบุสาเหตุ"); 
-            callBackend('update_status', { orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: document.getElementById('staffName').innerText }, (res) => {
-                if(res.status === 'success') { closeModal('modalFeedback'); fetchStaffData(); }
-            }); 
+            callBackend('update_status', { orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { closeModal('modalFeedback'); fetchStaffData(); } }); 
         }
-
         function confirmFixPP() { 
             const no = document.getElementById('fixPPOrderNo').value; const detail = document.getElementById('fixPPDetail').value;
             if(!detail) return alert("ระบุรายละเอียดการแก้ไข"); 
-            callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: document.getElementById('staffName').innerText }, (res) => {
-                if(res.status === 'success') { closeModal('modalFixPP'); fetchStaffData(); }
-            }); 
+            callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { closeModal('modalFixPP'); fetchStaffData(); } }); 
         }
 
         async function sendSample(no) { 
-            const method = document.getElementById(`del-s-${no}`).value;
-            const track = document.getElementById(`track-s-${no}`).value; 
-            const phone = document.getElementById(`phone-s-${no}`).value; 
-            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); 
-            if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
-
-            callBackend('update_status', { 
-                orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: method, tracking: track, messengerPhone: phone, 
-                image: preloadedImages[`s-${no}`] || null, staffName: document.getElementById('staffName').innerText 
-            }, (res) => { if(res.status === 'success') { alert("แจ้งส่งเรียบร้อย"); fetchStaffData(); } }); 
+            const method = document.getElementById(`del-s-${no}`).value; const track = document.getElementById(`track-s-${no}`).value; const phone = document.getElementById(`phone-s-${no}`).value; 
+            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
+            callBackend('update_status', { orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: method, tracking: track, messengerPhone: phone, image: preloadedImages[`s-${no}`] || null, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { alert("แจ้งส่งเรียบร้อย"); fetchStaffData(); } }); 
         }
 
         async function shipOrder(no) { 
-            const method = document.getElementById(`del-ship-${no}`).value;
-            const track = document.getElementById(`track-ship-${no}`).value; 
-            const phone = document.getElementById(`phone-ship-${no}`).value; 
-            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); 
-            if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
-
-            callBackend('update_status', { 
-                orderNo: no, actionType: 'SHIP', deliveryMethod: method, tracking: track, messengerPhone: phone, 
-                image: preloadedImages[`ship-${no}`] || null, staffName: document.getElementById('staffName').innerText 
-            }, (res) => { if(res.status === 'success') { alert("บันทึกจัดส่งสำเร็จ"); fetchStaffData(); } }); 
+            const method = document.getElementById(`del-ship-${no}`).value; const track = document.getElementById(`track-ship-${no}`).value; const phone = document.getElementById(`phone-ship-${no}`).value; 
+            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
+            callBackend('update_status', { orderNo: no, actionType: 'SHIP', deliveryMethod: method, tracking: track, messengerPhone: phone, image: preloadedImages[`ship-${no}`] || null, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { alert("บันทึกจัดส่งสำเร็จ"); fetchStaffData(); } }); 
         }
     </script>
 </body>
