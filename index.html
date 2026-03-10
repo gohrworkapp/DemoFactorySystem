@@ -3,22 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Demo Factory</title>
+    <title>AWESOME.SCREEN</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         :root { 
-            --bg-color: #000000; 
-            --card-bg: #1A1A1A; 
-            --input-bg: #2A2A2A; 
+            --bg-color: #121212; 
+            --card-bg: #1E1E1E; 
+            --input-bg: #2C2C2C; 
             --text-main: #FFFFFF; 
-            --brand-grad: linear-gradient(90deg, #FFC805 0%, #FF0080 50%, #00B9F2 100%); 
-            --accent-color: #FFC805; 
-            --success-color: #00C851; 
-            --danger-color: #ff4444; 
-            --disable-color: #333333; 
+            --text-muted: #888888;
+            --accent-green: #00C851; 
+            --accent-red: #ff4444; 
+            --accent-orange: #FF8800;
+            --border-color: #333333;
+            /* Staff Colors */
+            --staff-pm: #00B9F2;
+            --staff-qc: #00C851;
+            --staff-ship: #FF0080;
+            --staff-merch: #FF9800;
         }
 
         body { 
@@ -26,190 +31,272 @@
             color: var(--text-main); 
             font-family: 'Kanit', sans-serif; 
             margin: 0; 
-            padding: 15px; 
+            padding: 0; 
             padding-bottom: 80px; 
         }
 
-        .brand-title { 
-            font-size: 24px; 
-            font-weight: bold; 
-            background: var(--brand-grad); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-align: center; 
-            margin-bottom: 5px; 
-        }
+        .container { padding: 15px; }
+        .hidden { display: none !important; }
+        .flex-row { display: flex; gap: 10px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        
+        .brand-logo-container { text-align: center; margin: 30px 0 20px 0; }
+        .brand-logo { width: 180px; max-width: 80%; }
 
         .card { 
             background: var(--card-bg); 
-            border-radius: 12px; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            border: 1px solid #333; 
+            border-radius: 16px; 
+            padding: 16px; 
+            margin-bottom: 16px; 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        .card-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-start; 
-            margin-bottom: 8px; 
-            border-bottom: 1px solid #333; 
-            padding-bottom: 8px; 
-        }
+        h2, h3, h4 { margin-top: 0; font-weight: 500; }
+        .text-muted { color: var(--text-muted); font-size: 13px; }
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
 
-        .cust-info { 
-            font-size: 13px; 
-            color: #ddd; 
-            margin-bottom: 10px; 
-            background: #222; 
-            padding: 10px; 
-            border-radius: 8px; 
-            border-left: 3px solid var(--accent-color); 
+        .input-label { 
+            font-size: 11px; 
+            color: var(--text-muted); 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px; 
+            display: block; 
+            margin-top: 12px; 
         }
-
-        /* Buttons */
-        .btn { 
+        input, select, textarea { 
             width: 100%; 
-            padding: 12px; 
+            padding: 14px; 
+            background: #A0A0A0; 
             border: none; 
-            border-radius: 8px; 
-            color: white; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 8px; 
-            font-size: 14px; 
-            transition: 0.2s; 
+            border-radius: 12px; 
+            color: #000; 
             box-sizing: border-box;
+            font-family: 'Kanit'; 
+            font-size: 15px; 
+            font-weight: 500;
         }
-        .btn-main { background: var(--brand-grad); }
+        input::placeholder, textarea::placeholder { color: #555; font-weight: 400; }
+        input:focus, textarea:focus { outline: 2px solid var(--accent-green); background: #FFF; }
+        /* Override for Staff Inputs to keep dark theme */
+        #viewStaff input, #viewStaff select, #viewStaff textarea { background: var(--input-bg); color: #fff; border: 1px solid #444; }
+
+        .btn { 
+            width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; 
+            font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 15px; 
+            transition: 0.2s; box-sizing: border-box; display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-main { background: transparent; border: 2px solid var(--text-main); color: var(--text-main); }
+        .btn-approve { background: var(--accent-green); color: #000; }
+        .btn-reject { background: transparent; border: 1px solid var(--accent-red); color: var(--accent-red); }
+        .btn-dark { background: #333; color: #FFF; }
+        
+        /* Staff Buttons */
         .btn-pm { background: linear-gradient(90deg, #00B9F2, #0055ff); }
         .btn-qc { background: linear-gradient(90deg, #00C851, #007E33); }
         .btn-ship { background: linear-gradient(90deg, #FF0080, #9900CC); }
         .btn-merch { background: linear-gradient(90deg, #FF9800, #F57C00); }
-        .btn-reject { background: transparent; border: 1px solid var(--danger-color); color: var(--danger-color); }
-        .btn-disabled { background: var(--disable-color) !important; color: #777 !important; cursor: not-allowed; border: 1px solid #444 !important; pointer-events: none; }
+        .btn-disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 
-        /* Inputs */
-        .input-label { 
-            font-size: 13px; 
-            color: var(--accent-color); 
-            margin-bottom: 5px; 
-            display: block; 
-            margin-top: 10px; 
-        }
-        input, select, textarea { 
-            width: 100%; 
-            padding: 12px; 
-            background: var(--input-bg); 
-            border: 1px solid #444; 
-            border-radius: 8px; 
-            color: #fff; 
-            box-sizing: border-box;
-            font-family: 'Kanit'; 
-            font-size: 14px; 
-        }
-        input[type="file"] { padding: 8px; font-size: 12px; }
-
-        /* Filter & Tabs */
-        .filter-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        .tab-container { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .tab-btn { background: transparent; border: none; color: #666; font-size: 16px; font-weight: bold; padding: 5px 10px; cursor: pointer; flex: 1; }
-        .tab-btn.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
-
-        /* Dashboard Stats */
-        .dashboard-stats { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; }
-        .stat-box { background: #252525; border: 1px solid #333; border-radius: 8px; min-width: 85px; padding: 12px; text-align: center; flex: 1; }
-        .stat-num { font-size: 22px; font-weight: bold; color: var(--accent-color); }
-        .stat-label { font-size: 11px; color: #aaa; white-space: nowrap; }
-
-        /* Progress Bar (Timeline) */
-        .stepper-wrapper { display: flex; justify-content: space-between; margin-top: 15px; position: relative; }
-        .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .stepper-item::before { content: ""; position: absolute; top: 7px; left: -50%; width: 100%; height: 2px; background: #444; z-index: 1; }
-        .stepper-item:first-child::before { content: none; }
-        .stepper-item.active::before { background: var(--success-color); }
-        .step-counter { z-index: 2; width: 14px; height: 14px; border-radius: 50%; background: #444; border: 2px solid #222;}
-        .stepper-item.active .step-counter { background: var(--success-color); box-shadow: 0 0 5px var(--success-color); border-color: var(--success-color);}
-        .step-name { margin-top: 5px; font-size: 9px; color: #666; text-align: center; line-height: 1.2; }
-        .stepper-item.active .step-name { color: #fff; font-weight: bold; }
-
-        /* Modal */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal.show { display: flex; }
-        .modal-content { width: 100%; max-width: 400px; background: #222; padding: 20px; border-radius: 12px; border: 1px solid #444; box-sizing: border-box; }
-
-        .hidden { display: none !important; }
-        .flex-row { display: flex; gap: 10px; }
-        .status-badge { background:#333; padding:4px 8px; border-radius:6px; font-size:11px; color:var(--accent-color); border:1px solid #555; text-align: right; }
-        .profile-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover; }
+        .profile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .profile-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .tier-badge { background: #333; color: #FFF; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; }
         
-        /* สไตล์สำหรับกล่องประวัติพับเก็บได้ (Accordion) */
+        .search-bar { background: var(--input-bg); border-radius: 12px; padding: 10px 15px; display: flex; align-items: center; margin-bottom: 15px; }
+        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; font-weight: 400; }
+        .search-bar i { color: #666; margin-left: 10px; }
+
+        /* Stepper (Timeline) */
+        .stepper-wrapper { display: flex; justify-content: space-between; margin: 20px 0; position: relative; }
+        .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; z-index: 2; }
+        .stepper-item::after { content: ""; position: absolute; top: 8px; left: 50%; width: 100%; height: 4px; background: var(--border-color); z-index: -1; }
+        .stepper-item:last-child::after { content: none; }
+        .step-counter { width: 20px; height: 20px; border-radius: 50%; background: var(--border-color); border: 2px solid var(--card-bg); }
+        .stepper-item.completed .step-counter, .stepper-item.active .step-counter { background: var(--accent-green); }
+        .stepper-item.completed::after { background: var(--accent-green); }
+        .step-name { margin-top: 8px; font-size: 9px; color: var(--text-muted); text-align: center; line-height: 1.2; font-weight: 500; }
+        .stepper-item.active .step-name { color: var(--text-main); }
+        .step-date { font-size: 8px; color: #666; margin-top: 2px; }
+
+        /* Revision History Box */
+        .revision-box { background: rgba(255, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px; padding: 12px; margin-top: 15px; }
+        .revision-title { color: var(--accent-red); font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        .revision-item { font-size: 11px; color: #DDD; margin-bottom: 4px; }
+        .revision-images { display: flex; gap: 8px; overflow-x: auto; margin-top: 10px; padding-bottom: 5px; }
+        .rev-img-box { width: 60px; height: 60px; background: #333; border-radius: 8px; flex-shrink: 0; }
+
+        /* Bottom Navigation */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111111; border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 12px 0 20px 0; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 11px; text-decoration: none; cursor: pointer; transition: 0.3s; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item.active { color: var(--text-main); }
+        .nav-item.active i { color: var(--text-main); }
+
+        /* Staff Specific Elements */
+        .status-badge { background:#333; padding:4px 8px; border-radius:6px; font-size:11px; color:var(--accent-green); border:1px solid #555; text-align: right; }
+        .cust-info { font-size: 13px; color: #ddd; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-green); }
         details { background: #181818; padding: 8px 12px; border-radius: 8px; border: 1px solid #333; margin-top: 10px; }
         summary { font-size: 12px; font-weight: bold; cursor: pointer; outline: none; }
         .history-box { font-size: 11px; margin-top: 8px; max-height: 150px; overflow-y: auto; padding-right: 5px; }
         .log-item { border-left: 2px solid #555; padding-left: 8px; margin-bottom: 6px; color: #ccc; }
 
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        /* Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal.show { display: flex; }
+        .modal-content { width: 100%; max-width: 400px; background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
+
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--accent-color)"></i>
-        <div style="font-size:12px; color:#aaa; margin-top:10px;">กำลังประมวลผล...</div>
+        <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--text-main)"></i>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Loading AWESOME.SCREEN...</div>
     </div>
 
-    <div class="brand-title">DEMO FACTORY</div>
-    <div style="text-align:center; color:#666; font-size:12px; margin-bottom:20px;">Smart Production System</div>
-
-    <div id="viewRegister" class="hidden">
-        <div class="card">
-            <h3 style="text-align:center; margin-top:0;">ลงทะเบียนลูกค้า</h3>
-            <label class="input-label">ชื่อลูกค้า / ชื่อแบรนด์</label>
-            <input type="text" id="regName" placeholder="ระบุชื่อของคุณ...">
-            <label class="input-label">เบอร์โทรศัพท์ (สำคัญมาก)</label>
-            <input type="tel" id="regPhone" placeholder="เช่น 0812345678">
-            <button class="btn btn-main" onclick="register()">ยืนยันการลงทะเบียน</button>
+    <div id="viewRegister" class="container hidden">
+        <div class="brand-logo-container">
+            <img src="https://drive.google.com/uc?export=view&id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="AWESOME.SCREEN" class="brand-logo">
+        </div>
+        <h3 style="text-align:center;">Create new Account</h3>
+        <p style="text-align:center; font-size:13px; color:var(--text-muted);">Welcome to AWESOME.SCREEN</p>
+        
+        <div style="margin-top: 30px;">
+            <label class="input-label">NAME</label>
+            <input type="text" id="regName" placeholder="Your full name">
+            
+            <label class="input-label">BRAND NAME</label>
+            <input type="text" id="regBrand" placeholder="Your brand name">
+            
+            <label class="input-label">PHONE NUMBER</label>
+            <input type="tel" id="regPhone" placeholder="08xxxxxxxx">
+            
+            <label class="input-label">EMAIL ADDRESS</label>
+            <input type="email" id="regEmail" placeholder="your@email.com">
+            
+            <button class="btn btn-main" style="margin-top: 30px;" onclick="register()">sign up</button>
         </div>
     </div>
 
-    <div id="viewStaff" class="hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#222; padding:12px; border-radius:8px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img id="staffProfilePic" src="https://via.placeholder.com/50" class="profile-img">
+    <div id="viewApp" class="hidden">
+        <div class="container">
+            <div class="profile-header">
                 <div>
-                    <div id="staffName" style="font-weight:bold; font-size:15px;">User</div>
-                    <div id="staffRole" style="font-size:11px; color:#aaa;">ROLE</div>
+                    <div style="font-size:10px; color:var(--text-muted);">Welcome back</div>
+                    <div id="headerName" style="font-size:18px; font-weight:600; line-height:1.2;">User Name</div>
+                    <div id="headerBrand" style="font-size:13px; color:var(--text-muted);">Brand Name</div>
+                </div>
+                <div style="text-align: right;">
+                    <img id="headerPic" src="https://via.placeholder.com/100" class="profile-img">
+                    <div style="margin-top:4px;"><span class="tier-badge"><i class="fas fa-crown"></i> <span id="headerTier">VVIP</span></span></div>
                 </div>
             </div>
-            <div id="staffTier" style="font-size:12px; background:#111; padding:4px 8px; border-radius:4px; border:1px solid #444;">-</div>
+
+            <div id="tabOrders">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="flex-between" style="margin-bottom: 15px;">
+                    <span style="font-weight: 600; font-size: 15px;">Transaction</span>
+                    <span style="font-size: 12px; color: var(--text-muted);">Sort by Latest ▾</span>
+                </div>
+                <div id="orderListContainer"></div>
+            </div>
+
+            <div id="tabOverview" class="hidden">
+                <div class="card" style="text-align:center; padding: 40px 20px;">
+                    <i class="fas fa-chart-pie fa-3x" style="color:var(--text-muted); margin-bottom: 15px;"></i>
+                    <h3>Overview</h3>
+                    <p class="text-muted">Summary and statistics will be available here.</p>
+                </div>
+            </div>
+
+            <div id="tabProfile" class="hidden">
+                <div style="text-align:center; margin-bottom:20px;">
+                    <img id="profilePicLg" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; margin-bottom:10px;">
+                    <div><span class="tier-badge" id="profileTier">VVIP</span></div>
+                    <h3 id="profileName" style="margin:5px 0 0 0;">User Name</h3>
+                    <div class="text-muted" id="profileId">Customer ID: CUST-XXXX</div>
+                </div>
+
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px; cursor:pointer;" onclick="openEditProfile()">
+                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--accent-red);"><i class="fas fa-pen"></i></div>
+                        <div style="font-weight:500;">Edit Profile</div>
+                    </div>
+                </div>
+
+                <h4 style="margin: 20px 0 10px 0; color:var(--text-muted);">General Settings</h4>
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
+                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#ff44a0;"><i class="fas fa-question"></i></div>
+                        <div style="font-weight:500;">About</div>
+                    </div>
+                    <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
+                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#ff4444;"><i class="fas fa-exclamation"></i></div>
+                        <div style="font-weight:500;">Terms & Conditions</div>
+                    </div>
+                    <div style="padding: 15px; display:flex; align-items:center; gap:15px;">
+                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#a044ff;"><i class="fas fa-lock"></i></div>
+                        <div style="font-weight:500;">Privacy Policy</div>
+                    </div>
+                </div>
+                
+                <div style="text-align:center; margin-top:30px; font-size:10px; color:#555;">
+                    Powered by AWESOME.SCREEN CO., LTD.
+                </div>
+            </div>
         </div>
 
-        <div class="filter-container">
-            <input type="text" id="staffSearch" placeholder="🔍 ค้นหา ชื่อ, เบอร์, Order No..." onkeyup="filterStaffList()">
-            <select id="staffStatusFilter" onchange="filterStaffList()">
-                <option value="ACTIVE">งานที่กำลังดำเนินการ</option>
-                <option value="ALL">งานทั้งหมด</option>
-                <option value="Pending Customer Confirmation">1. รอตรวจสอบใบสั่งงาน</option>
-                <option value="Order Confirmation">2. ยืนยันออเดอร์</option>
-                <option value="Work Order Review Stage">3. ตรวจสอบ Work Order</option>
-                <option value="Sampling Stage">4. งานตัวอย่าง</option>
-                <option value="Pre-Production Approved">5. ลูกค้าอนุมัติแบบ</option>
-                <option value="Bulk Production">6. กำลังผลิต</option>
-                <option value="Quality Control">7. ตรวจสอบคุณภาพ</option>
-                <option value="PP Rejected">⚠ งานแก้ไขตัวแบบ (PP Reject)</option>
-                <option value="Correction Needed">⚠ งานแก้ไข (QC ตีกลับ)</option>
-                <option value="Shipped">8. จัดส่งแล้ว</option>
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('Orders', this)">
+                <i class="fas fa-list-alt"></i><span>Orders</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('Overview', this)">
+                <i class="fas fa-search"></i><span>Overview</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('Profile', this)">
+                <i class="fas fa-user"></i><span>Profile</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewStaff" class="container hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:var(--card-bg); padding:12px; border-radius:12px; border:1px solid var(--border-color);">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img id="staffProfilePic" src="https://via.placeholder.com/50" class="profile-img" style="border-color:var(--accent-green);">
+                <div>
+                    <div id="staffName" style="font-weight:bold; font-size:15px;">User</div>
+                    <div id="staffRole" style="font-size:11px; color:var(--text-muted);">ROLE</div>
+                </div>
+            </div>
+            <div id="staffTier" class="tier-badge">Staff</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+            <input type="text" id="staffSearch" placeholder="🔍 Search Order No, Name..." onkeyup="filterStaffList()" style="background:var(--input-bg); color:#fff;">
+            <select id="staffStatusFilter" onchange="filterStaffList()" style="background:var(--input-bg); color:#fff;">
+                <option value="ACTIVE">Active Orders</option>
+                <option value="ALL">All Orders</option>
+                <option value="Order Received">1. Order Received</option>
+                <option value="Preparation">2. Preparation</option>
+                <option value="In Production">3. In Production</option>
+                <option value="Quality Check">4. Quality Check</option>
+                <option value="Delivered">5. Delivered</option>
             </select>
         </div>
 
         <div id="adminPanel" class="hidden">
-            <button class="btn" style="background:#333; border:1px solid #555; margin-bottom:15px;" onclick="document.getElementById('createOrderForm').classList.toggle('hidden')">
-                <i class="fas fa-file-invoice"></i> + สร้างออเดอร์ใหม่ (Sales)
+            <button class="btn btn-dark" style="margin-bottom:15px; border:1px solid var(--accent-green);" onclick="document.getElementById('createOrderForm').classList.toggle('hidden')">
+                <i class="fas fa-plus"></i> Create New Order
             </button>
             
             <div id="createOrderForm" class="card hidden">
-                <h4 style="margin-top:0; color:var(--accent-color); border-bottom:1px solid #333; padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
+                <h4 style="margin-top:0; color:var(--accent-green); border-bottom:1px solid var(--border-color); padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
                 
                 <label class="input-label">1. เบอร์โทรลูกค้า</label>
                 <input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx">
@@ -231,154 +318,108 @@
                 <label class="input-label">5. ชนิดผ้า (Fabric)</label>
                 <select id="ordFabric"><option>Loading...</option></select>
 
-                <label class="input-label">6. วันที่กำหนดส่งมอบ</label>
+                <label class="input-label">6. วันที่คาดว่าจะส่งมอบ (Est. Delivery)</label>
                 <input type="date" id="ordDate">
 
-                <label class="input-label">7. ที่อยู่จัดส่ง</label>
-                <textarea id="ordAddress" rows="2" placeholder="รายละเอียดที่อยู่..."></textarea>
-
-                <label class="input-label">8. รายละเอียดเพิ่มเติม</label>
+                <label class="input-label">7. รายละเอียดเพิ่มเติม</label>
                 <textarea id="ordDetail" rows="2" placeholder="จุดสกรีน, ขนาด..."></textarea>
 
-                <label class="input-label">9. แนบใบสั่งงาน (Work Order - รูปภาพ)</label>
-                <input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')">
+                <label class="input-label">8. แนบใบสั่งงาน (Work Order - รูปภาพ)</label>
+                <input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" style="padding: 10px; font-size:12px;">
                 <div id="status-wo-new_wo" style="font-size:12px; margin-top:5px; display:none;"></div>
 
-                <button class="btn btn-main" style="margin-top:15px;" onclick="createOrder()">บันทึก & แจ้งลูกค้ายืนยัน</button>
+                <button class="btn btn-approve" style="margin-top:15px; color:#000;" onclick="createOrder()">บันทึก & แจ้งลูกค้ายืนยัน</button>
             </div>
         </div>
 
         <div id="staffTaskList">Loading tasks...</div>
     </div>
 
-    <div id="viewCustomer" class="hidden">
-        <div style="display:flex; flex-direction:column; align-items:center; background:#222; padding:20px 15px; border-radius:12px; margin-bottom:15px; border: 1px solid #444;">
-            <img id="custProfilePic" src="https://via.placeholder.com/80" style="width:70px; height:70px; border-radius:50%; border:3px solid var(--accent-color); margin-bottom:10px;">
-            <h3 style="margin:0; color:#fff;" id="custHeaderName">สวัสดีครับ</h3>
-            <div id="custHeaderTier" style="font-size:13px; color:var(--accent-color); margin-top:5px; background:#111; padding:4px 12px; border-radius:12px;">Tier</div>
-        </div>
-        
-        <div class="tab-container">
-            <button class="tab-btn active" onclick="switchCustTab('list')">รายการออเดอร์</button>
-            <button class="tab-btn" onclick="switchCustTab('dashboard')">ภาพรวม</button>
-        </div>
+    <div id="modalProfile" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; text-align:center;">Edit Profile</h3>
+            <label class="input-label">NAME*</label><input type="text" id="epName">
+            <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand">
+            <label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone">
+            <label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail">
 
-        <div id="custListView"><div id="customerOrderList">Loading...</div></div>
-        
-        <div id="custDashView" class="hidden">
-            <div class="dashboard-stats">
-                <div class="stat-box"><div class="stat-num" id="stat-confirm">0</div><div class="stat-label">ยืนยันแล้ว</div></div>
-                <div class="stat-box"><div class="stat-num" id="stat-prod">0</div><div class="stat-label">กำลังผลิต</div></div>
-                <div class="stat-box"><div class="stat-num" id="stat-done" style="color:var(--success-color)">0</div><div class="stat-label">ส่งมอบแล้ว</div></div>
+            <h4 style="margin: 25px 0 5px 0; color:var(--accent-green);">SHIPPING ADDRESS</h4>
+            <label class="input-label">RECIPIENT NAME</label><input type="text" id="epShipName">
+            <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress" placeholder="House No, Street, Building...">
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">CITY / DISTRICT</label><input type="text" id="epShipCity"></div>
+                <div style="flex:1;"><label class="input-label">PROVINCE</label><input type="text" id="epShipProv"></div>
             </div>
-            <p style="text-align:center; color:#666; font-size:12px; margin-top:20px;">ขอบคุณที่ไว้วางใจใช้บริการ Demo Factory</p>
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label">POSTAL CODE</label><input type="text" id="epShipZip"></div>
+                <div style="flex:1;"><label class="input-label">PHONE NO.</label><input type="text" id="epShipPhone"></div>
+            </div>
+
+            <div class="flex-row" style="margin-top: 25px;">
+                <button class="btn btn-dark" onclick="closeModal('modalProfile')">Cancel</button>
+                <button class="btn btn-approve" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalReject" class="modal">
+        <div class="modal-content">
+            <h3 style="color:var(--accent-red); margin-top:0;"><i class="fas fa-times-circle"></i> ไม่อนุมัติ (Not Approved)</h3>
+            <p style="font-size:12px; color:var(--text-muted);">ระบุสาเหตุ จุดที่ต้องการแก้ไข<br>Please specify the reason and areas to revise.</p>
+            <input type="hidden" id="rejOrderNo">
+            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป, สีโลโก้ไม่ตรง..."></textarea>
+            
+            <div class="flex-row" style="margin-top:20px;">
+                <button class="btn btn-dark" onclick="closeModal('modalReject')">Cancel</button>
+                <button class="btn btn-reject" onclick="confirmReject()">แจ้งฝ่ายผลิต</button>
+            </div>
         </div>
     </div>
 
     <div id="modalFeedback" class="modal">
         <div class="modal-content">
-            <h3 style="color:var(--danger-color); margin-top:0;"><i class="fas fa-exclamation-triangle"></i> ตีกลับงาน (QC)</h3>
+            <h3 style="color:var(--accent-red); margin-top:0;"><i class="fas fa-exclamation-triangle"></i> ตีกลับงาน (QC)</h3>
             <label class="input-label">ระบุสาเหตุที่ต้องให้ PM แก้ไข</label>
             <input type="hidden" id="fbOrderNo">
-            <textarea id="fbReason" rows="4" placeholder="ระบุจุดที่ต้องแก้ไขให้ชัดเจน..."></textarea>
+            <textarea id="fbReason" rows="4" placeholder="ระบุจุดที่ต้องแก้ไขให้ชัดเจน..." style="background:var(--input-bg); color:#fff;"></textarea>
             <div class="flex-row" style="margin-top:15px;">
-                <button class="btn" style="background:#444;" onclick="closeModal('modalFeedback')">ยกเลิก</button>
-                <button class="btn" style="background:var(--danger-color);" onclick="confirmRollback()">ยืนยันการส่งกลับ</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modalRejectPP" class="modal">
-        <div class="modal-content">
-            <h3 style="color:var(--danger-color); margin-top:0;"><i class="fas fa-times-circle"></i> ไม่อนุมัติแบบ (PP Reject)</h3>
-            <label class="input-label">ระบุสาเหตุ / จุดที่ต้องการให้แก้ไข</label>
-            <input type="hidden" id="rejPPOrderNo">
-            <textarea id="rejPPReason" rows="4" placeholder="แขนเสื้อสั้นไป, สีโลโก้ไม่ตรง..."></textarea>
-            <div class="flex-row" style="margin-top:15px;">
-                <button class="btn" style="background:#444;" onclick="closeModal('modalRejectPP')">ยกเลิก</button>
-                <button class="btn" style="background:var(--danger-color);" onclick="confirmRejectPP()">แจ้งฝ่ายผลิต</button>
+                <button class="btn btn-dark" onclick="closeModal('modalFeedback')">ยกเลิก</button>
+                <button class="btn btn-reject" onclick="confirmRollback()">ยืนยันการส่งกลับ</button>
             </div>
         </div>
     </div>
 
     <div id="modalFixPP" class="modal">
         <div class="modal-content">
-            <h3 style="color:var(--success-color); margin-top:0;"><i class="fas fa-wrench"></i> บันทึกการแก้ไขแบบ</h3>
+            <h3 style="color:var(--accent-green); margin-top:0;"><i class="fas fa-wrench"></i> บันทึกการแก้ไขแบบ</h3>
             <label class="input-label">ระบุรายละเอียดที่ได้ทำการแก้ไขแบบไป</label>
             <input type="hidden" id="fixPPOrderNo">
-            <textarea id="fixPPDetail" rows="4" placeholder="ปรับขนาดโลโก้ใหม่, เปลี่ยนสียางยืด..."></textarea>
+            <textarea id="fixPPDetail" rows="4" placeholder="ปรับขนาดโลโก้ใหม่, เปลี่ยนสียางยืด..." style="background:var(--input-bg); color:#fff;"></textarea>
             <div class="flex-row" style="margin-top:15px;">
-                <button class="btn" style="background:#444;" onclick="closeModal('modalFixPP')">ยกเลิก</button>
-                <button class="btn" style="background:var(--success-color);" onclick="confirmFixPP()">บันทึกการแก้ไข</button>
+                <button class="btn btn-dark" onclick="closeModal('modalFixPP')">ยกเลิก</button>
+                <button class="btn btn-approve" onclick="confirmFixPP()">บันทึกการแก้ไข</button>
             </div>
         </div>
     </div>
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbzQMaK7ZL3iIUlUj_Uu9QLFL7mdTtcbYuQprIAuK2NVAVFOHPf37wVSC7KxpFa3zA00Qg/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbwjqf62cEhOWlpnPsOyd9g2aRWpcpbP0W5br__pfScVzmeJlxKRcU3J9_de1y9G3fcb0w/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         // =================================================
 
         let userProfile = {};
-        let linePictureUrl = 'https://via.placeholder.com/80';
-        let currentUserRole = '';
+        let dbUserData = {};
         let globalOrders = [];
+        let preloadedImages = {}; 
 
-        // ฟังก์ชันจัดรูปแบบเวลาสำหรับใช้ในกล่องประวัติ
+        // Utilities
         function formatDateTime(ts) {
             if(!ts) return "";
             const d = new Date(ts);
             if(isNaN(d.getTime())) return "";
             const pad = n => String(n).padStart(2, '0');
             return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        }
-
-        async function main() {
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) { 
-                    liff.login(); 
-                    return; 
-                }
-                userProfile = await liff.getProfile();
-                if(userProfile.pictureUrl) {
-                    linePictureUrl = userProfile.pictureUrl;
-                }
-                checkUser();
-            } catch(e) { 
-                alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); 
-            }
-        }
-        main();
-
-        function checkUser() {
-            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_user', data: { userId: userProfile.userId } }) })
-            .then(r => r.json())
-            .then(res => {
-                document.getElementById('loader').classList.add('hidden');
-                if (res.found) {
-                    currentUserRole = res.data.Role;
-                    if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser', 'Sales Coordinators'].includes(currentUserRole)) {
-                        showStaffDashboard(res.data);
-                    } else {
-                        showCustomerView(res.data);
-                    }
-                } else {
-                    document.getElementById('viewRegister').classList.remove('hidden');
-                }
-            });
-        }
-
-        function getTierDisplay(tier) {
-            if (tier === 'VVIP') return '👑 VVIP';
-            if (tier === 'VIP') return '⭐️ VIP';
-            if (tier === 'Staff') return '👔 Staff';
-            return '👤 Regular';
-        }
-
-        function hasAccess(role) {
-            return currentUserRole === role || currentUserRole === 'Admin' || currentUserRole === 'Sales Coordinators';
         }
 
         function getBase64(file) {
@@ -404,8 +445,6 @@
             });
         }
 
-        let preloadedImages = {}; 
-
         async function processImage(input, orderNo, type) {
             let btnId = ''; let statusId = '';
             if(type === 's') { btnId = `btn-s-${orderNo}`; statusId = `status-s-${orderNo}`; }
@@ -419,17 +458,17 @@
             if (input.files.length > 0) {
                 if(btn) { btn.classList.add('btn-disabled'); btn.disabled = true; }
                 status.style.display = 'block';
-                status.style.color = 'var(--accent-color)';
+                status.style.color = 'var(--accent-orange)';
                 status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังประมวลผลไฟล์...';
 
                 try {
                     const base64 = await getBase64(input.files[0]);
                     preloadedImages[key] = base64; 
-                    status.style.color = 'var(--success-color)';
+                    status.style.color = 'var(--accent-green)';
                     status.innerHTML = '<i class="fas fa-check-circle"></i> ไฟล์พร้อมส่งแล้ว';
                     if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 } catch (e) {
-                    status.style.color = 'var(--danger-color)';
+                    status.style.color = 'var(--accent-red)';
                     status.innerHTML = '<i class="fas fa-times-circle"></i> เกิดข้อผิดพลาด กรุณาเลือกไฟล์ใหม่';
                     if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 }
@@ -439,16 +478,273 @@
             }
         }
 
-        // ================= STAFF SECTION =================
+        // ================= CORE SYSTEM =================
+
+        async function main() {
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                if (!liff.isLoggedIn()) { 
+                    liff.login(); 
+                    return; 
+                }
+                userProfile = await liff.getProfile();
+                checkUser();
+            } catch(e) { 
+                alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); 
+            }
+        }
+        main();
+
+        function callBackend(action, data, callback) {
+            document.getElementById('loader').classList.remove('hidden');
+            fetch(GAS_API, {
+                method: 'POST',
+                body: JSON.stringify({ action: action, data: data })
+            })
+            .then(r => r.json())
+            .then(res => {
+                document.getElementById('loader').classList.add('hidden');
+                if(callback) callback(res);
+            }).catch(e => {
+                document.getElementById('loader').classList.add('hidden');
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่");
+                console.error(e);
+            });
+        }
+
+        function checkUser() {
+            callBackend('get_user', { userId: userProfile.userId }, (res) => {
+                if (res.found) {
+                    dbUserData = res.data;
+                    const role = dbUserData.Role;
+                    // Route users based on role
+                    if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser', 'Sales Coordinators'].includes(role)) {
+                        showStaffDashboard(dbUserData);
+                    } else {
+                        setupCustomerView();
+                    }
+                } else {
+                    document.getElementById('viewRegister').classList.remove('hidden');
+                }
+            });
+        }
+
+        function register() {
+            const payload = {
+                userId: userProfile.userId,
+                realName: document.getElementById('regName').value,
+                brandName: document.getElementById('regBrand').value,
+                phone: document.getElementById('regPhone').value,
+                email: document.getElementById('regEmail').value
+            };
+            if(!payload.realName || !payload.phone) return alert("กรุณากรอกชื่อและเบอร์โทรศัพท์");
+            callBackend('register', payload, (res) => {
+                if(res.status === 'success') location.reload();
+            });
+        }
+
+        // ================= CUSTOMER LOGIC =================
+
+        function setupCustomerView() {
+            document.getElementById('viewApp').classList.remove('hidden');
+            
+            document.getElementById('headerName').innerText = dbUserData.RealName || userProfile.displayName;
+            document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand';
+            document.getElementById('headerTier').innerText = dbUserData.Tier;
+            document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
+            
+            document.getElementById('profileName').innerText = dbUserData.RealName || userProfile.displayName;
+            document.getElementById('profileId').innerText = "Customer ID: " + dbUserData.CustomerID;
+            document.getElementById('profileTier').innerText = dbUserData.Tier;
+            document.getElementById('profilePicLg').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
+
+            fetchCustomerOrders();
+        }
+
+        function fetchCustomerOrders() {
+            callBackend('get_my_orders', { userId: userProfile.userId }, (res) => {
+                globalOrders = res.orders;
+                renderCustomerOrders(globalOrders);
+            });
+        }
+
+        function getStepIndex(status) {
+            const flow = ['Order Received', 'Preparation', 'In Production', 'Quality Check', 'Delivered'];
+            return flow.indexOf(status) + 1;
+        }
+
+        function renderCustomerOrders(orders) {
+            const container = document.getElementById('orderListContainer');
+            if (orders.length === 0) {
+                container.innerHTML = '<div class="card text-center text-muted" style="padding:40px;">No transactions found.</div>';
+                return;
+            }
+
+            let html = '';
+            orders.forEach(o => {
+                const currentStep = getStepIndex(o.status);
+                let statusColor = 'var(--text-main)';
+                if(o.status === 'Delivered') statusColor = 'var(--accent-green)';
+                if(o.status === 'Preparation') statusColor = 'var(--accent-orange)';
+
+                const steps = [
+                    { name: 'Order Received', date: o.dateReceived },
+                    { name: 'Preparation', date: o.datePrep },
+                    { name: 'In Production', date: o.dateProd },
+                    { name: 'Quality Check', date: o.dateQC },
+                    { name: 'Delivered', date: o.dateDelivered }
+                ];
+
+                let stepperHtml = '<div class="stepper-wrapper">';
+                steps.forEach((s, idx) => {
+                    const stepNum = idx + 1;
+                    let stateClass = '';
+                    if (stepNum < currentStep) stateClass = 'completed';
+                    else if (stepNum === currentStep) stateClass = 'active';
+                    stepperHtml += `
+                        <div class="stepper-item ${stateClass}">
+                            <div class="step-counter"></div>
+                            <div class="step-name">${s.name}</div>
+                            <div class="step-date">${s.date !== '-' ? s.date : ''}</div>
+                        </div>
+                    `;
+                });
+                stepperHtml += '</div>';
+
+                let actionHtml = '';
+                // จำลองปุ่มอนุมัติเมื่อถึงขั้นตอน Preparation
+                if (o.status === 'Preparation' && o.sampleImage && o.sampleImage !== '-') {
+                    actionHtml = `
+                        <div style="background: rgba(255,136,0,0.1); padding: 12px; border-radius: 12px; margin-top: 15px; text-align:center;">
+                            <div style="font-size:11px; color:var(--accent-orange); margin-bottom:10px;">กรุณาตรวจสอบตัวอย่างและอนุมัติการผลิต</div>
+                            <div class="flex-row">
+                                <button class="btn btn-approve" style="flex:1; font-size:12px; padding:10px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต</button>
+                                <button class="btn btn-reject" style="flex:1; font-size:12px; padding:10px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let revHtml = '';
+                if (o.revCount > 0 && o.revHistory.length > 0) {
+                    let itemsHtml = '';
+                    o.revHistory.forEach(r => {
+                        itemsHtml += `<div class="revision-item">• Revision ${r.round} (Not Approved): ${r.rejectReason}</div>`;
+                        if(r.fixDetail) itemsHtml += `<div class="revision-item" style="color:var(--accent-green);">• Revised: ${r.fixDetail}</div>`;
+                    });
+                    revHtml = `
+                        <div class="revision-box">
+                            <div class="revision-title"><i class="fas fa-arrow-right"></i> Revision History (${o.revCount} time)</div>
+                            ${itemsHtml}
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="card">
+                        <div class="flex-between" style="margin-bottom: 12px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <i class="fas fa-tshirt" style="font-size:24px; color:#DDD;"></i>
+                                <div>
+                                    <div style="font-size:16px; font-weight:600;">${o.orderNo}</div>
+                                    <div style="font-size:11px; color:var(--text-muted);">${o.dateReceived}</div>
+                                </div>
+                            </div>
+                            <div style="color:${statusColor}; font-size:14px; font-weight:500;">${o.status}</div>
+                        </div>
+                        <div style="background:#2A2A2A; padding:12px; border-radius:12px; display:flex; justify-content:space-between;">
+                            <div>
+                                <div style="color:#ff44a0; font-weight:500;">${o.style} <span style="color:var(--text-muted); font-size:12px;">(${o.qty} pcs)</span></div>
+                                <div style="font-size:12px; margin-top:4px;">Estimated Delivery:</div>
+                                <div style="font-size:14px; font-weight:500;">${o.delivery}</div>
+                            </div>
+                            ${o.woUrl !== '-' ? `<a href="${o.woUrl}" target="_blank" style="width:60px; height:60px; background:#fff; border-radius:8px; display:flex; justify-content:center; align-items:center; color:#000; font-size:10px; text-decoration:none; text-align:center; padding:5px;">WO<br>PDF</a>` : ''}
+                        </div>
+                        ${stepperHtml}
+                        ${revHtml}
+                        ${actionHtml}
+                        ${o.status === 'Delivered' ? `<div style="text-align:center; color:var(--accent-green); font-size:12px; margin-top:15px; font-weight:500;">Thank you for using AWESOME.SCREEN</div>` : ''}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('tabOrders').classList.add('hidden');
+            document.getElementById('tabOverview').classList.add('hidden');
+            document.getElementById('tabProfile').classList.add('hidden');
+            document.getElementById('tab' + tabId).classList.remove('hidden');
+        }
+
+        function filterOrders() {
+            const txt = document.getElementById('searchInput').value.toLowerCase();
+            if (!txt) { renderCustomerOrders(globalOrders); return; }
+            const filtered = globalOrders.filter(o => o.orderNo.toLowerCase().includes(txt) || o.style.toLowerCase().includes(txt));
+            renderCustomerOrders(filtered);
+        }
+
+        function openEditProfile() {
+            document.getElementById('epName').value = dbUserData.RealName || '';
+            document.getElementById('epBrand').value = dbUserData.BrandName || '';
+            document.getElementById('epPhone').value = dbUserData.Phone || '';
+            document.getElementById('epEmail').value = dbUserData.Email || '';
+            document.getElementById('epShipName').value = dbUserData.ShipName || '';
+            document.getElementById('epShipAddress').value = dbUserData.ShipAddress || '';
+            document.getElementById('epShipCity').value = dbUserData.ShipCity || '';
+            document.getElementById('epShipProv').value = dbUserData.ShipProvince || '';
+            document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
+            document.getElementById('epShipPhone').value = dbUserData.ShipPhone || '';
+            document.getElementById('modalProfile').classList.add('show');
+        }
+
+        function saveProfile() {
+            const payload = {
+                userId: userProfile.userId, realName: document.getElementById('epName').value,
+                brandName: document.getElementById('epBrand').value, phone: document.getElementById('epPhone').value,
+                email: document.getElementById('epEmail').value, shipName: document.getElementById('epShipName').value,
+                shipAddress: document.getElementById('epShipAddress').value, shipCity: document.getElementById('epShipCity').value,
+                shipProvince: document.getElementById('epShipProv').value, shipZip: document.getElementById('epShipZip').value,
+                shipPhone: document.getElementById('epShipPhone').value
+            };
+            callBackend('update_profile', payload, (res) => {
+                if(res.status === 'success') { alert("Profile Updated Successfully!"); closeModal('modalProfile'); checkUser(); }
+            });
+        }
+
+        function approveAction(orderNo) {
+            if(!confirm("ยืนยันการอนุมัติผลิตออเดอร์ " + orderNo + " ใช่หรือไม่?")) return;
+            callBackend('update_status', { orderNo: orderNo, actionType: 'PP_APPROVE', staffName: 'Customer' }, (res) => {
+                if(res.status === 'success') fetchCustomerOrders();
+            });
+        }
+
+        function openRejectModal(orderNo) {
+            document.getElementById('rejOrderNo').value = orderNo;
+            document.getElementById('rejReason').value = '';
+            document.getElementById('modalReject').classList.add('show');
+        }
+
+        function confirmReject() {
+            const orderNo = document.getElementById('rejOrderNo').value;
+            const reason = document.getElementById('rejReason').value;
+            if(!reason) return alert("กรุณาระบุสาเหตุ");
+            callBackend('update_status', { orderNo: orderNo, actionType: 'PP_REJECT', reason: reason, staffName: 'Customer' }, (res) => {
+                if(res.status === 'success') { closeModal('modalReject'); fetchCustomerOrders(); }
+            });
+        }
+
+        // ================= STAFF LOGIC =================
 
         function showStaffDashboard(data) {
             document.getElementById('viewStaff').classList.remove('hidden');
             document.getElementById('staffName').innerText = data.RealName;
             document.getElementById('staffRole').innerText = data.Role;
-            document.getElementById('staffTier').innerText = getTierDisplay(data.Tier);
-            document.getElementById('staffProfilePic').src = linePictureUrl;
+            document.getElementById('staffProfilePic').src = userProfile.pictureUrl || 'https://via.placeholder.com/50';
 
-            if (hasAccess('Sales Admin')) {
+            if (['Admin', 'Sales Admin'].includes(data.Role)) {
                 document.getElementById('adminPanel').classList.remove('hidden');
                 fetchOptions();
             }
@@ -456,547 +752,26 @@
         }
 
         function fetchStaffData() {
-            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_all_orders' }) })
-            .then(r => r.json())
-            .then(res => {
+            callBackend('get_all_orders', {}, (res) => {
                 globalOrders = res.orders;
                 document.getElementById('staffStatusFilter').value = "ACTIVE"; 
                 filterStaffList();
             });
         }
 
-        function toggleDelivery(no, method, type) {
-            const trackDiv = document.getElementById(`box-track-${type}-${no}`);
-            const phoneDiv = document.getElementById(`box-phone-${type}-${no}`);
-            if(method === 'Messenger') {
-                trackDiv.style.display = 'none';
-                phoneDiv.style.display = 'block';
-            } else {
-                trackDiv.style.display = 'block';
-                phoneDiv.style.display = 'none';
-            }
-        }
-
-        // กล่องประวัติการแก้แบบ
-        function renderRevisionHistory(revCount, revHistory) {
-            if (!revCount || revCount === 0 || !revHistory || revHistory.length === 0) return '';
-            
-            return `
-            <details style="background:#330000; border-color:var(--danger-color);">
-                <summary style="color:var(--danger-color);">⚠ ประวัติแก้ตัวแบบ (${revCount} ครั้ง)</summary>
-                <div class="history-box">
-                    ${revHistory.map(r => `
-                        <div style="border-bottom:1px dashed #555; padding-bottom:6px; margin-bottom:6px;">
-                            <div style="color:#ff8888;"><b>ครั้งที่ ${r.round} (ไม่อนุมัติ):</b> ${r.rejectReason} <span style="color:#888;">(${formatDateTime(r.rejectDate)})</span></div>
-                            ${r.fixDetail ? `<div style="color:#88ff88;"><b>แก้ไขแล้ว (${r.fixBy}):</b> ${r.fixDetail} <span style="color:#888;">(${formatDateTime(r.fixDate)})</span></div>` 
-                            : `<div style="color:#aaa;">⏳ กำลังรอฝ่ายผลิตแก้ไข...</div>`}
-                        </div>
-                    `).join('')}
-                </div>
-            </details>`;
-        }
-
-        // กล่องประวัติพนักงานที่ทำรายการ (เฉพาะ Staff)
-        function renderActionLogs(actionLogs) {
-            if (!actionLogs || actionLogs.length === 0) return '';
-            return `
-            <details>
-                <summary style="color:var(--accent-color);">🕒 ประวัติพนักงานทำรายการ</summary>
-                <div class="history-box">
-                    ${actionLogs.map(l => `
-                        <div class="log-item">
-                            <b>${formatDateTime(l.date)}</b> [${l.by}]: ${l.status}
-                        </div>
-                    `).join('')}
-                </div>
-            </details>`;
-        }
-
-        function filterStaffList() {
-            const keyword = document.getElementById('staffSearch').value.toLowerCase();
-            const statusFilter = document.getElementById('staffStatusFilter').value;
-            const list = document.getElementById('staffTaskList');
-            
-            let filtered = globalOrders;
-
-            if (statusFilter === 'ACTIVE') {
-                filtered = filtered.filter(o => o.status !== 'Shipped'); 
-            } else if (statusFilter !== 'ALL') {
-                filtered = filtered.filter(o => o.status.includes(statusFilter));
-            }
-
-            if (keyword) {
-                filtered = filtered.filter(o => 
-                    o.orderNo.toLowerCase().includes(keyword) || 
-                    (o.custName && o.custName.toLowerCase().includes(keyword)) ||
-                    (o.custPhone && o.custPhone.includes(keyword))
-                );
-            }
-
-            if (filtered.length === 0) { 
-                list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; 
-                return; 
-            }
-
-            let html = '';
-            filtered.forEach(o => {
-                let btns = '';
-                
-                const custInfo = `
-                    <div class="cust-info">
-                        <div style="font-size:14px; margin-bottom:5px;">👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${getTierDisplay(o.tier)}</span></div>
-                        <div style="font-size:13px;"><a href="tel:${o.custPhone}" style="color:var(--accent-color); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
-                        <div style="font-size:12px; color:#aaa; border-top:1px dashed #444; padding-top:5px; margin-top:5px;">📍 <b>จัดส่ง:</b> ${o.address || '-'}</div>
-                    </div>`;
-
-                if (o.status === 'Pending Customer Confirmation') {
-                    btns += `<div style="color:var(--accent-color); font-size:12px; text-align:center; margin-top:10px;">⏳ รอให้ลูกค้ายืนยันออเดอร์</div>`;
-                }
-
-                // --- งานแก้ไขตัวแบบ (PP Reject) ที่ต้องให้ Merchandiser จัดการ ---
-                if (o.status === 'PP Rejected') {
-                    if (hasAccess('Merchandiser')) {
-                        html += `
-                        <div class="card" style="border:1px solid var(--danger-color)">
-                            <div class="card-header">
-                                <div>
-                                    <strong style="color:var(--danger-color); font-size:16px;">${o.orderNo}</strong>
-                                    <div style="font-size:10px; color:#aaa;">👤 Sales: ${o.salesOwner}</div>
-                                </div>
-                                <span class="status-badge" style="background:var(--danger-color)">PP Rejected</span>
-                            </div>
-                            ${custInfo}
-                            <p style="font-size:13px; color:#fff; background:#333; padding:10px; border-radius:6px; border-left:3px solid var(--danger-color);">
-                                <b>สาเหตุจากลูกค้า:</b> ${o.revHistory[o.revHistory.length-1].rejectReason}
-                            </p>
-                            ${renderRevisionHistory(o.revCount, o.revHistory)}
-                            ${renderActionLogs(o.actionLogs)}
-                            <button class="btn" style="background:var(--success-color); margin-top:15px;" onclick="openFixPP('${o.orderNo}')"><i class="fas fa-check-circle"></i> ดำเนินการแก้ตัวแบบแล้ว</button>
-                        </div>`;
-                    } else {
-                        html += `
-                        <div class="card" style="border:1px solid var(--danger-color)">
-                            <div class="card-header">
-                                <div>
-                                    <strong style="color:var(--danger-color); font-size:16px;">${o.orderNo}</strong>
-                                    <div style="font-size:10px; color:#aaa;">👤 Sales: ${o.salesOwner}</div>
-                                </div>
-                                <span class="status-badge" style="background:var(--danger-color)">PP Rejected</span>
-                            </div>
-                            <p style="font-size:12px; color:#aaa;">สาเหตุจากลูกค้า: ${o.revHistory[o.revHistory.length-1].rejectReason} (รอฝ่าย Merch จัดการ)</p>
-                        </div>`;
-                    }
-                    return; // ข้ามการวาดการ์ดปกติไป
-                }
-
-                // --- กรณีติดปัญหา (Correction Needed จาก QC) ---
-                if (o.status === 'Correction Needed') {
-                    if (hasAccess('Production Manager')) {
-                        html += `
-                        <div class="card" style="border:1px solid var(--danger-color)">
-                            <div class="card-header">
-                                <div>
-                                    <strong style="color:var(--danger-color); font-size:16px;">${o.orderNo}</strong>
-                                    <div style="font-size:10px; color:#aaa;">👤 Sales: ${o.salesOwner}</div>
-                                </div>
-                                <span class="status-badge" style="background:var(--danger-color)">Fix Needed</span>
-                            </div>
-                            ${custInfo}
-                            <p style="font-size:13px; color:#fff; background:#333; padding:10px; border-radius:6px; border-left:3px solid var(--danger-color);">
-                                <b>สาเหตุจาก QC:</b> ${o.feedback}
-                            </p>
-                            ${renderRevisionHistory(o.revCount, o.revHistory)}
-                            ${renderActionLogs(o.actionLogs)}
-                            <button class="btn" style="background:var(--success-color); margin-top:15px;" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')"><i class="fas fa-check-circle"></i> แก้ไขเสร็จสิ้น (ส่ง QC ตรวจใหม่)</button>
-                        </div>`;
-                    } else {
-                        html += `
-                        <div class="card" style="border:1px solid var(--danger-color)">
-                            <div class="card-header">
-                                <div>
-                                    <strong style="color:var(--danger-color); font-size:16px;">${o.orderNo}</strong>
-                                    <div style="font-size:10px; color:#aaa;">👤 Sales: ${o.salesOwner}</div>
-                                </div>
-                                <span class="status-badge">รอ PM แก้ไข</span>
-                            </div>
-                            <p style="font-size:12px; color:#aaa;">เหตุผลการตีกลับ: ${o.feedback}</p>
-                        </div>`;
-                    }
-                    return; 
-                }
-
-                if (hasAccess('Production Manager')) {
-                    if (o.status === 'Order Confirmation') {
-                        btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')"><i class="fas fa-clipboard-check"></i> อนุมัติ Work Order</button>`;
-                    } else if (o.status === 'Pre-Production Approved') {
-                        btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')"><i class="fas fa-bolt"></i> แจ้งผลิตเสร็จ 50%</button>`;
-                    }
-                }
-
-                if (hasAccess('Merchandiser')) {
-                    if (o.status === 'Work Order Review Stage') {
-                        btns += `
-                        <div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
-                            <label style="font-size:12px; color:var(--accent-color);">วิธีส่งตัวอย่าง:</label>
-                            <select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px;">
-                                <option value="Parcel">ส่งพัสดุ (J&T)</option>
-                                <option value="Messenger">ส่งแมสเซ็นเจอร์</option>
-                            </select>
-                            
-                            <div id="box-track-s-${o.orderNo}">
-                                <input type="text" id="track-s-${o.orderNo}" placeholder="ระบุ Tracking J&T" style="margin-bottom:5px;">
-                            </div>
-                            <div id="box-phone-s-${o.orderNo}" style="display:none;">
-                                <input type="tel" id="phone-s-${o.orderNo}" placeholder="ระบุเบอร์โทรแมสเซ็นเจอร์" style="margin-bottom:5px;">
-                            </div>
-                            
-                            <label style="font-size:12px; color:#aaa;">แนบหลักฐานการส่ง:</label>
-                            <input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')">
-                            <div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
-                            
-                            <button class="btn btn-merch" id="btn-s-${o.orderNo}" style="margin-top:8px;" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> แจ้งส่งตัวอย่าง</button>
-                        </div>`;
-                    }
-                }
-
-                if (hasAccess('Quality Control')) {
-                    if (o.status === 'Bulk Production (50%)') {
-                        btns += `
-                        <div class="flex-row">
-                            <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')"><i class="fas fa-check-circle"></i> ให้ผ่าน QC</button>
-                            <button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')"><i class="fas fa-undo"></i> ตีกลับให้ PM</button>
-                        </div>`;
-                    }
-                }
-
-                if (hasAccess('Sales Admin')) {
-                    if (o.status === 'Quality Control Passed') {
-                        btns += `
-                        <div style="background:#222; padding:10px; border-radius:8px; margin-top:8px;">
-                            <label style="font-size:12px; color:var(--accent-color);">วิธีจัดส่งสินค้า:</label>
-                            <select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px;">
-                                <option value="Parcel">ส่งพัสดุ (J&T)</option>
-                                <option value="Messenger">ส่งแมสเซ็นเจอร์</option>
-                            </select>
-
-                            <div id="box-track-ship-${o.orderNo}">
-                                <input type="text" id="track-ship-${o.orderNo}" placeholder="ระบุ Tracking J&T" style="margin-bottom:5px;">
-                            </div>
-                            <div id="box-phone-ship-${o.orderNo}" style="display:none;">
-                                <input type="tel" id="phone-ship-${o.orderNo}" placeholder="ระบุเบอร์โทรแมสเซ็นเจอร์" style="margin-bottom:5px;">
-                            </div>
-                            
-                            <label style="font-size:12px; color:#aaa;">แนบหลักฐานจัดส่ง:</label>
-                            <input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')">
-                            <div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
-                            
-                            <button class="btn btn-ship" id="btn-ship-${o.orderNo}" style="margin-top:8px;" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันจัดส่งลูกค้า</button>
-                        </div>`;
-                    } else if (o.status === 'Shipped') {
-                        let delText = o.deliveryMethod === 'Messenger' ? `Messenger: ${o.messengerPhone}` : `J&T: ${o.tracking}`;
-                        btns += `<div style="margin-top:10px; font-size:13px; color:var(--success-color); text-align:center; background:#111; padding:8px; border-radius:6px;">✔ จัดส่งแล้ว (${delText})</div>`;
-                    }
-                }
-
-                let extraLinks = '';
-                if(o.woUrl && o.woUrl !== '-') extraLinks += `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-color); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (WO)</a>`;
-                if(o.sampleImage && o.sampleImage !== '-') extraLinks += `<br><a href="${o.sampleImage}" target="_blank" style="color:#00B9F2; font-size:11px; text-decoration:none;"><i class="fas fa-image"></i> รูปพัสดุตัวอย่าง</a>`;
-                if(o.shipImage && o.shipImage !== '-') extraLinks += `<br><a href="${o.shipImage}" target="_blank" style="color:#FF0080; font-size:11px; text-decoration:none;"><i class="fas fa-image"></i> รูปพัสดุจัดส่ง</a>`;
-
-                html += `
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <strong style="color:var(--accent-color); font-size:16px;">${o.orderNo}</strong>
-                            <div style="font-size:10px; color:#aaa;">👤 Sales: ${o.salesOwner}</div>
-                        </div>
-                        <span class="status-badge">${o.status}</span>
-                    </div>
-                    ${custInfo}
-                    <div style="font-size:13px; color:#ccc; display:flex; justify-content:space-between; line-height:1.6;">
-                        <div>
-                            ทรงเสื้อ: <span style="color:#fff;">${o.style}</span><br>
-                            จำนวน: <span style="color:#fff;">${o.qty} ตัว</span><br>
-                            Batch: <span style="color:#fff;">${o.batch || '-'}</span>
-                        </div>
-                        <div style="text-align:right;">
-                            ส่งมอบ: <span style="color:#fff;">${o.delivery}</span><br>
-                            <span style="font-size:11px; color:#666;">อัปเดต: ${o.updatedDate}</span>
-                            ${extraLinks}
-                        </div>
-                    </div>
-                    ${renderRevisionHistory(o.revCount, o.revHistory)}
-                    ${renderActionLogs(o.actionLogs)}
-                    ${btns}
-                </div>`;
-            });
-            list.innerHTML = html;
-        }
-
-        // ================= CUSTOMER SECTION =================
-
-        function showCustomerView(data) {
-            document.getElementById('viewCustomer').classList.remove('hidden');
-            document.getElementById('custHeaderName').innerText = "คุณ " + data.RealName;
-            document.getElementById('custHeaderTier').innerText = getTierDisplay(data.Tier);
-            document.getElementById('custProfilePic').src = linePictureUrl;
-            
-            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_my_orders', data: { userId: userProfile.userId } }) })
-            .then(r => r.json())
-            .then(res => {
-                let confirm = 0, prod = 0, done = 0;
-                res.orders.forEach(o => {
-                    if(o.status === 'Shipped') done++;
-                    else if(o.status === 'Order Confirmation' || o.status === 'Pending Customer Confirmation') confirm++;
-                    else prod++;
-                });
-                
-                document.getElementById('stat-confirm').innerText = confirm;
-                document.getElementById('stat-prod').innerText = prod;
-                document.getElementById('stat-done').innerText = done;
-
-                const list = document.getElementById('customerOrderList');
-                if (res.orders.length === 0) { 
-                    list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">คุณยังไม่มีรายการสั่งผลิต</div>'; 
-                    return; 
-                }
-                list.innerHTML = res.orders.map(o => renderCustCard(o)).join('');
-            });
-        }
-
-        function switchCustTab(tab) {
-            document.querySelectorAll('#viewCustomer .tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            if(tab === 'list') {
-                document.getElementById('custListView').classList.remove('hidden');
-                document.getElementById('custDashView').classList.add('hidden');
-            } else {
-                document.getElementById('custListView').classList.add('hidden');
-                document.getElementById('custDashView').classList.remove('hidden');
-            }
-        }
-
-        function renderCustCard(o) {
-            let currentStepIdx = 0;
-            if (['Order Confirmation', 'Work Order Review Stage', 'Sampling Stage', 'Pre-Production Approved', 'PP Rejected'].includes(o.status)) currentStepIdx = 1;
-            if (['Bulk Production (50%)'].includes(o.status)) currentStepIdx = 2;
-            if (['Quality Control Passed', 'Correction Needed'].includes(o.status)) currentStepIdx = 3;
-            if (o.status === 'Shipped') currentStepIdx = 4;
-
-            const steps = [
-                { label: 'รับออเดอร์', active: true, dateText: o.startDate }, 
-                { label: 'เตรียมงาน', active: currentStepIdx >= 1, dateText: o.prepDate },
-                { label: 'กำลังผลิต', active: currentStepIdx >= 2, dateText: o.prodDate },
-                { label: 'ตรวจสอบ', active: currentStepIdx >= 3, dateText: o.qcDate },
-                { label: 'ส่งมอบ', active: currentStepIdx === 4, dateText: o.shipDate }
-            ];
-
-            let progressHtml = '<div class="stepper-wrapper">';
-            steps.forEach(s => { 
-                const dateHtml = (s.active && s.dateText && s.dateText !== '-') ? `<br><span style="color:#aaa; font-size:9px;">${s.dateText}</span>` : '';
-                progressHtml += `<div class="stepper-item ${s.active ? 'active' : ''}"><div class="step-counter"></div><div class="step-name">${s.label}${dateHtml}</div></div>`; 
-            });
-            progressHtml += '</div>';
-
-            let actionHtml = '';
-            
-            if (o.status === 'Pending Customer Confirmation') {
-                actionHtml = `
-                <div style="margin-top:15px; padding-top:15px; border-top:1px solid #444;">
-                    <p style="font-size:13px; color:var(--accent-color); margin-bottom:10px; text-align:center;">กรุณาตรวจสอบใบสั่งงานและยืนยันออเดอร์</p>
-                    ${o.woUrl !== '-' ? `<a href="${o.woUrl}" target="_blank" class="btn" style="background:#333; text-align:center; display:block; text-decoration:none; margin-bottom:8px; border:1px solid #555;"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</a>` : ''}
-                    <button class="btn btn-main" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง</button>
-                </div>`;
-            }
-
-            if (o.status === 'Sampling Stage') {
-                actionHtml = `
-                <div style="margin-top:15px; padding-top:15px; border-top:1px solid #444;">
-                    <p style="font-size:13px; color:var(--accent-color); margin-bottom:10px; text-align:center;">กรุณาตรวจสอบตัวอย่างและอนุมัติการผลิต</p>
-                    <div class="flex-row">
-                        <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'PP_APPROVE')"><i class="fas fa-thumbs-up"></i> อนุมัติผลิต</button>
-                        <button class="btn btn-reject" style="flex:1;" onclick="openRejectPP('${o.orderNo}')"><i class="fas fa-times"></i> ไม่อนุมัติ</button>
-                    </div>
-                </div>`;
-            }
-
-            if (o.status === 'PP Rejected') {
-                actionHtml = `
-                <div style="margin-top:15px; padding-top:15px; border-top:1px solid #444; text-align:center;">
-                    <p style="font-size:13px; color:var(--danger-color); margin-bottom:5px;"><i class="fas fa-tools"></i> โรงงานกำลังดำเนินการแก้ไขตัวแบบ</p>
-                </div>`;
-            }
-
-            return `
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                        <strong style="color:var(--accent-color); font-size:16px;">${o.orderNo}</strong>
-                        <span class="status-badge">${o.status}</span>
-                    </div>
-                    <div style="font-size:14px; color:#ddd; background:#222; padding:10px; border-radius:8px;">
-                        👕 <b>${o.style}</b> (${o.qty} ตัว)<br>
-                        📅 กำหนดส่ง: <span style="color:#fff">${o.delivery}</span>
-                    </div>
-                    ${progressHtml}
-                    ${renderRevisionHistory(o.revCount, o.revHistory)}
-                    ${actionHtml}
-                </div>`;
-        }
-
-        // ================= ACTIONS & MODALS =================
-
-        function openFeedback(no) { 
-            document.getElementById('fbOrderNo').value = no; 
-            document.getElementById('modalFeedback').classList.add('show'); 
-        }
-
-        function openRejectPP(no) { 
-            document.getElementById('rejPPOrderNo').value = no; 
-            document.getElementById('modalRejectPP').classList.add('show'); 
-        }
-
-        function openFixPP(no) { 
-            document.getElementById('fixPPOrderNo').value = no; 
-            document.getElementById('modalFixPP').classList.add('show'); 
-        }
-
-        function closeModal(id) { 
-            document.getElementById(id).classList.remove('show'); 
-        }
-        
-        function confirmRollback() { 
-            const no = document.getElementById('fbOrderNo').value;
-            const reason = document.getElementById('fbReason').value;
-            if(!reason) return alert("กรุณาระบุสาเหตุที่ต้องแก้ไขให้ชัดเจน"); 
-            
-            callApi({ 
-                orderNo: no, 
-                actionType: 'ROLLBACK', 
-                reason: reason, 
-                staffName: document.getElementById('staffName').innerText 
-            }); 
-            closeModal('modalFeedback'); 
-        }
-
-        function confirmRejectPP() { 
-            const no = document.getElementById('rejPPOrderNo').value;
-            const reason = document.getElementById('rejPPReason').value;
-            if(!reason) return alert("กรุณาระบุสาเหตุที่ไม่อนุมัติให้ชัดเจน"); 
-            
-            callApi({ 
-                orderNo: no, 
-                actionType: 'PP_REJECT', 
-                reason: reason 
-            }); 
-            closeModal('modalRejectPP'); 
-        }
-
-        function confirmFixPP() { 
-            const no = document.getElementById('fixPPOrderNo').value;
-            const detail = document.getElementById('fixPPDetail').value;
-            if(!detail) return alert("กรุณาระบุรายละเอียดการแก้ไขที่ได้ทำไป"); 
-            
-            callApi({ 
-                orderNo: no, 
-                actionType: 'FIX_PP_REJECT', 
-                fixDetail: detail, 
-                staffName: document.getElementById('staffName').innerText 
-            }); 
-            closeModal('modalFixPP'); 
-        }
-        
-        function updateStatus(no, action) { 
-            if(!confirm('ยืนยันการทำรายการ?')) return; 
-            const staffName = document.getElementById('staffName') ? document.getElementById('staffName').innerText : 'Customer';
-            
-            callApi({ 
-                orderNo: no, 
-                actionType: action, 
-                staffName: staffName 
+        function fetchOptions() { 
+            callBackend('get_options', {}, (res) => { 
+                const s = document.getElementById('ordStyle');
+                const f = document.getElementById('ordFabric'); 
+                s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ...</option>'; 
+                f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>'; 
+                res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); 
+                res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`); 
             }); 
         }
-        
-        async function sendSample(no) { 
-            const method = document.getElementById(`del-s-${no}`).value;
-            const track = document.getElementById(`track-s-${no}`).value; 
-            const phone = document.getElementById(`phone-s-${no}`).value; 
 
-            if(method === 'Parcel' && !track) return alert("กรุณาระบุเลข Tracking J&T"); 
-            if(method === 'Messenger' && !phone) return alert("กรุณาระบุเบอร์โทรศัพท์แมสเซ็นเจอร์"); 
-
-            let base64Img = preloadedImages[`s-${no}`] || null; 
-            document.getElementById('loader').classList.remove('hidden');
-            
-            callApi({ 
-                orderNo: no, 
-                actionType: 'SEND_SAMPLE', 
-                deliveryMethod: method, 
-                tracking: track, 
-                messengerPhone: phone, 
-                image: base64Img, 
-                staffName: document.getElementById('staffName').innerText 
-            }); 
-        }
-        
-        async function shipOrder(no) { 
-            const method = document.getElementById(`del-ship-${no}`).value;
-            const track = document.getElementById(`track-ship-${no}`).value; 
-            const phone = document.getElementById(`phone-ship-${no}`).value; 
-
-            if(method === 'Parcel' && !track) return alert("กรุณาระบุเลข Tracking J&T"); 
-            if(method === 'Messenger' && !phone) return alert("กรุณาระบุเบอร์โทรศัพท์แมสเซ็นเจอร์"); 
-
-            let base64Img = preloadedImages[`ship-${no}`] || null; 
-            document.getElementById('loader').classList.remove('hidden');
-            
-            callApi({ 
-                orderNo: no, 
-                actionType: 'SHIP', 
-                deliveryMethod: method, 
-                tracking: track, 
-                messengerPhone: phone, 
-                image: base64Img, 
-                staffName: document.getElementById('staffName').innerText 
-            }); 
-        }
-        
-        function callApi(payload) { 
-            document.getElementById('loader').classList.remove('hidden'); 
-            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'update_status', data: payload }) })
-            .then(r => r.json())
-            .then(res => { 
-                document.getElementById('loader').classList.add('hidden'); 
-                if (res.status === 'success') { 
-                    alert("บันทึกสำเร็จ!"); 
-                    location.reload(); 
-                } else {
-                    alert("Error: " + res.message); 
-                }
-            }).catch(e => {
-                document.getElementById('loader').classList.add('hidden'); 
-                alert("การอัปโหลดไฟล์อาจใช้เวลาสักครู่ กรุณารีเฟรชหน้าจอ");
-            }); 
-        }
-        
-        function register() { 
-            const n = document.getElementById('regName').value;
-            const p = document.getElementById('regPhone').value; 
-            if(!n || !p) return alert("กรุณากรอกข้อมูลให้ครบถ้วน"); 
-            
-            document.getElementById('loader').classList.remove('hidden'); 
-            fetch(GAS_API, { 
-                method: 'POST', 
-                body: JSON.stringify({ 
-                    action: 'register', 
-                    data: { userId: userProfile.userId, displayName: userProfile.displayName, realName: n, phone: p } 
-                }) 
-            })
-            .then(() => location.reload()); 
-        }
-        
         function createOrder() { 
             let woImg = preloadedImages['wo-new_wo'] || null;
-
             const payload = {
                 adminName: document.getElementById('staffName').innerText,
                 phone: document.getElementById('ordPhone').value,
@@ -1005,42 +780,219 @@
                 qty: document.getElementById('ordQty').value,
                 fabric: document.getElementById('ordFabric').value,
                 deliveryDate: document.getElementById('ordDate').value,
-                address: document.getElementById('ordAddress').value,
                 detail: document.getElementById('ordDetail').value,
                 woImage: woImg
             };
-            
-            if(!payload.phone || !payload.batch || !payload.address) {
-                return alert("กรุณากรอก เบอร์โทรลูกค้า, Batch และ ที่อยู่จัดส่ง ให้ครบถ้วน"); 
-            }
-            
-            document.getElementById('loader').classList.remove('hidden'); 
-            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'create_order', data: payload }) })
-            .then(r => r.json())
-            .then(res => { 
-                document.getElementById('loader').classList.add('hidden'); 
-                if(res.status === 'success') { 
-                    alert("เปิดออเดอร์เรียบร้อย ลูกค้าจะได้รับข้อความแจ้งเตือนให้กดยืนยันครับ"); 
-                    location.reload(); 
-                } else {
-                    alert("เกิดข้อผิดพลาด: " + res.message); 
-                }
+            if(!payload.phone || !payload.batch) return alert("กรุณากรอก เบอร์โทรลูกค้า และ Batch ให้ครบถ้วน"); 
+            callBackend('create_order', payload, (res) => { 
+                if(res.status === 'success') { alert("เปิดออเดอร์เรียบร้อย"); location.reload(); } 
+                else { alert("Error: " + res.message); }
             }); 
         }
-        
-        function fetchOptions() { 
-            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'get_options' }) })
-            .then(r => r.json())
-            .then(res => { 
-                const s = document.getElementById('ordStyle');
-                const f = document.getElementById('ordFabric'); 
+
+        function filterStaffList() {
+            const keyword = document.getElementById('staffSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('staffStatusFilter').value;
+            const list = document.getElementById('staffTaskList');
+            
+            let filtered = globalOrders;
+            if (statusFilter === 'ACTIVE') {
+                filtered = filtered.filter(o => o.status !== 'Delivered'); 
+            } else if (statusFilter !== 'ALL') {
+                filtered = filtered.filter(o => o.status.includes(statusFilter));
+            }
+            if (keyword) {
+                filtered = filtered.filter(o => o.orderNo.toLowerCase().includes(keyword) || (o.custName && o.custName.toLowerCase().includes(keyword)) || (o.custPhone && o.custPhone.includes(keyword)));
+            }
+
+            if (filtered.length === 0) { 
+                list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; 
+                return; 
+            }
+
+            let html = '';
+            const role = document.getElementById('staffRole').innerText;
+
+            filtered.forEach(o => {
+                let btns = '';
+                const custInfo = `
+                    <div class="cust-info">
+                        <div style="font-size:14px; margin-bottom:5px;">👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${o.tier}</span></div>
+                        <div style="font-size:13px; color:var(--text-muted);">Brand: ${o.custBrand}</div>
+                        <div style="font-size:13px;"><a href="tel:${o.custPhone}" style="color:var(--accent-green); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                        <div style="font-size:12px; color:#aaa; border-top:1px dashed var(--border-color); padding-top:5px; margin-top:5px;">📍 <b>จัดส่ง:</b> ${o.address || '-'}</div>
+                    </div>`;
+
+                // Render Action Logs (Staff only)
+                const logHtml = o.actionLogs && o.actionLogs.length > 0 ? `
+                    <details>
+                        <summary style="color:var(--text-muted);">🕒 ประวัติพนักงานทำรายการ</summary>
+                        <div class="history-box">${o.actionLogs.map(l => `<div class="log-item"><b>${formatDateTime(l.date)}</b> [${l.by}]: ${l.status}</div>`).join('')}</div>
+                    </details>` : '';
+
+                const revHtml = o.revCount > 0 ? `
+                    <details style="background:#330000; border-color:var(--accent-red);">
+                        <summary style="color:var(--accent-red);">⚠ ประวัติแก้ตัวแบบ (${o.revCount} ครั้ง)</summary>
+                        <div class="history-box">${o.revHistory.map(r => `
+                            <div style="border-bottom:1px dashed #555; padding-bottom:6px; margin-bottom:6px;">
+                                <div style="color:#ff8888;"><b>ครั้งที่ ${r.round} (ไม่อนุมัติ):</b> ${r.rejectReason} <span style="color:#888;">(${formatDateTime(r.rejectDate)})</span></div>
+                                ${r.fixDetail ? `<div style="color:var(--accent-green);"><b>แก้ไขแล้ว (${r.fixBy}):</b> ${r.fixDetail} <span style="color:#888;">(${formatDateTime(r.fixDate)})</span></div>` : `<div style="color:#aaa;">⏳ กำลังรอฝ่ายผลิตแก้ไข...</div>`}
+                            </div>`).join('')}
+                        </div>
+                    </details>` : '';
+
+                // Buttons based on Role & Status
+                if (['Admin', 'Production Manager'].includes(role) && o.status === 'Order Received') {
+                    btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')"><i class="fas fa-clipboard-check"></i> ยืนยันรับงาน (แทนลูกค้า)</button>`;
+                }
                 
-                s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ...</option>'; 
-                f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>'; 
-                
-                res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); 
-                res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`); 
+                if (['Admin', 'Merchandiser'].includes(role) && o.status === 'Preparation') {
+                    // ถ้าลูกค้ายอมตีกลับมา (มี Reject Reason ที่ยังไม่แก้)
+                    if(o.ppFeedback && o.ppFeedback !== '-') {
+                         btns += `
+                         <div style="padding:10px; background:rgba(255,0,0,0.1); border:1px solid var(--accent-red); border-radius:8px; margin-top:10px;">
+                            <div style="color:var(--accent-red); font-size:12px; font-weight:bold; margin-bottom:5px;">⚠ ลูกค้าตีกลับแบบ: ${o.ppFeedback}</div>
+                            <button class="btn btn-approve" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้แบบเสร็จสิ้น</button>
+                         </div>`;
+                    } else {
+                        btns += `
+                        <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-top:8px;">
+                            <label style="font-size:12px; color:var(--text-muted);">ส่งตัวอย่าง (PP Sample):</label>
+                            <select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px;">
+                                <option value="Parcel">ส่งพัสดุ</option>
+                                <option value="Messenger">แมสเซ็นเจอร์</option>
+                            </select>
+                            <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div>
+                            <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div>
+                            <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐาน:</label>
+                            <input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="padding:8px; font-size:12px;">
+                            <div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
+                            <button class="btn btn-merch" id="btn-s-${o.orderNo}" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> ส่งตัวอย่างให้ลูกค้าตรวจ</button>
+                        </div>`;
+                    }
+                }
+
+                if (['Admin', 'Quality Control'].includes(role) && o.status === 'In Production') {
+                    // ถ้าถูกตีกลับจาก QC (Feedback Reason มีค่า)
+                    if(o.feedback && o.feedback !== '-') {
+                        btns += `<div style="color:var(--accent-orange); font-size:12px; text-align:center; padding:10px;">รอ PM แก้ไขงาน (ตีกลับ: ${o.feedback})</div>`;
+                    } else {
+                        btns += `
+                        <div class="flex-row">
+                            <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')"><i class="fas fa-check-circle"></i> ผ่าน QC</button>
+                            <button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')"><i class="fas fa-undo"></i> ตีกลับ PM</button>
+                        </div>`;
+                    }
+                }
+
+                if (['Admin', 'Production Manager'].includes(role) && o.status === 'In Production' && o.feedback && o.feedback !== '-') {
+                    btns += `<button class="btn btn-approve" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')"><i class="fas fa-tools"></i> แก้ไขงานเสร็จ (ส่ง QC ใหม่)</button>`;
+                }
+
+                if (['Admin', 'Sales Admin'].includes(role) && o.status === 'Quality Check') {
+                    btns += `
+                    <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-top:8px;">
+                        <label style="font-size:12px; color:var(--accent-green);">จัดส่งสินค้าสำเร็จรูป:</label>
+                        <select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px;">
+                            <option value="Parcel">ส่งพัสดุ</option>
+                            <option value="Messenger">แมสเซ็นเจอร์</option>
+                        </select>
+                        <div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div>
+                        <div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div>
+                        <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐานจัดส่ง:</label>
+                        <input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="padding:8px; font-size:12px;">
+                        <div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
+                        <button class="btn btn-ship" id="btn-ship-${o.orderNo}" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันจัดส่งลูกค้า</button>
+                    </div>`;
+                }
+
+                html += `
+                <div class="card">
+                    <div class="flex-between" style="margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                        <div>
+                            <strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong>
+                            <div style="font-size:10px; color:var(--text-muted);">Sales: ${o.salesOwner}</div>
+                        </div>
+                        <span class="status-badge">${o.status}</span>
+                    </div>
+                    ${custInfo}
+                    <div style="font-size:13px; color:#ccc; display:flex; justify-content:space-between; line-height:1.6; margin-bottom:10px;">
+                        <div>
+                            Style: <span style="color:#fff;">${o.style}</span><br>
+                            Qty: <span style="color:#fff;">${o.qty} pcs</span><br>
+                            Batch: <span style="color:#fff;">${o.batch || '-'}</span>
+                        </div>
+                        <div style="text-align:right;">
+                            Est. Del: <span style="color:#fff;">${o.delivery}</span><br>
+                            <span style="font-size:10px; color:#666;">Upd: ${o.updatedDate}</span>
+                            ${o.woUrl !== '-' ? `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-green); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> WO PDF</a>` : ''}
+                        </div>
+                    </div>
+                    ${revHtml}
+                    ${logHtml}
+                    ${btns}
+                </div>`;
+            });
+            list.innerHTML = html;
+        }
+
+        // Staff Actions
+        function toggleDelivery(no, method, type) {
+            document.getElementById(`box-track-${type}-${no}`).style.display = method === 'Messenger' ? 'none' : 'block';
+            document.getElementById(`box-phone-${type}-${no}`).style.display = method === 'Messenger' ? 'block' : 'none';
+        }
+
+        function updateStatus(no, action) { 
+            if(!confirm('ยืนยันการทำรายการ?')) return; 
+            callBackend('update_status', { orderNo: no, actionType: action, staffName: document.getElementById('staffName').innerText }, (res) => {
+                if(res.status === 'success') { alert('บันทึกสำเร็จ'); fetchStaffData(); }
             }); 
+        }
+
+        function openFeedback(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('modalFeedback').classList.add('show'); }
+        function openFixPP(no) { document.getElementById('fixPPOrderNo').value = no; document.getElementById('modalFixPP').classList.add('show'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+        function confirmRollback() { 
+            const no = document.getElementById('fbOrderNo').value; const reason = document.getElementById('fbReason').value;
+            if(!reason) return alert("ระบุสาเหตุ"); 
+            callBackend('update_status', { orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: document.getElementById('staffName').innerText }, (res) => {
+                if(res.status === 'success') { closeModal('modalFeedback'); fetchStaffData(); }
+            }); 
+        }
+
+        function confirmFixPP() { 
+            const no = document.getElementById('fixPPOrderNo').value; const detail = document.getElementById('fixPPDetail').value;
+            if(!detail) return alert("ระบุรายละเอียดการแก้ไข"); 
+            callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: document.getElementById('staffName').innerText }, (res) => {
+                if(res.status === 'success') { closeModal('modalFixPP'); fetchStaffData(); }
+            }); 
+        }
+
+        async function sendSample(no) { 
+            const method = document.getElementById(`del-s-${no}`).value;
+            const track = document.getElementById(`track-s-${no}`).value; 
+            const phone = document.getElementById(`phone-s-${no}`).value; 
+            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); 
+            if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
+
+            callBackend('update_status', { 
+                orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: method, tracking: track, messengerPhone: phone, 
+                image: preloadedImages[`s-${no}`] || null, staffName: document.getElementById('staffName').innerText 
+            }, (res) => { if(res.status === 'success') { alert("แจ้งส่งเรียบร้อย"); fetchStaffData(); } }); 
+        }
+
+        async function shipOrder(no) { 
+            const method = document.getElementById(`del-ship-${no}`).value;
+            const track = document.getElementById(`track-ship-${no}`).value; 
+            const phone = document.getElementById(`phone-ship-${no}`).value; 
+            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); 
+            if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
+
+            callBackend('update_status', { 
+                orderNo: no, actionType: 'SHIP', deliveryMethod: method, tracking: track, messengerPhone: phone, 
+                image: preloadedImages[`ship-${no}`] || null, staffName: document.getElementById('staffName').innerText 
+            }, (res) => { if(res.status === 'success') { alert("บันทึกจัดส่งสำเร็จ"); fetchStaffData(); } }); 
         }
     </script>
 </body>
