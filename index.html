@@ -5,147 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AWESOME.SCREEN</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         :root { 
-            --bg-color: #121212; 
-            --card-bg: #1E1E1E; 
-            --input-bg: #2C2C2C; 
+            --bg-color: #161616; 
+            --card-bg: #222222; 
+            --input-bg: #B0B0B0; 
             --text-main: #FFFFFF; 
-            --text-muted: #888888;
-            --accent-green: #00C851; 
-            --accent-red: #ff4444; 
-            --accent-orange: #FF8800;
+            --text-muted: #999999;
+            --accent-green: #00E676; 
+            --accent-red: #FF4444; 
+            --text-pink: #FF4D6D;
             --border-color: #333333;
-            /* Staff Colors */
-            --staff-pm: #00B9F2;
-            --staff-qc: #00C851;
-            --staff-ship: #FF0080;
-            --staff-merch: #FF9800;
         }
 
         body { 
             background-color: var(--bg-color); 
             color: var(--text-main); 
-            font-family: 'Kanit', sans-serif; 
+            font-family: 'Inter', 'Kanit', sans-serif; 
             margin: 0; 
             padding: 0; 
-            padding-bottom: 80px; 
+            padding-bottom: 40px; 
         }
 
-        .container { padding: 15px; }
+        .container { padding: 20px; }
         .hidden { display: none !important; }
         .flex-row { display: flex; gap: 10px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         
-        .brand-logo-container { text-align: center; margin: 30px 0 20px 0; }
-        .brand-logo { width: 180px; max-width: 80%; }
-
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 16px; 
-            padding: 16px; 
-            margin-bottom: 16px; 
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        h2, h3, h4 { margin-top: 0; font-weight: 500; }
-        .text-muted { color: var(--text-muted); font-size: 13px; }
-        .text-green { color: var(--accent-green); }
-        .text-red { color: var(--accent-red); }
-
-        .input-label { 
-            font-size: 11px; 
-            color: var(--text-muted); 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px; 
-            display: block; 
-            margin-top: 12px; 
-        }
-        input, select, textarea { 
-            width: 100%; 
-            padding: 14px; 
-            background: #A0A0A0; 
-            border: none; 
-            border-radius: 12px; 
-            color: #000; 
-            box-sizing: border-box;
-            font-family: 'Kanit'; 
-            font-size: 15px; 
-            font-weight: 500;
-        }
-        input::placeholder, textarea::placeholder { color: #555; font-weight: 400; }
-        input:focus, textarea:focus { outline: 2px solid var(--accent-green); background: #FFF; }
-        /* Override for Staff Inputs to keep dark theme */
-        #viewStaff input, #viewStaff select, #viewStaff textarea { background: var(--input-bg); color: #fff; border: 1px solid #444; }
-
-        .btn { 
-            width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; 
-            font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 15px; 
-            transition: 0.2s; box-sizing: border-box; display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .btn-main { background: transparent; border: 2px solid var(--text-main); color: var(--text-main); }
-        .btn-approve { background: var(--accent-green); color: #000; }
-        .btn-reject { background: transparent; border: 1px solid var(--accent-red); color: var(--accent-red); }
-        .btn-dark { background: #333; color: #FFF; }
+        /* --- Typography & Elements --- */
+        h3 { font-size: 24px; font-weight: 600; margin: 0 0 5px 0; }
+        .input-label { font-size: 12px; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; margin-top: 15px; }
         
-        /* Staff Buttons */
-        .btn-pm { background: linear-gradient(90deg, #00B9F2, #0055ff); }
-        .btn-qc { background: linear-gradient(90deg, #00C851, #007E33); }
-        .btn-ship { background: linear-gradient(90deg, #FF0080, #9900CC); }
-        .btn-merch { background: linear-gradient(90deg, #FF9800, #F57C00); }
+        /* Inputs matching Page 1 */
+        input, select, textarea { 
+            width: 100%; padding: 16px; background: var(--input-bg); 
+            border: none; border-radius: 12px; color: #111; 
+            font-family: 'Inter', 'Kanit', sans-serif; font-size: 15px; font-weight: 500; outline: none;
+        }
+        input::placeholder, textarea::placeholder { color: #555; }
+        
+        /* Buttons */
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-outline { background: transparent; border: 1.5px solid #FFF; color: #FFF; }
+        .btn-green { background: var(--accent-green); color: #000; }
+        .btn-dark { background: #333333; color: #FFF; }
+        .btn-reject { background: transparent; border: 1.5px solid var(--accent-red); color: var(--accent-red); }
         .btn-disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 
-        .profile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .profile-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
-        .tier-badge { background: #333; color: #FFF; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; }
-        
-        .search-bar { background: var(--input-bg); border-radius: 12px; padding: 10px 15px; display: flex; align-items: center; margin-bottom: 15px; }
-        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; font-weight: 400; }
-        .search-bar i { color: #666; margin-left: 10px; }
+        /* --- Header area --- */
+        .profile-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; margin-top: 10px; }
+        .gradient-text { background: linear-gradient(90deg, #FFC805, #FF0080, #00B9F2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 22px; }
+        .profile-img-container { position: relative; }
+        .profile-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+        .tier-badge { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); background: #111; border: 1px solid #333; color: #FFF; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; }
 
-        /* Stepper (Timeline) */
-        .stepper-wrapper { display: flex; justify-content: space-between; margin: 20px 0; position: relative; }
+        /* --- Navigation Tabs (Top) --- */
+        .top-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .nav-item { background: var(--card-bg); border-radius: 16px; padding: 15px; text-align: center; color: #FFF; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+        .nav-item i { font-size: 24px; color: var(--text-muted); }
+        .nav-item span { font-size: 12px; font-weight: 500; }
+        .nav-item.active i { color: var(--text-pink); }
+        
+        .search-bar { background: var(--card-bg); border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; }
+        .search-bar input::placeholder { color: #666; }
+        .search-bar i { color: #666; margin-left: 10px; font-size: 18px;}
+
+        /* --- Order Card --- */
+        .order-card { background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 20px; }
+        .inner-box { background: #2A2A2E; border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; margin-top: 15px; }
+        .wo-thumbnail { width: 70px; height: 85px; background: #FFF; border-radius: 8px; object-fit: cover; border: 1px solid #ddd; }
+
+        /* --- Stepper (Timeline) --- */
+        .stepper-wrapper { display: flex; justify-content: space-between; margin: 25px 0 10px 0; position: relative; }
         .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; z-index: 2; }
-        .stepper-item::after { content: ""; position: absolute; top: 8px; left: 50%; width: 100%; height: 4px; background: var(--border-color); z-index: -1; }
+        .stepper-item::after { content: ""; position: absolute; top: 10px; left: 50%; width: 100%; height: 4px; background: #444; z-index: -1; }
         .stepper-item:last-child::after { content: none; }
-        .step-counter { width: 20px; height: 20px; border-radius: 50%; background: var(--border-color); border: 2px solid var(--card-bg); }
+        .step-counter { width: 24px; height: 24px; border-radius: 50%; background: #444; }
         .stepper-item.completed .step-counter, .stepper-item.active .step-counter { background: var(--accent-green); }
         .stepper-item.completed::after { background: var(--accent-green); }
-        .step-name { margin-top: 8px; font-size: 9px; color: var(--text-muted); text-align: center; line-height: 1.2; font-weight: 500; }
-        .stepper-item.active .step-name { color: var(--text-main); }
-        .step-date { font-size: 8px; color: #666; margin-top: 2px; }
+        .step-name { margin-top: 8px; font-size: 9px; color: var(--text-main); text-align: center; font-weight: 500; line-height: 1.2; }
+        .step-date { font-size: 8px; color: var(--text-muted); margin-top: 2px; }
 
-        /* Revision History Box */
-        .revision-box { background: rgba(255, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px; padding: 12px; margin-top: 15px; }
-        .revision-title { color: var(--accent-red); font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        /* --- Revision History Box --- */
+        .revision-box { border: 1px solid var(--accent-red); border-radius: 12px; padding: 12px; margin-top: 15px; }
+        .revision-title { color: var(--accent-red); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
         .revision-item { font-size: 11px; color: #DDD; margin-bottom: 4px; }
-        .revision-images { display: flex; gap: 8px; overflow-x: auto; margin-top: 10px; padding-bottom: 5px; }
-        .rev-img-box { width: 60px; height: 60px; background: #333; border-radius: 8px; flex-shrink: 0; }
-
-        /* Bottom Navigation */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111111; border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 12px 0 20px 0; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 11px; text-decoration: none; cursor: pointer; transition: 0.3s; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-        .nav-item.active { color: var(--text-main); }
-        .nav-item.active i { color: var(--text-main); }
-
-        /* Staff Specific Elements */
-        .status-badge { background:#333; padding:4px 8px; border-radius:6px; font-size:11px; color:var(--accent-green); border:1px solid #555; text-align: right; }
-        .cust-info { font-size: 13px; color: #ddd; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-green); }
-        details { background: #181818; padding: 8px 12px; border-radius: 8px; border: 1px solid #333; margin-top: 10px; }
-        summary { font-size: 12px; font-weight: bold; cursor: pointer; outline: none; }
-        .history-box { font-size: 11px; margin-top: 8px; max-height: 150px; overflow-y: auto; padding-right: 5px; }
-        .log-item { border-left: 2px solid #555; padding-left: 8px; margin-bottom: 6px; color: #ccc; }
+        .revision-images { display: flex; gap: 8px; overflow-x: auto; margin-top: 10px; }
+        .rev-img-box { width: 60px; height: 60px; background: #333; border-radius: 8px; flex-shrink: 0; object-fit: cover; }
 
         /* Modal */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal.show { display: flex; }
-        .modal-content { width: 100%; max-width: 400px; background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
+        .modal-content { width: 100%; max-width: 400px; background: var(--card-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
 
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
@@ -158,101 +113,48 @@
     </div>
 
     <div id="viewRegister" class="container hidden">
-        <div class="brand-logo-container">
-            <img src="https://drive.google.com/uc?export=view&id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="AWESOME.SCREEN" class="brand-logo">
+        <div style="text-align: center; margin: 40px 0 30px 0;">
+            <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="AWESOME.SCREEN" style="max-width: 80%; height: auto;" onerror="this.outerHTML='<h2 style=\'color:#FFF; letter-spacing:2px;\'>AWESOME.SCREEN</h2>'">
         </div>
-        <h3 style="text-align:center;">Create new Account</h3>
-        <p style="text-align:center; font-size:13px; color:var(--text-muted);">Welcome to AWESOME.SCREEN</p>
         
-        <div style="margin-top: 30px;">
-            <label class="input-label">NAME</label>
-            <input type="text" id="regName" placeholder="Your full name">
-            
-            <label class="input-label">BRAND NAME</label>
-            <input type="text" id="regBrand" placeholder="Your brand name">
-            
-            <label class="input-label">PHONE NUMBER</label>
-            <input type="tel" id="regPhone" placeholder="08xxxxxxxx">
-            
-            <label class="input-label">EMAIL ADDRESS</label>
-            <input type="email" id="regEmail" placeholder="your@email.com">
-            
-            <button class="btn btn-main" style="margin-top: 30px;" onclick="register()">sign up</button>
-        </div>
+        <h3>Create new<br>Account</h3>
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom: 30px;">Already Registered? Log in here.</div>
+        
+        <label class="input-label">NAME</label>
+        <input type="text" id="regName" placeholder="Jiara Martins">
+        
+        <label class="input-label">BRAND NAME</label>
+        <input type="text" id="regBrand" placeholder="AWESOME.SCREEN">
+        
+        <label class="input-label">PHONE NUMBER</label>
+        <input type="tel" id="regPhone" placeholder="089065063">
+        
+        <label class="input-label">EMAIL ADDRESS</label>
+        <input type="email" id="regEmail" placeholder="panrapee.pukkajiam@gmail.com">
+        
+        <button class="btn btn-outline" style="margin-top: 30px;" onclick="register()">sign up</button>
     </div>
 
-    <div id="viewApp" class="hidden">
-        <div class="container">
-            <div class="profile-header">
-                <div>
-                    <div style="font-size:10px; color:var(--text-muted);">Welcome back</div>
-                    <div id="headerName" style="font-size:18px; font-weight:600; line-height:1.2;">User Name</div>
-                    <div id="headerBrand" style="font-size:13px; color:var(--text-muted);">Brand Name</div>
+    <div id="viewApp" class="container hidden">
+        
+        <div class="profile-header">
+            <div>
+                <div style="display:flex; align-items:center; gap:5px;">
+                    <div class="gradient-text">Welcome back</div>
                 </div>
-                <div style="text-align: right;">
-                    <img id="headerPic" src="https://via.placeholder.com/100" class="profile-img">
-                    <div style="margin-top:4px;"><span class="tier-badge"><i class="fas fa-crown"></i> <span id="headerTier">VVIP</span></span></div>
-                </div>
+                <div id="headerName" style="font-size:18px; font-weight:600; margin-top:5px;">User Name</div>
+                <div id="headerBrand" style="font-size:15px; font-weight:500;">Brand name</div>
+                <div id="headerId" style="font-size:12px; font-weight:600; margin-top:5px;">Customer ID: CUST-0000</div>
             </div>
-
-            <div id="tabOrders">
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="flex-between" style="margin-bottom: 15px;">
-                    <span style="font-weight: 600; font-size: 15px;">Transaction</span>
-                    <span style="font-size: 12px; color: var(--text-muted);">Sort by Latest ▾</span>
-                </div>
-                <div id="orderListContainer"></div>
-            </div>
-
-            <div id="tabOverview" class="hidden">
-                <div class="card" style="text-align:center; padding: 40px 20px;">
-                    <i class="fas fa-chart-pie fa-3x" style="color:var(--text-muted); margin-bottom: 15px;"></i>
-                    <h3>Overview</h3>
-                    <p class="text-muted">Summary and statistics will be available here.</p>
-                </div>
-            </div>
-
-            <div id="tabProfile" class="hidden">
-                <div style="text-align:center; margin-bottom:20px;">
-                    <img id="profilePicLg" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; margin-bottom:10px;">
-                    <div><span class="tier-badge" id="profileTier">VVIP</span></div>
-                    <h3 id="profileName" style="margin:5px 0 0 0;">User Name</h3>
-                    <div class="text-muted" id="profileId">Customer ID: CUST-XXXX</div>
-                </div>
-
-                <div class="card" style="padding: 0; overflow: hidden;">
-                    <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px; cursor:pointer;" onclick="openEditProfile()">
-                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--accent-red);"><i class="fas fa-pen"></i></div>
-                        <div style="font-weight:500;">Edit Profile</div>
-                    </div>
-                </div>
-
-                <h4 style="margin: 20px 0 10px 0; color:var(--text-muted);">General Settings</h4>
-                <div class="card" style="padding: 0; overflow: hidden;">
-                    <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
-                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#ff44a0;"><i class="fas fa-question"></i></div>
-                        <div style="font-weight:500;">About</div>
-                    </div>
-                    <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
-                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#ff4444;"><i class="fas fa-exclamation"></i></div>
-                        <div style="font-weight:500;">Terms & Conditions</div>
-                    </div>
-                    <div style="padding: 15px; display:flex; align-items:center; gap:15px;">
-                        <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#a044ff;"><i class="fas fa-lock"></i></div>
-                        <div style="font-weight:500;">Privacy Policy</div>
-                    </div>
-                </div>
-                
-                <div style="text-align:center; margin-top:30px; font-size:10px; color:#555;">
-                    Powered by AWESOME.SCREEN CO., LTD.
-                </div>
+            <div class="profile-img-container">
+                <img id="headerPic" src="https://via.placeholder.com/100" class="profile-img">
+                <div class="tier-badge"><i class="fas fa-crown" style="font-size:8px;"></i> <span id="headerTier">VVIP</span></div>
             </div>
         </div>
 
-        <div class="bottom-nav">
+        <div style="font-size:16px; font-weight:600; margin-bottom:15px;">Your Order Process Now</div>
+
+        <div class="top-nav">
             <div class="nav-item active" onclick="switchTab('Orders', this)">
                 <i class="fas fa-list-alt"></i><span>Orders</span>
             </div>
@@ -263,23 +165,74 @@
                 <i class="fas fa-user"></i><span>Profile</span>
             </div>
         </div>
+
+        <div id="tabOrders">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()" style="font-weight: 400; padding:0;">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <div class="flex-between" style="margin-bottom: 15px;">
+                <span style="font-weight: 600; font-size: 15px;">Transaction</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Sort by Latest ▾</span>
+            </div>
+            
+            <div id="orderListContainer"></div>
+        </div>
+
+        <div id="tabOverview" class="hidden">
+            <div class="order-card" style="text-align:center; padding: 40px 20px;">
+                <i class="fas fa-chart-pie fa-3x" style="color:var(--text-muted); margin-bottom: 15px;"></i>
+                <h3 style="color:#FFF;">Overview</h3>
+                <p class="text-muted">Summary and statistics will be available here.</p>
+            </div>
+        </div>
+
+        <div id="tabProfile" class="hidden">
+            <div class="order-card" style="padding: 0; overflow: hidden; margin-top:10px;">
+                <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px; cursor:pointer;" onclick="openEditProfile()">
+                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--text-pink);"><i class="fas fa-pen"></i></div>
+                    <div style="font-weight:500;">Edit Profile</div>
+                </div>
+            </div>
+
+            <h4 style="margin: 20px 0 10px 0; color:var(--text-main); font-weight:600;">General Settings</h4>
+            <div class="order-card" style="padding: 0; overflow: hidden;">
+                <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
+                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#FF44A0;"><i class="fas fa-question"></i></div>
+                    <div style="font-weight:500;">About</div>
+                </div>
+                <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:15px;">
+                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#FF4444;"><i class="fas fa-exclamation"></i></div>
+                    <div style="font-weight:500;">Terms & Conditions</div>
+                </div>
+                <div style="padding: 15px; display:flex; align-items:center; gap:15px;">
+                    <div style="background:#333; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#A044FF;"><i class="fas fa-lock"></i></div>
+                    <div style="font-weight:500;">Privacy Policy</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:20px; font-size:11px; color:#555;">
+            Powered by AWESOME.SCREEN CO., LTD.
+        </div>
     </div>
 
     <div id="viewStaff" class="container hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:var(--card-bg); padding:12px; border-radius:12px; border:1px solid var(--border-color);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:var(--card-bg); padding:15px; border-radius:16px;">
             <div style="display:flex; align-items:center; gap:10px;">
-                <img id="staffProfilePic" src="https://via.placeholder.com/50" class="profile-img" style="border-color:var(--accent-green);">
+                <img id="staffProfilePic" src="https://via.placeholder.com/50" class="profile-img" style="border:2px solid var(--accent-green);">
                 <div>
-                    <div id="staffName" style="font-weight:bold; font-size:15px;">User</div>
-                    <div id="staffRole" style="font-size:11px; color:var(--text-muted);">ROLE</div>
+                    <div id="staffName" style="font-weight:bold; font-size:16px;">User</div>
+                    <div id="staffRole" style="font-size:12px; color:var(--text-muted);">ROLE</div>
                 </div>
             </div>
-            <div id="staffTier" class="tier-badge">Staff</div>
+            <div id="staffTier" style="background:#333; padding:4px 8px; border-radius:8px; font-size:11px;">Staff</div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
-            <input type="text" id="staffSearch" placeholder="🔍 Search Order No, Name..." onkeyup="filterStaffList()" style="background:var(--input-bg); color:#fff;">
-            <select id="staffStatusFilter" onchange="filterStaffList()" style="background:var(--input-bg); color:#fff;">
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+            <input type="text" id="staffSearch" placeholder="🔍 Search Order No, Name..." onkeyup="filterStaffList()" style="background:#333; color:#FFF; padding:12px;">
+            <select id="staffStatusFilter" onchange="filterStaffList()" style="background:#333; color:#FFF; padding:12px;">
                 <option value="ACTIVE">Active Orders</option>
                 <option value="ALL">All Orders</option>
                 <option value="Order Received">1. Order Received</option>
@@ -294,45 +247,40 @@
             <button class="btn btn-dark" style="margin-bottom:15px; border:1px solid var(--accent-green);" onclick="document.getElementById('createOrderForm').classList.toggle('hidden')">
                 <i class="fas fa-plus"></i> Create New Order
             </button>
-            
-            <div id="createOrderForm" class="card hidden">
-                <h4 style="margin-top:0; color:var(--accent-green); border-bottom:1px solid var(--border-color); padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
-                
-                <label class="input-label">1. เบอร์โทรลูกค้า</label>
-                <input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx">
-                
-                <label class="input-label">2. Batch / Lot Reference</label>
-                <input type="text" id="ordBatch" placeholder="เช่น QT2026-001">
-
+            <div id="createOrderForm" class="order-card hidden">
+                <h4 style="margin-top:0; color:var(--accent-green); border-bottom:1px solid #444; padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
+                <label style="font-size:11px; color:#aaa; margin-top:10px; display:block;">1. เบอร์โทรลูกค้า</label><input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;">
+                <label style="font-size:11px; color:#aaa;">2. Batch</label><input type="text" id="ordBatch" placeholder="QT2026-001" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;">
                 <div class="flex-row">
-                    <div style="width:50%">
-                        <label class="input-label">3. ทรงเสื้อ (Style)</label>
-                        <select id="ordStyle"><option>Loading...</option></select>
-                    </div>
-                    <div style="width:50%">
-                        <label class="input-label">4. จำนวน (Qty)</label>
-                        <input type="number" id="ordQty" placeholder="100">
-                    </div>
+                    <div style="flex:1"><label style="font-size:11px; color:#aaa;">3. ทรงเสื้อ</label><select id="ordStyle" style="background:#333; color:#fff; padding:10px;"></select></div>
+                    <div style="flex:1"><label style="font-size:11px; color:#aaa;">4. จำนวน</label><input type="number" id="ordQty" placeholder="100" style="background:#333; color:#fff; padding:10px;"></div>
                 </div>
-
-                <label class="input-label">5. ชนิดผ้า (Fabric)</label>
-                <select id="ordFabric"><option>Loading...</option></select>
-
-                <label class="input-label">6. วันที่คาดว่าจะส่งมอบ (Est. Delivery)</label>
-                <input type="date" id="ordDate">
-
-                <label class="input-label">7. รายละเอียดเพิ่มเติม</label>
-                <textarea id="ordDetail" rows="2" placeholder="จุดสกรีน, ขนาด..."></textarea>
-
-                <label class="input-label">8. แนบใบสั่งงาน (Work Order - รูปภาพ)</label>
-                <input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" style="padding: 10px; font-size:12px;">
-                <div id="status-wo-new_wo" style="font-size:12px; margin-top:5px; display:none;"></div>
-
-                <button class="btn btn-approve" style="margin-top:15px; color:#000;" onclick="createOrder()">บันทึก & แจ้งลูกค้ายืนยัน</button>
+                <label style="font-size:11px; color:#aaa; margin-top:8px; display:block;">5. ชนิดผ้า</label><select id="ordFabric" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;"></select>
+                <label style="font-size:11px; color:#aaa;">6. วันที่ส่งมอบ</label><input type="date" id="ordDate" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;">
+                <label style="font-size:11px; color:#aaa;">7. รายละเอียด</label><textarea id="ordDetail" rows="2" style="background:#333; color:#fff; padding:10px; margin-bottom:8px;"></textarea>
+                <label style="font-size:11px; color:#aaa;">8. แนบใบสั่งงาน (WO)</label><input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" style="font-size:11px;">
+                <div id="status-wo-new_wo" style="font-size:11px; margin-top:5px; display:none;"></div>
+                <button class="btn btn-green" style="margin-top:15px;" onclick="createOrder()">บันทึก & แจ้งลูกค้า</button>
             </div>
         </div>
 
         <div id="staffTaskList">Loading tasks...</div>
+    </div>
+
+    <div id="modalReject" class="modal">
+        <div class="modal-content">
+            <div style="text-align:center; color:var(--text-main); font-size:18px; font-weight:600; margin-bottom:5px;">ไม่อนุมัติ (PP Reject)</div>
+            <div style="font-size:13px; color:var(--text-main); margin-bottom: 2px;">ระบุสาเหตุ จุดที่ต้องการแก้ไข</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-bottom: 15px;">Please specify the reason and the areas that need to be revised</div>
+            
+            <input type="hidden" id="rejOrderNo">
+            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป, สีโลโก้ไม่ตรง...&#10;Sleeves are too short, The logo color is incorrect..."></textarea>
+            
+            <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
+                <button class="btn btn-dark" onclick="closeModal('modalReject')">Cancel</button>
+                <button class="btn btn-reject" style="background:transparent;" onclick="confirmReject()">แจ้งฝ่ายผลิต / Notify Production</button>
+            </div>
+        </div>
     </div>
 
     <div id="modalProfile" class="modal">
@@ -343,69 +291,40 @@
             <label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone">
             <label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail">
 
-            <h4 style="margin: 25px 0 5px 0; color:var(--accent-green);">SHIPPING ADDRESS</h4>
-            <label class="input-label">RECIPIENT NAME</label><input type="text" id="epShipName">
-            <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress" placeholder="House No, Street, Building...">
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">CITY / DISTRICT</label><input type="text" id="epShipCity"></div>
-                <div style="flex:1;"><label class="input-label">PROVINCE</label><input type="text" id="epShipProv"></div>
-            </div>
-            <div class="flex-row">
-                <div style="flex:1;"><label class="input-label">POSTAL CODE</label><input type="text" id="epShipZip"></div>
-                <div style="flex:1;"><label class="input-label">PHONE NO.</label><input type="text" id="epShipPhone"></div>
-            </div>
-
             <div class="flex-row" style="margin-top: 25px;">
                 <button class="btn btn-dark" onclick="closeModal('modalProfile')">Cancel</button>
-                <button class="btn btn-approve" onclick="saveProfile()">Save Changes</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modalReject" class="modal">
-        <div class="modal-content">
-            <h3 style="color:var(--accent-red); margin-top:0;"><i class="fas fa-times-circle"></i> ไม่อนุมัติ (Not Approved)</h3>
-            <p style="font-size:12px; color:var(--text-muted);">ระบุสาเหตุ จุดที่ต้องการแก้ไข<br>Please specify the reason and areas to revise.</p>
-            <input type="hidden" id="rejOrderNo">
-            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป, สีโลโก้ไม่ตรง..."></textarea>
-            
-            <div class="flex-row" style="margin-top:20px;">
-                <button class="btn btn-dark" onclick="closeModal('modalReject')">Cancel</button>
-                <button class="btn btn-reject" onclick="confirmReject()">แจ้งฝ่ายผลิต</button>
+                <button class="btn btn-green" onclick="saveProfile()">Save Changes</button>
             </div>
         </div>
     </div>
 
     <div id="modalFeedback" class="modal">
         <div class="modal-content">
-            <h3 style="color:var(--accent-red); margin-top:0;"><i class="fas fa-exclamation-triangle"></i> ตีกลับงาน (QC)</h3>
-            <label class="input-label">ระบุสาเหตุที่ต้องให้ PM แก้ไข</label>
+            <h3 style="color:var(--accent-red); margin-top:0;">ตีกลับงาน (QC)</h3>
             <input type="hidden" id="fbOrderNo">
-            <textarea id="fbReason" rows="4" placeholder="ระบุจุดที่ต้องแก้ไขให้ชัดเจน..." style="background:var(--input-bg); color:#fff;"></textarea>
+            <textarea id="fbReason" rows="4" placeholder="ระบุสาเหตุ..."></textarea>
             <div class="flex-row" style="margin-top:15px;">
                 <button class="btn btn-dark" onclick="closeModal('modalFeedback')">ยกเลิก</button>
-                <button class="btn btn-reject" onclick="confirmRollback()">ยืนยันการส่งกลับ</button>
+                <button class="btn btn-reject" onclick="confirmRollback()">ยืนยัน</button>
             </div>
         </div>
     </div>
-
     <div id="modalFixPP" class="modal">
         <div class="modal-content">
-            <h3 style="color:var(--accent-green); margin-top:0;"><i class="fas fa-wrench"></i> บันทึกการแก้ไขแบบ</h3>
-            <label class="input-label">ระบุรายละเอียดที่ได้ทำการแก้ไขแบบไป</label>
+            <h3 style="color:var(--accent-green); margin-top:0;">บันทึกการแก้ไขแบบ</h3>
             <input type="hidden" id="fixPPOrderNo">
-            <textarea id="fixPPDetail" rows="4" placeholder="ปรับขนาดโลโก้ใหม่, เปลี่ยนสียางยืด..." style="background:var(--input-bg); color:#fff;"></textarea>
+            <textarea id="fixPPDetail" rows="4" placeholder="รายละเอียด..."></textarea>
             <div class="flex-row" style="margin-top:15px;">
                 <button class="btn btn-dark" onclick="closeModal('modalFixPP')">ยกเลิก</button>
-                <button class="btn btn-approve" onclick="confirmFixPP()">บันทึกการแก้ไข</button>
+                <button class="btn btn-green" onclick="confirmFixPP()">บันทึก</button>
             </div>
         </div>
     </div>
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbwjqf62cEhOWlpnPsOyd9g2aRWpcpbP0W5br__pfScVzmeJlxKRcU3J9_de1y9G3fcb0w/exec'; 
-        const LIFF_ID = '2009142530-l2sIA52W';
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbwjqf62cEhOWlpnPsOyd9g2aRWpcpbP0W5br__pfScVzmeJlxKRcU3J9_de1y9G3fcb0w/exec'; // <--- แก้ไขตรงนี้
+        const LIFF_ID = '2009142530-l2sIA52W'; // <--- แก้ไขตรงนี้
         // =================================================
 
         let userProfile = {};
@@ -419,7 +338,7 @@
             const d = new Date(ts);
             if(isNaN(d.getTime())) return "";
             const pad = n => String(n).padStart(2, '0');
-            return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+            return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
         }
 
         function getBase64(file) {
@@ -458,18 +377,17 @@
             if (input.files.length > 0) {
                 if(btn) { btn.classList.add('btn-disabled'); btn.disabled = true; }
                 status.style.display = 'block';
-                status.style.color = 'var(--accent-orange)';
-                status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังประมวลผลไฟล์...';
-
+                status.style.color = '#FFC805';
+                status.innerHTML = 'กำลังประมวลผล...';
                 try {
                     const base64 = await getBase64(input.files[0]);
                     preloadedImages[key] = base64; 
                     status.style.color = 'var(--accent-green)';
-                    status.innerHTML = '<i class="fas fa-check-circle"></i> ไฟล์พร้อมส่งแล้ว';
+                    status.innerHTML = 'ไฟล์พร้อมส่ง';
                     if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 } catch (e) {
                     status.style.color = 'var(--accent-red)';
-                    status.innerHTML = '<i class="fas fa-times-circle"></i> เกิดข้อผิดพลาด กรุณาเลือกไฟล์ใหม่';
+                    status.innerHTML = 'เกิดข้อผิดพลาด';
                     if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
                 }
             } else {
@@ -490,7 +408,7 @@
                 userProfile = await liff.getProfile();
                 checkUser();
             } catch(e) { 
-                alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); 
+                alert("LIFF Init Error"); 
             }
         }
         main();
@@ -507,8 +425,7 @@
                 if(callback) callback(res);
             }).catch(e => {
                 document.getElementById('loader').classList.add('hidden');
-                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่");
-                console.error(e);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
             });
         }
 
@@ -517,7 +434,6 @@
                 if (res.found) {
                     dbUserData = res.data;
                     const role = dbUserData.Role;
-                    // Route users based on role
                     if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser', 'Sales Coordinators'].includes(role)) {
                         showStaffDashboard(dbUserData);
                     } else {
@@ -550,14 +466,10 @@
             
             document.getElementById('headerName').innerText = dbUserData.RealName || userProfile.displayName;
             document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand';
+            document.getElementById('headerId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
             document.getElementById('headerTier').innerText = dbUserData.Tier;
             document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
             
-            document.getElementById('profileName').innerText = dbUserData.RealName || userProfile.displayName;
-            document.getElementById('profileId').innerText = "Customer ID: " + dbUserData.CustomerID;
-            document.getElementById('profileTier').innerText = dbUserData.Tier;
-            document.getElementById('profilePicLg').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
-
             fetchCustomerOrders();
         }
 
@@ -576,7 +488,7 @@
         function renderCustomerOrders(orders) {
             const container = document.getElementById('orderListContainer');
             if (orders.length === 0) {
-                container.innerHTML = '<div class="card text-center text-muted" style="padding:40px;">No transactions found.</div>';
+                container.innerHTML = '<div class="order-card text-center text-muted" style="padding:40px;">No transactions found.</div>';
                 return;
             }
 
@@ -584,8 +496,11 @@
             orders.forEach(o => {
                 const currentStep = getStepIndex(o.status);
                 let statusColor = 'var(--text-main)';
+                if(o.status === 'Order Received') statusColor = 'var(--accent-green)';
+                if(o.status === 'Preparation') statusColor = '#FFC805'; // Yellowish
+                if(o.status === 'In Production') statusColor = '#FFC805';
+                if(o.status === 'Quality Check') statusColor = '#00B9F2';
                 if(o.status === 'Delivered') statusColor = 'var(--accent-green)';
-                if(o.status === 'Preparation') statusColor = 'var(--accent-orange)';
 
                 const steps = [
                     { name: 'Order Received', date: o.dateReceived },
@@ -601,10 +516,16 @@
                     let stateClass = '';
                     if (stepNum < currentStep) stateClass = 'completed';
                     else if (stepNum === currentStep) stateClass = 'active';
+                    
+                    let label = s.name;
+                    if(label === 'Order Received') label = 'Order<br>Received';
+                    if(label === 'In Production') label = 'In<br>Production';
+                    if(label === 'Quality Check') label = 'Quality<br>Check';
+
                     stepperHtml += `
                         <div class="stepper-item ${stateClass}">
                             <div class="step-counter"></div>
-                            <div class="step-name">${s.name}</div>
+                            <div class="step-name">${label}</div>
                             <div class="step-date">${s.date !== '-' ? s.date : ''}</div>
                         </div>
                     `;
@@ -612,15 +533,23 @@
                 stepperHtml += '</div>';
 
                 let actionHtml = '';
-                // จำลองปุ่มอนุมัติเมื่อถึงขั้นตอน Preparation
+                
+                if (o.status === 'Order Received' || o.status === 'Pending Customer Confirmation') {
+                    actionHtml = `
+                        <div style="margin-top: 20px; text-align:center;">
+                            <div style="font-size:12px; color:#FFC805; margin-bottom:12px;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
+                            ${o.woUrl !== '-' ? `<button class="btn btn-outline" style="margin-bottom:10px; font-size:14px; padding:12px;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
+                            <button class="btn btn-green" style="font-size:14px; padding:12px;" onclick="confirmWOAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button>
+                        </div>
+                    `;
+                }
+
                 if (o.status === 'Preparation' && o.sampleImage && o.sampleImage !== '-') {
                     actionHtml = `
-                        <div style="background: rgba(255,136,0,0.1); padding: 12px; border-radius: 12px; margin-top: 15px; text-align:center;">
-                            <div style="font-size:11px; color:var(--accent-orange); margin-bottom:10px;">กรุณาตรวจสอบตัวอย่างและอนุมัติการผลิต</div>
-                            <div class="flex-row">
-                                <button class="btn btn-approve" style="flex:1; font-size:12px; padding:10px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต</button>
-                                <button class="btn btn-reject" style="flex:1; font-size:12px; padding:10px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button>
-                            </div>
+                        <div style="margin-top: 20px; text-align:center;">
+                            <div style="font-size:12px; color:#FFC805; margin-bottom:12px;">ตัวอย่างถูกจัดส่งแล้ว กรุณาตรวจสอบและคอนเฟิร์ม<br>The sample has been shipped. Please review and confirm.</div>
+                            <button class="btn btn-green" style="margin-bottom:10px; font-size:14px; padding:12px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต / Approve Production</button>
+                            <button class="btn btn-reject" style="font-size:14px; padding:12px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button>
                         </div>
                     `;
                 }
@@ -628,42 +557,56 @@
                 let revHtml = '';
                 if (o.revCount > 0 && o.revHistory.length > 0) {
                     let itemsHtml = '';
+                    let imagesHtml = '';
                     o.revHistory.forEach(r => {
-                        itemsHtml += `<div class="revision-item">• Revision ${r.round} (Not Approved): ${r.rejectReason}</div>`;
-                        if(r.fixDetail) itemsHtml += `<div class="revision-item" style="color:var(--accent-green);">• Revised: ${r.fixDetail}</div>`;
+                        itemsHtml += `<div class="revision-item">• Revision ${r.round} (Not Approved) : ${r.rejectReason}</div>`;
+                        if(r.fixDetail) itemsHtml += `<div class="revision-item" style="color:var(--accent-green);">• Revised : ${r.fixDetail}</div>`;
                     });
+                    
+                    if(o.sampleImage && o.sampleImage !== '-') {
+                         imagesHtml = `
+                         <div class="revision-images">
+                             <img src="${o.sampleImage}" class="rev-img-box" onclick="window.open('${o.sampleImage}')">
+                         </div>`;
+                    }
+
                     revHtml = `
                         <div class="revision-box">
                             <div class="revision-title"><i class="fas fa-arrow-right"></i> Revision History (${o.revCount} time)</div>
                             ${itemsHtml}
+                            <hr style="border-top:1px dashed #444; margin:8px 0;">
+                            ${imagesHtml}
                         </div>
                     `;
                 }
 
                 html += `
-                    <div class="card">
+                    <div class="order-card">
                         <div class="flex-between" style="margin-bottom: 12px;">
-                            <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="display:flex; align-items:center; gap:12px;">
                                 <i class="fas fa-tshirt" style="font-size:24px; color:#DDD;"></i>
                                 <div>
                                     <div style="font-size:16px; font-weight:600;">${o.orderNo}</div>
                                     <div style="font-size:11px; color:var(--text-muted);">${o.dateReceived}</div>
                                 </div>
                             </div>
-                            <div style="color:${statusColor}; font-size:14px; font-weight:500;">${o.status}</div>
+                            <div style="color:${statusColor}; font-size:14px; font-weight:600;">${o.status}</div>
                         </div>
-                        <div style="background:#2A2A2A; padding:12px; border-radius:12px; display:flex; justify-content:space-between;">
+
+                        <div class="inner-box">
                             <div>
-                                <div style="color:#ff44a0; font-weight:500;">${o.style} <span style="color:var(--text-muted); font-size:12px;">(${o.qty} pcs)</span></div>
-                                <div style="font-size:12px; margin-top:4px;">Estimated Delivery:</div>
-                                <div style="font-size:14px; font-weight:500;">${o.delivery}</div>
+                                <div style="color:var(--text-pink); font-size:16px; font-weight:600; margin-bottom:10px;">${o.style} <span style="color:var(--text-muted); font-size:13px; font-weight:400;">(${o.qty} pcs)</span></div>
+                                <div style="font-size:13px; color:var(--text-main);">Estimated Delivery:</div>
+                                <div style="font-size:16px; font-weight:500;">${o.delivery}</div>
                             </div>
-                            ${o.woUrl !== '-' ? `<a href="${o.woUrl}" target="_blank" style="width:60px; height:60px; background:#fff; border-radius:8px; display:flex; justify-content:center; align-items:center; color:#000; font-size:10px; text-decoration:none; text-align:center; padding:5px;">WO<br>PDF</a>` : ''}
+                            ${o.woUrl !== '-' ? `<img src="https://via.placeholder.com/70x85?text=WO" class="wo-thumbnail" onclick="window.open('${o.woUrl}','_blank')" style="cursor:pointer;">` : '<div class="wo-thumbnail" style="display:flex; align-items:center; justify-content:center; color:#ccc; font-size:10px;">No WO</div>'}
                         </div>
+
                         ${stepperHtml}
                         ${revHtml}
                         ${actionHtml}
-                        ${o.status === 'Delivered' ? `<div style="text-align:center; color:var(--accent-green); font-size:12px; margin-top:15px; font-weight:500;">Thank you for using AWESOME.SCREEN</div>` : ''}
+                        
+                        ${o.status === 'Delivered' ? `<div style="text-align:center; color:var(--accent-green); font-size:13px; margin-top:20px; font-weight:600;">Thank you for using AWESOME.SCREEN</div>` : ''}
                     </div>
                 `;
             });
@@ -691,12 +634,6 @@
             document.getElementById('epBrand').value = dbUserData.BrandName || '';
             document.getElementById('epPhone').value = dbUserData.Phone || '';
             document.getElementById('epEmail').value = dbUserData.Email || '';
-            document.getElementById('epShipName').value = dbUserData.ShipName || '';
-            document.getElementById('epShipAddress').value = dbUserData.ShipAddress || '';
-            document.getElementById('epShipCity').value = dbUserData.ShipCity || '';
-            document.getElementById('epShipProv').value = dbUserData.ShipProvince || '';
-            document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
-            document.getElementById('epShipPhone').value = dbUserData.ShipPhone || '';
             document.getElementById('modalProfile').classList.add('show');
         }
 
@@ -704,18 +641,20 @@
             const payload = {
                 userId: userProfile.userId, realName: document.getElementById('epName').value,
                 brandName: document.getElementById('epBrand').value, phone: document.getElementById('epPhone').value,
-                email: document.getElementById('epEmail').value, shipName: document.getElementById('epShipName').value,
-                shipAddress: document.getElementById('epShipAddress').value, shipCity: document.getElementById('epShipCity').value,
-                shipProvince: document.getElementById('epShipProv').value, shipZip: document.getElementById('epShipZip').value,
-                shipPhone: document.getElementById('epShipPhone').value
+                email: document.getElementById('epEmail').value
             };
             callBackend('update_profile', payload, (res) => {
                 if(res.status === 'success') { alert("Profile Updated Successfully!"); closeModal('modalProfile'); checkUser(); }
             });
         }
 
+        function confirmWOAction(orderNo) {
+            callBackend('update_status', { orderNo: orderNo, actionType: 'CUST_CONFIRM_WO', staffName: 'Customer' }, (res) => {
+                if(res.status === 'success') fetchCustomerOrders();
+            });
+        }
+
         function approveAction(orderNo) {
-            if(!confirm("ยืนยันการอนุมัติผลิตออเดอร์ " + orderNo + " ใช่หรือไม่?")) return;
             callBackend('update_status', { orderNo: orderNo, actionType: 'PP_APPROVE', staffName: 'Customer' }, (res) => {
                 if(res.status === 'success') fetchCustomerOrders();
             });
@@ -737,7 +676,6 @@
         }
 
         // ================= STAFF LOGIC =================
-
         function showStaffDashboard(data) {
             document.getElementById('viewStaff').classList.remove('hidden');
             document.getElementById('staffName').innerText = data.RealName;
@@ -806,7 +744,7 @@
             }
 
             if (filtered.length === 0) { 
-                list.innerHTML = '<div class="card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; 
+                list.innerHTML = '<div class="order-card text-center" style="color:#666; padding:30px;">ไม่พบรายการงาน</div>'; 
                 return; 
             }
 
@@ -815,128 +753,56 @@
 
             filtered.forEach(o => {
                 let btns = '';
-                const custInfo = `
-                    <div class="cust-info">
-                        <div style="font-size:14px; margin-bottom:5px;">👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${o.tier}</span></div>
-                        <div style="font-size:13px; color:var(--text-muted);">Brand: ${o.custBrand}</div>
-                        <div style="font-size:13px;"><a href="tel:${o.custPhone}" style="color:var(--accent-green); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
-                        <div style="font-size:12px; color:#aaa; border-top:1px dashed var(--border-color); padding-top:5px; margin-top:5px;">📍 <b>จัดส่ง:</b> ${o.address || '-'}</div>
-                    </div>`;
 
-                // Render Action Logs (Staff only)
-                const logHtml = o.actionLogs && o.actionLogs.length > 0 ? `
-                    <details>
-                        <summary style="color:var(--text-muted);">🕒 ประวัติพนักงานทำรายการ</summary>
-                        <div class="history-box">${o.actionLogs.map(l => `<div class="log-item"><b>${formatDateTime(l.date)}</b> [${l.by}]: ${l.status}</div>`).join('')}</div>
-                    </details>` : '';
-
-                const revHtml = o.revCount > 0 ? `
-                    <details style="background:#330000; border-color:var(--accent-red);">
-                        <summary style="color:var(--accent-red);">⚠ ประวัติแก้ตัวแบบ (${o.revCount} ครั้ง)</summary>
-                        <div class="history-box">${o.revHistory.map(r => `
-                            <div style="border-bottom:1px dashed #555; padding-bottom:6px; margin-bottom:6px;">
-                                <div style="color:#ff8888;"><b>ครั้งที่ ${r.round} (ไม่อนุมัติ):</b> ${r.rejectReason} <span style="color:#888;">(${formatDateTime(r.rejectDate)})</span></div>
-                                ${r.fixDetail ? `<div style="color:var(--accent-green);"><b>แก้ไขแล้ว (${r.fixBy}):</b> ${r.fixDetail} <span style="color:#888;">(${formatDateTime(r.fixDate)})</span></div>` : `<div style="color:#aaa;">⏳ กำลังรอฝ่ายผลิตแก้ไข...</div>`}
-                            </div>`).join('')}
-                        </div>
-                    </details>` : '';
-
-                // Buttons based on Role & Status
+                // Staff Action Buttons
                 if (['Admin', 'Production Manager'].includes(role) && o.status === 'Order Received') {
-                    btns += `<button class="btn btn-pm" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')"><i class="fas fa-clipboard-check"></i> ยืนยันรับงาน (แทนลูกค้า)</button>`;
+                    btns += `<button class="btn btn-dark" style="border:1px solid #00B9F2; color:#00B9F2;" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')">ยืนยันรับงาน (แทนลูกค้า)</button>`;
                 }
-                
                 if (['Admin', 'Merchandiser'].includes(role) && o.status === 'Preparation') {
-                    // ถ้าลูกค้ายอมตีกลับมา (มี Reject Reason ที่ยังไม่แก้)
                     if(o.ppFeedback && o.ppFeedback !== '-') {
-                         btns += `
-                         <div style="padding:10px; background:rgba(255,0,0,0.1); border:1px solid var(--accent-red); border-radius:8px; margin-top:10px;">
-                            <div style="color:var(--accent-red); font-size:12px; font-weight:bold; margin-bottom:5px;">⚠ ลูกค้าตีกลับแบบ: ${o.ppFeedback}</div>
-                            <button class="btn btn-approve" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้แบบเสร็จสิ้น</button>
-                         </div>`;
+                         btns += `<div style="padding:10px; border:1px solid var(--accent-red); border-radius:8px; margin-top:10px;"><div style="color:var(--accent-red); font-size:12px; margin-bottom:5px;">⚠ ลูกค้าตีกลับแบบ: ${o.ppFeedback}</div><button class="btn btn-green" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้แบบเสร็จสิ้น</button></div>`;
                     } else {
-                        btns += `
-                        <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-top:8px;">
-                            <label style="font-size:12px; color:var(--text-muted);">ส่งตัวอย่าง (PP Sample):</label>
-                            <select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px;">
-                                <option value="Parcel">ส่งพัสดุ</option>
-                                <option value="Messenger">แมสเซ็นเจอร์</option>
-                            </select>
-                            <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div>
-                            <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div>
-                            <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐาน:</label>
-                            <input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="padding:8px; font-size:12px;">
-                            <div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
-                            <button class="btn btn-merch" id="btn-s-${o.orderNo}" onclick="sendSample('${o.orderNo}')"><i class="fas fa-box"></i> ส่งตัวอย่างให้ลูกค้าตรวจ</button>
-                        </div>`;
+                        btns += `<div style="background:#333; padding:10px; border-radius:8px; margin-top:8px;"><label class="input-label">ส่งตัวอย่าง:</label><select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div><div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div><label class="input-label">แนบสลิป:</label><input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="padding:8px;"><div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:10px;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่าง</button></div>`;
                     }
                 }
-
                 if (['Admin', 'Quality Control'].includes(role) && o.status === 'In Production') {
-                    // ถ้าถูกตีกลับจาก QC (Feedback Reason มีค่า)
                     if(o.feedback && o.feedback !== '-') {
-                        btns += `<div style="color:var(--accent-orange); font-size:12px; text-align:center; padding:10px;">รอ PM แก้ไขงาน (ตีกลับ: ${o.feedback})</div>`;
+                        btns += `<div style="color:#FFC805; font-size:12px; text-align:center; padding:10px;">รอ PM แก้ไขงาน</div>`;
                     } else {
-                        btns += `
-                        <div class="flex-row">
-                            <button class="btn btn-qc" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')"><i class="fas fa-check-circle"></i> ผ่าน QC</button>
-                            <button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')"><i class="fas fa-undo"></i> ตีกลับ PM</button>
-                        </div>`;
+                        btns += `<div class="flex-row"><button class="btn btn-green" style="flex:2;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')">ผ่าน QC</button><button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')">ตีกลับ PM</button></div>`;
                     }
                 }
-
                 if (['Admin', 'Production Manager'].includes(role) && o.status === 'In Production' && o.feedback && o.feedback !== '-') {
-                    btns += `<button class="btn btn-approve" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')"><i class="fas fa-tools"></i> แก้ไขงานเสร็จ (ส่ง QC ใหม่)</button>`;
+                    btns += `<button class="btn btn-green" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้ไขงานเสร็จ (ส่ง QC ใหม่)</button>`;
                 }
-
                 if (['Admin', 'Sales Admin'].includes(role) && o.status === 'Quality Check') {
-                    btns += `
-                    <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-top:8px;">
-                        <label style="font-size:12px; color:var(--accent-green);">จัดส่งสินค้าสำเร็จรูป:</label>
-                        <select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px;">
-                            <option value="Parcel">ส่งพัสดุ</option>
-                            <option value="Messenger">แมสเซ็นเจอร์</option>
-                        </select>
-                        <div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div>
-                        <div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div>
-                        <label style="font-size:12px; color:#aaa;">แนบสลิป/หลักฐานจัดส่ง:</label>
-                        <input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="padding:8px; font-size:12px;">
-                        <div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
-                        <button class="btn btn-ship" id="btn-ship-${o.orderNo}" onclick="shipOrder('${o.orderNo}')"><i class="fas fa-shipping-fast"></i> ยืนยันจัดส่งลูกค้า</button>
-                    </div>`;
+                    btns += `<div style="background:#333; padding:10px; border-radius:8px; margin-top:8px;"><label class="input-label">จัดส่งสินค้า:</label><select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px;"></div><div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px;"></div><label class="input-label">แนบสลิปจัดส่ง:</label><input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="padding:8px;"><div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-green" id="btn-ship-${o.orderNo}" style="margin-top:10px;" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งลูกค้า</button></div>`;
                 }
 
                 html += `
-                <div class="card">
-                    <div class="flex-between" style="margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                <div class="order-card">
+                    <div class="flex-between" style="border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom:10px;">
                         <div>
                             <strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong>
                             <div style="font-size:10px; color:var(--text-muted);">Sales: ${o.salesOwner}</div>
                         </div>
-                        <span class="status-badge">${o.status}</span>
+                        <div style="color:var(--accent-green); font-size:12px; font-weight:bold;">${o.status}</div>
                     </div>
-                    ${custInfo}
+                    <div style="font-size: 13px; color: #ddd; background: #111; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-green); margin-bottom:10px;">
+                        <div>👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${o.tier}</span></div>
+                        <div style="color:var(--text-muted);">Brand: ${o.custBrand}</div>
+                        <div><a href="tel:${o.custPhone}" style="color:var(--accent-green); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                    </div>
                     <div style="font-size:13px; color:#ccc; display:flex; justify-content:space-between; line-height:1.6; margin-bottom:10px;">
-                        <div>
-                            Style: <span style="color:#fff;">${o.style}</span><br>
-                            Qty: <span style="color:#fff;">${o.qty} pcs</span><br>
-                            Batch: <span style="color:#fff;">${o.batch || '-'}</span>
-                        </div>
-                        <div style="text-align:right;">
-                            Est. Del: <span style="color:#fff;">${o.delivery}</span><br>
-                            <span style="font-size:10px; color:#666;">Upd: ${o.updatedDate}</span>
-                            ${o.woUrl !== '-' ? `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-green); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> WO PDF</a>` : ''}
-                        </div>
+                        <div>Style: <span style="color:#fff;">${o.style}</span><br>Qty: <span style="color:#fff;">${o.qty} pcs</span><br>Batch: <span style="color:#fff;">${o.batch || '-'}</span></div>
+                        <div style="text-align:right;">Est: <span style="color:#fff;">${o.delivery}</span><br><span style="font-size:10px; color:#666;">Upd: ${o.updatedDate}</span>${o.woUrl !== '-' ? `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-green); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> WO PDF</a>` : ''}</div>
                     </div>
-                    ${revHtml}
-                    ${logHtml}
                     ${btns}
                 </div>`;
             });
             list.innerHTML = html;
         }
 
-        // Staff Actions
         function toggleDelivery(no, method, type) {
             document.getElementById(`box-track-${type}-${no}`).style.display = method === 'Messenger' ? 'none' : 'block';
             document.getElementById(`box-phone-${type}-${no}`).style.display = method === 'Messenger' ? 'block' : 'none';
