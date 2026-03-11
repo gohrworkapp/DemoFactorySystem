@@ -237,7 +237,7 @@
         </div>
 
         <div id="customerElements" class="hidden">
-            <div id="statusBanner" class="status-banner bg-prep">
+            <div id="statusBanner" class="status-banner bg-prep hidden">
                 <div style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">Your Order Process Now</div>
                 <div style="font-size: 32px; font-weight: 800; line-height: 1;" id="bannerStatusText">Preparation</div>
                 <div style="font-size: 14px; font-weight: 600; margin-top: 5px;" id="bannerOrderNo">ORD-2026-000</div>
@@ -346,40 +346,87 @@
 
     <div id="viewEditProfile" class="full-view">
         <div class="topbar" style="background:var(--bg-color); position:sticky; top:0; z-index:910;">
+            <button class="menu-btn" onclick="closeEditProfile()" style="left: 20px;"><i class="fas fa-chevron-left"></i></button>
             <h2 style="font-size:20px;">Profile</h2>
         </div>
         <div class="content-area" style="padding-top:10px; min-height: auto;">
             <div style="text-align:center; margin-bottom:20px;">
-                <img id="epPic" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
-                <div style="margin-top:5px;"><span class="tier-badge" id="epTier" style="font-size:16px;">VVIP</span></div>
-                <h3 style="margin:0; font-size:22px;" id="epHeaderName">User Name</h3>
+                <img id="epPic" src="https://via.placeholder.com/100" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+                <div style="margin-top:10px;"><span class="tier-badge" id="epTier" style="font-size:16px;">VVIP</span></div>
+                <h3 style="margin:5px 0 0 0; font-size:24px;" id="epHeaderName">User Name</h3>
+                <div style="font-size: 12px; font-weight: 600; color: #FFF; margin-top: 5px;" id="epHeaderId">Customer ID: CUST-0000</div>
             </div>
-            <div style="background:#888; border-radius: 20px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                <div style="background: #444; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);"><i class="fas fa-pen"></i></div>
-                <div style="font-size: 16px; font-weight: 500; color: #FFF;">Edit Profile</div>
+            
+            <div style="background:#555; border-radius: 20px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="background: #333; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);"><i class="fas fa-pen"></i></div>
+                <div style="font-size: 18px; font-weight: 600; color: #FFF;">Edit Profile</div>
             </div>
 
-            <div style="background: #333; padding: 20px; border-radius: 20px;">
-                <label class="input-label" style="margin-top: 0;">NAME*</label><input type="text" id="epName">
-                <label class="input-label">BRAND NAME</label><input type="text" id="epBrand">
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">PHONE*</label><input type="tel" id="epPhone"></div>
-                    <div style="flex:1;"><label class="input-label">EMAIL</label><input type="email" id="epEmail"></div>
-                </div>
-                <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress">
+            <div style="background: #333; padding: 25px 20px; border-radius: 20px;">
                 
-                <label class="input-label">SHIPPING LOCATION (พิกัด GPS)</label>
-                <input type="text" id="epLocation" placeholder="Search Address" readonly style="text-align:center; margin-bottom:15px; font-weight:600; color:#111;">
+                <label class="input-label" style="margin-top: 0;">RECIPIENT NAME*</label><input type="text" id="epName" placeholder="ชื่อผู้รับสินค้า">
+                <label class="input-label">BRAND NAME</label><input type="text" id="epBrand">
+                
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone"></div>
+                    <div style="flex:1;"><label class="input-label">EMAIL ADDRESS</label><input type="email" id="epEmail"></div>
+                </div>
+
+                <label class="input-label">SHIPPING ADDRESS*</label><textarea id="epShipAddress" rows="2" placeholder="บ้านเลขที่, ซอย, ถนน..."></textarea>
+                
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epShipCity" placeholder="เขต/อำเภอ"></div>
+                    <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epShipProv" placeholder="จังหวัด"></div>
+                </div>
+                
+                <div class="flex-row">
+                    <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epShipZip" placeholder="รหัสไปรษณีย์"></div>
+                    <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epShipCountry" value="Thailand"></div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div style="font-size: 12px; color: #FFF; font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px;">BILLING ADDRESS (FOR TAX INVOICE)</div>
+                <label class="checkbox-container" style="margin-bottom: 20px;">
+                    <input type="checkbox" id="cbSameAsShip" onchange="toggleBillingForm()">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Same as Shipping Address</span>
+                </label>
+
+                <div id="billingSection">
+                    <div class="flex-row">
+                        <div style="flex:1;"><label class="input-label">COMPANY NAME</label><input type="text" id="epBillCompany" placeholder="ชื่อบริษัท (ถ้ามี)"></div>
+                        <div style="flex:1;"><label class="input-label">TAX ID</label><input type="text" id="epBillTax" placeholder="เลขประจำตัวผู้เสียภาษี"></div>
+                    </div>
+                    
+                    <label class="input-label">BILLING ADDRESS*</label><textarea id="epBillAddress" rows="2" placeholder="ที่อยู่สำหรับออกบิล..."></textarea>
+                    
+                    <div class="flex-row">
+                        <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epBillCity"></div>
+                        <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epBillProv"></div>
+                    </div>
+                    
+                    <div class="flex-row">
+                        <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epBillZip"></div>
+                        <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epBillCountry" value="Thailand"></div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <label class="input-label">SHIPPING LOCATION (พิกัด GPS สำหรับแมสเซ็นเจอร์)</label>
+                <input type="text" id="epLocation" placeholder="Search Address" readonly style="text-align:center; margin-bottom:15px; font-weight:600; color:#111; background:#FFF;">
                 <div class="map-placeholder" id="mapDisplay">
-                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5866160161474!2d100.53696807490074!3d13.743452486648712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2992db54e58f3%3A0xc3b5ed1eb10aab64!2sPratunam%20Market!5e0!3m2!1sen!2sth!4v1716373801234!5m2!1sen!2sth" allowfullscreen="" loading="lazy"></iframe>
+                     <iframe src="https://maps.google.com/maps?q=13.7563,100.5018&z=15&output=embed" allowfullscreen="" loading="lazy"></iframe>
                 </div>
                 <div class="flex-row" style="margin-bottom: 30px;">
                     <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:13px; border-radius:30px;" onclick="getLocation()"><i class="fas fa-location-arrow"></i> My Location</button>
-                    <button class="btn btn-pink" style="flex:1.5; font-size:13px; border-radius:30px;" onclick="openMap()">Open Map</button>
+                    <button class="btn btn-pink" style="flex:1.5; font-size:13px; border-radius:30px; background:var(--accent-red);" onclick="openMap()">Select Delivery Location</button>
                 </div>
+                
                 <div class="flex-row">
-                    <button class="btn btn-dark" onclick="closeEditProfile()" style="border-radius:30px;">Cancel</button>
-                    <button class="btn btn-green" onclick="saveProfile()" style="border-radius:30px;">Save</button>
+                    <button class="btn btn-dark" onclick="closeEditProfile()" style="border-radius:30px; background:#111;">Cancel</button>
+                    <button class="btn btn-green" onclick="saveProfile()" style="border-radius:30px;">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -423,7 +470,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbzQKukQOamROu9N4uNIxlPz5mNnILXEpD6Kis3XdiWlX1sWiFtcsITuuuj0GE3evJ7Phg/exec'; // <--- ใส่ Web App URL ของคุณที่นี่
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbyQqPRnceIw2YfulIXY9yTvZKl9mBWdmtg1G3NkQ6xvWXMpTU3Wspfku8VGJ0Dsmh5NEg/exec'; // <--- ใส่ Web App URL ของคุณที่นี่
         const LIFF_ID = '2009142530-l2sIA52W'; // <--- ใส่ LIFF ID ของคุณที่นี่
         // =================================================
 
@@ -560,7 +607,7 @@
                     if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(role)) {
                         isStaff = true;
                         document.getElementById('sidebarRole').innerText = role; 
-                        document.getElementById('headerId').classList.add('hidden'); // ซ่อน ID ฝั่ง Staff
+                        document.getElementById('headerId').classList.add('hidden');
                         
                         document.getElementById('sidebarMenuStaff').classList.remove('hidden');
                         document.getElementById('sidebarMenuCustomer').classList.add('hidden');
@@ -626,10 +673,6 @@
         // ================= CUSTOMER VIEW =================
         function setupCustomerView() {
             switchTab('Orders'); 
-            document.getElementById('profileName').innerText = dbUserData.RealName;
-            document.getElementById('profileId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
-            document.getElementById('profileTier').innerHTML = getTierIcon(dbUserData.Tier);
-            document.getElementById('profilePicLg').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
             fetchCustomerOrders();
         }
 
@@ -768,18 +811,53 @@
             }); 
         }
         
+        function toggleBillingForm() {
+            const isChecked = document.getElementById('cbSameAsShip').checked;
+            document.getElementById('billingSection').style.display = isChecked ? 'none' : 'block';
+        }
+
         function openEditProfile() {
-            document.getElementById('epName').value = dbUserData.RealName || '';
+            // Header Info
+            document.getElementById('epPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
+            document.getElementById('epHeaderName').innerText = dbUserData.RealName || 'User';
+            document.getElementById('epHeaderId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
+            document.getElementById('epTier').innerHTML = getTierIcon(dbUserData.Tier);
+
+            // Basic & Shipping Info
+            document.getElementById('epName').value = dbUserData.ShipName || dbUserData.RealName || '';
             document.getElementById('epBrand').value = dbUserData.BrandName || '';
-            document.getElementById('epPhone').value = dbUserData.Phone || '';
+            document.getElementById('epPhone').value = dbUserData.ShipPhone || dbUserData.Phone || '';
             document.getElementById('epEmail').value = dbUserData.Email || '';
-            document.getElementById('epShipAddress').value = dbUserData.ShipAddress || '';
             
+            document.getElementById('epShipAddress').value = dbUserData.ShipAddress || '';
+            document.getElementById('epShipCity').value = dbUserData.ShipCity || '';
+            document.getElementById('epShipProv').value = dbUserData.ShipProvince || '';
+            document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
+            document.getElementById('epShipCountry').value = dbUserData.ShipCountry || 'Thailand';
+
+            // Billing Info
+            document.getElementById('epBillCompany').value = dbUserData.BillCompany || '';
+            document.getElementById('epBillTax').value = dbUserData.BillTaxId || '';
+            document.getElementById('epBillAddress').value = dbUserData.BillAddress || '';
+            document.getElementById('epBillCity').value = dbUserData.BillCity || '';
+            document.getElementById('epBillProv').value = dbUserData.BillProvince || '';
+            document.getElementById('epBillZip').value = dbUserData.BillZip || '';
+            document.getElementById('epBillCountry').value = dbUserData.BillCountry || 'Thailand';
+
+            // GPS
             if (dbUserData.ShipLocation) {
                 document.getElementById('epLocation').value = dbUserData.ShipLocation;
                 const c = dbUserData.ShipLocation.split(','); 
-                if(c.length===2) { currentLat=c[0]; currentLng=c[1]; updateMap(currentLat, currentLng); }
+                if(c.length === 2) { 
+                    currentLat = c[0]; currentLng = c[1]; 
+                    document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=${currentLat},${currentLng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
+                }
             }
+
+            // รีเซ็ตสถานะ Checkbox
+            document.getElementById('cbSameAsShip').checked = false;
+            toggleBillingForm();
+
             document.getElementById('viewApp').classList.add('hidden'); 
             document.getElementById('viewEditProfile').classList.add('show'); 
             window.scrollTo(0,0);
@@ -791,14 +869,47 @@
         }
         
         function saveProfile() {
+            const isSameAsShip = document.getElementById('cbSameAsShip').checked;
+
             const payload = { 
-                userId: userProfile.userId, realName: document.getElementById('epName').value, 
-                brandName: document.getElementById('epBrand').value, phone: document.getElementById('epPhone').value, 
-                email: document.getElementById('epEmail').value, shipAddress: document.getElementById('epShipAddress').value, 
-                shipLocation: document.getElementById('epLocation').value 
+                userId: userProfile.userId, 
+                realName: document.getElementById('epName').value, 
+                brandName: document.getElementById('epBrand').value, 
+                phone: document.getElementById('epPhone').value, 
+                email: document.getElementById('epEmail').value, 
+                
+                // Shipping
+                shipName: document.getElementById('epName').value,
+                shipPhone: document.getElementById('epPhone').value,
+                shipAddress: document.getElementById('epShipAddress').value,
+                shipCity: document.getElementById('epShipCity').value,
+                shipProvince: document.getElementById('epShipProv').value,
+                shipZip: document.getElementById('epShipZip').value,
+                shipCountry: document.getElementById('epShipCountry').value,
+                shipLocation: document.getElementById('epLocation').value,
+
+                // Billing
+                billCompany: isSameAsShip ? document.getElementById('epName').value : document.getElementById('epBillCompany').value,
+                billTaxId: isSameAsShip ? '-' : document.getElementById('epBillTax').value,
+                billAddress: isSameAsShip ? document.getElementById('epShipAddress').value : document.getElementById('epBillAddress').value,
+                billCity: isSameAsShip ? document.getElementById('epShipCity').value : document.getElementById('epBillCity').value,
+                billProvince: isSameAsShip ? document.getElementById('epShipProv').value : document.getElementById('epBillProv').value,
+                billZip: isSameAsShip ? document.getElementById('epShipZip').value : document.getElementById('epBillZip').value,
+                billCountry: isSameAsShip ? document.getElementById('epShipCountry').value : document.getElementById('epBillCountry').value
             };
+
+            if(!payload.realName || !payload.phone || !payload.shipAddress) {
+                return alert("กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วน");
+            }
+
             callBackend('update_profile', payload, (res) => { 
-                if(res.status === 'success') { alert("Saved!"); closeEditProfile(); checkUser(); } 
+                if(res.status === 'success') { 
+                    alert("บันทึกข้อมูลเรียบร้อยแล้ว!"); 
+                    closeEditProfile(); 
+                    checkUser(); 
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + res.message);
+                }
             });
         }
 
@@ -861,16 +972,14 @@
             let html = ''; const role = dbUserData.Role;
             filtered.forEach(o => {
                 let btns = '';
-                let attachments = renderAttachments(o); // ใช้ฟังก์ชันร่วมเพื่อโชว์ไฟล์แนบ
+                let attachments = renderAttachments(o);
                 
-                // --- Logic การกดปุ่มของ Staff (อิงจาก Code.gs เดิม 100%) ---
                 if (['Admin', 'Production Manager'].includes(role)) {
                     if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
                     if (o.status === 'Pre-Production Approved') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')">แจ้งผลิตเสร็จ 50%</button>`;
                     if (o.status === 'Correction Needed') btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px;">ตีกลับ: ${o.feedback}</div><button class="btn btn-green" style="margin-top:5px;" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้เสร็จแล้ว ส่ง QC ใหม่</button>`;
                 }
 
-                // *เพิ่ม Sales Admin ให้ส่งตัวอย่างได้*
                 if (['Admin', 'Merchandiser', 'Sales Admin'].includes(role)) {
                     if (o.status === 'Work Order Review Stage') {
                         btns += `
