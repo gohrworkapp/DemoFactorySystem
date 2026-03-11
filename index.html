@@ -3,57 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Demo Factory</title>
+    <title>AWESOME.SCREEN</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         :root { 
-            /* --- COLOR PALETTE (Matched to Prototype) --- */
-            --bg-color: #000000;              /* Pure Black background */
-            --card-bg: #2A2A2A;               /* Dark grey for cards */
-            --input-bg: #2A2A2A;              /* Dark grey for inputs in main view */
-            --text-main: #FFFFFF;             /* White text */
-            --text-muted: #AAAAAA;            /* Muted grey text */
+            /* --- COLOR PALETTE (Strictly from Prototype) --- */
+            --bg-base: #111111;              
+            --card-base: #222222;               
+            --card-inner: #333333;
             
-            /* -- Accents (Gradients & Solid) -- */
-            --accent-yellow: #FFC805;         /* Yellow for status 1/2 start */
-            --accent-pink: #FF0080;           /* Pink for status 1/2 end */
-            --accent-blue: #00B9F2;           /* Blue for status 3 start */
-            --accent-cyan: #18FFFF;           /* Cyan for status 3/4 end */
-            --accent-green: #00E676;          /* Green for status 4 start */
-            --accent-red: #FF4D6D;            /* Red for alerts/branding */
+            --text-white: #FFFFFF;             
+            --text-grey: #AAAAAA;            
+            --text-dark: #000000;
             
-            --border-color: #444444;          /* Border color for elements */
-            
-            /* -- Edit Profile (Grey Card View) -- */
-            --ep-card-bg: #5E5E5E;            /* Lighter grey for big card */
-            --ep-input-bg: #7A7A7A;           /* Input background inside big card */
-            --ep-icon-bg: #7A7A7A;            /* Icon background inside big card */
-            
-            /* -- Sidebar -- */
-            --sidebar-bg: #D9D9D9;            /* Light grey sidebar */
-            --sidebar-text: #111111;          /* Dark sidebar text */
+            --accent-yellow: #FFC107;         
+            --accent-pink: #FF4D6D;           
+            --accent-blue: #00B9F2;           
+            --accent-cyan: #18FFFF;           
+            --accent-green: #00E676;          
+            --accent-red: #FF3B30;            
         }
 
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', 'Kanit', sans-serif; margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; font-size: 14px; }
+        body { 
+            background-color: var(--bg-base); 
+            color: var(--text-white); 
+            font-family: 'Kanit', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            overflow-x: hidden; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        
         .hidden { display: none !important; }
         .flex-row { display: flex; gap: 10px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         
-        /* --- Sidebar & Topbar (Updated based on d1e5dc.png, d1e922.png) --- */
-        .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: var(--sidebar-bg); z-index: 1000; transition: 0.3s ease-in-out; display: flex; flex-direction: column; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
+        /* ================= SIDEBAR & TOPBAR ================= */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: #D9D9D9; z-index: 1000; transition: 0.3s ease-in-out; display: flex; flex-direction: column; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
         .sidebar.open { left: 0; }
-        .sidebar-header { padding: 20px 20px 10px 20px; }
+        .sidebar-header { padding: 20px; }
         .sidebar-menu { flex: 1; padding: 10px 25px; display: flex; flex-direction: column; gap: 20px; }
-        .sidebar-item { display: flex; align-items: center; gap: 15px; color: var(--sidebar-text); font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; text-decoration: none; }
-        .sidebar-item i { font-size: 22px; width: 24px; text-align: center; }
-        
-        .sidebar-footer { padding: 20px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; border-top: 1px solid #CCC; }
-        .sidebar-user { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .sidebar-item { display: flex; align-items: center; gap: 15px; color: #111; font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .sidebar-footer { padding: 20px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #CCC; }
+        .sidebar-user { display: flex; align-items: center; gap: 10px; }
         .sidebar-user img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
-        .sidebar-user-info { display: flex; flex-direction: column; }
         .sidebar-user-info .name { color: #000; font-size: 14px; font-weight: 800; line-height: 1.2; }
         .sidebar-user-info .id { font-size: 11px; font-weight: 600; color: #555; }
         .sidebar-powered { font-size: 9px; font-weight: 600; color: #555; text-align: center; margin-top: 5px; }
@@ -61,244 +57,209 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 998; display: none; transition: 0.3s; }
         .overlay.show { display: block; }
         
-        /* --- Header Layout (Updated based on d1e922.png, d1e945.png) --- */
-        .app-header { padding: 15px 30px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
-        .menu-btn { position: absolute; left: 20px; top: 15px; background: transparent; color: #FFF; border: 1px solid #FFF; width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; cursor: pointer; z-index: 10; }
-        .greeting-area { margin-top: 40px; }
-        .greeting-text-en { font-size: 26px; font-weight: 800; background: linear-gradient(90deg, var(--accent-yellow), var(--accent-pink), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2px; line-height: 1.1;}
-        .greeting-text-th { font-size: 18px; font-weight: 700; color: #FFF; }
-        .user-brand-display { font-size: 15px; font-weight: 500; color: var(--text-muted); }
-        .avatar-container { text-align: center; margin-top: 10px; }
-        .avatar-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+        /* ================= APP HEADER ================= */
+        .app-header { padding: 20px 25px 10px 25px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
+        .menu-btn { background: transparent; color: #FFF; border: 1.5px solid #FFF; width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; cursor: pointer; margin-bottom: 15px; }
+        
+        .greeting-text-en { font-size: 28px; font-weight: 800; background: linear-gradient(90deg, var(--accent-yellow), var(--accent-pink), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0px; line-height: 1.1; font-family: 'Inter', sans-serif;}
+        .greeting-text-th { font-size: 22px; font-weight: 700; color: #FFF; margin-bottom: 0px; line-height: 1.2;}
+        .user-brand-display { font-size: 16px; font-weight: 500; color: var(--text-grey); margin-bottom: 5px;}
+        .user-id-display { font-size: 12px; font-weight: 600; color: #FFF; margin-top: 5px; opacity: 0.8;}
+        
+        .avatar-container { text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .avatar-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
         .tier-badge { background: transparent; color: #FFF; font-size: 12px; font-weight: 700; margin-top: 5px; }
 
-        /* --- Status Banner (Updated based on d1e945.png) --- */
-        .status-banner { margin: 10px 30px 20px 30px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .status-banner-title { font-weight: 700; font-size: 16px; margin-bottom: 5px; color: inherit; }
-        .status-banner-status { font-size: 38px; font-weight: 800; line-height: 1.1; color: inherit; }
-        .status-banner-ord { font-size: 13px; font-weight: 600; margin-top: 5px; color: inherit; }
-        .status-banner-delivery { font-size: 12px; font-weight: 600; margin-top: 20px; color: inherit; }
-        .status-banner-delivery span { font-size:18px; font-weight: 800; }
+        /* ================= STATUS BANNER ================= */
+        .status-banner { margin: 15px 25px 25px 25px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .sb-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; color: inherit; }
+        .sb-status { font-size: 42px; font-weight: 800; line-height: 1; color: inherit; font-family: 'Inter', sans-serif; letter-spacing: -1px;}
+        .sb-ord { font-size: 14px; font-weight: 600; margin-top: 5px; color: inherit; }
+        .sb-delivery { font-size: 12px; font-weight: 600; margin-top: 25px; color: inherit; }
+        .sb-delivery span { font-size:20px; font-weight: 800; font-family: 'Inter', sans-serif;}
         
-        .bg-banner-prep { background: linear-gradient(135deg, var(--accent-yellow), var(--accent-pink)); color: #000; }
-        .bg-banner-prod { background: linear-gradient(135deg, #B388FF, var(--accent-cyan)); color: #000; }
-        .bg-banner-qc { background: linear-gradient(135deg, var(--accent-blue), #0052D4); color: #FFF; }
-        .bg-banner-deliv { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); color: #000; }
-        
-        /* --- Nav Squares (Updated based on d1e945.png) --- */
-        .nav-squares { display: flex; justify-content: space-between; padding: 0 30px; margin-bottom: 25px; gap: 15px; }
-        .nav-sq { flex: 1; background: #333333; border-radius: 16px; aspect-ratio: 1.1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; text-align: center; }
-        .nav-sq i { font-size: 32px; color: #888888; margin-bottom: 8px; }
-        .nav-sq span { font-size: 13px; font-weight: 600; color: #FFF; }
-        .nav-sq.active { background: #444444; }
-        .nav-sq.active i.fa-list-alt { color: var(--accent-red); }
-        .nav-sq.active i { color: var(--text-main); }
+        /* Gradients mapping */
+        .bg-gradient-prep { background: linear-gradient(135deg, #FFD54F, #FF8A65); color: #000; }
+        .bg-gradient-received { background: linear-gradient(135deg, #B2FF59, #FFEB3B); color: #000; }
+        .bg-gradient-prod { background: linear-gradient(135deg, #B388FF, #18FFFF); color: #000; }
+        .bg-gradient-qc { background: linear-gradient(135deg, #4FC3F7, #0288D1); color: #FFF; }
+        .bg-gradient-deliv { background: linear-gradient(135deg, #69F0AE, #18FFFF); color: #000; }
 
-        /* --- Overview Stats (Updated based on d1e945.png) --- */
+        /* ================= NAV SQUARES ================= */
+        .nav-squares { display: flex; justify-content: space-between; padding: 0 25px; margin-bottom: 25px; gap: 15px; }
+        .nav-sq { flex: 1; background: #2A2A2A; border-radius: 20px; aspect-ratio: 1.05; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; text-align: center; }
+        .nav-sq i { font-size: 36px; color: #666; margin-bottom: 10px; }
+        .nav-sq span { font-size: 13px; font-weight: 600; color: #FFF; }
+        .nav-sq.active { background: #383838; }
+        .nav-sq.active i.fa-list-alt { color: var(--accent-pink); }
+        .nav-sq.active i.fa-search { color: var(--text-white); }
+        .nav-sq.active i.fa-user { color: var(--text-white); }
+
+        .content-area { padding: 0 25px 30px 25px; }
+
+        /* ================= TRANSACTION HEADER ================= */
+        .transaction-header { font-weight: 800; font-size: 16px; color: #FFF; }
+        .search-container { background: #222; border: 1px solid #444; border-radius: 16px; padding: 12px 15px; display: flex; align-items: center; flex: 1; }
+        .search-container input { background: transparent; border: none; color: #FFF; font-size: 14px; flex: 1; outline: none; font-family: 'Kanit'; }
+        .filter-btn { background: #222; border: 1px solid #444; border-radius: 16px; width: 48px; display: flex; justify-content: center; align-items: center; color: #FFF; font-size: 16px; }
+
+        /* ================= ORDER CARDS ================= */
+        .order-card { background: var(--card-base); border-radius: 24px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        
+        .oc-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; cursor: pointer; background: transparent; }
+        .oc-icon { background: #383838; width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 22px; color: #fff; }
+        .oc-no { color: #FFF; font-size: 18px; font-weight: 800; font-family: 'Inter', sans-serif;}
+        .oc-date { font-size: 12px; color: #888; font-weight: 500; }
+        .oc-status { font-size: 13px; font-weight: 700; }
+        
+        /* Card Body (Collapsible) */
+        .oc-body { overflow: hidden; transition: max-height 0.3s ease-out; max-height: 0; padding: 0 20px; }
+        .oc-body.open { max-height: 2500px; transition: max-height 0.5s ease-in; padding-bottom: 20px;}
+        
+        .oc-detail-box { background: var(--card-inner); border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .oc-style { font-size: 20px; font-weight: 800; }
+        .oc-qty { font-size: 14px; font-weight: 500; color: #ccc; }
+        .oc-del-label { font-size: 12px; color: #aaa; margin-top: 8px; }
+        .oc-del-val { font-size: 16px; color: #fff; font-weight: 700; font-family: 'Inter', sans-serif;}
+        .oc-thumb { width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#111; border: 1px solid #555; flex-shrink:0; }
+        .oc-thumb img { width:100%; height:100%; object-fit:cover; cursor:pointer; }
+
+        /* ================= STEPPER ================= */
+        .stepper-container { position: relative; margin-bottom: 30px; margin-top: 10px; }
+        /* The grey background line */
+        .step-bg-line { position: absolute; top: 12px; left: 10%; right: 10%; height: 4px; background: #444; z-index: 1; border-radius: 2px;}
+        /* The colored progress line */
+        .step-progress-line { position: absolute; top: 12px; left: 10%; height: 4px; background: var(--accent-green); z-index: 2; border-radius: 2px; transition: 0.3s;}
+        
+        .step-dots-wrapper { display: flex; justify-content: space-between; position: relative; z-index: 3; }
+        .step-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .step-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .step-circle-inner { width: 14px; height: 14px; border-radius: 50%; }
+        .step-label { font-size: 8px; font-weight: 700; text-align: center; margin-top: 5px; color: #888; width: 120%; }
+        .step-date-label { font-size: 8px; color: #666; text-align: center; font-family: 'Inter', sans-serif;}
+
+        /* Status Colors */
+        .text-green { color: var(--accent-green); }
+        .text-yellow { color: var(--accent-yellow); }
+        .text-blue { color: var(--accent-blue); }
+        .text-cyan { color: var(--accent-cyan); }
+        .text-pink { color: var(--accent-pink); }
+        .text-red { color: var(--accent-red); }
+
+        /* ================= ACTION BUTTONS & BOXES ================= */
+        .action-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer; font-size: 13px; display: flex; justify-content: center; align-items: center; gap: 8px; font-family: 'Kanit'; }
+        .btn-grey { background: #444; color: #FFF; }
+        .btn-grad-confirm { background: linear-gradient(90deg, #00E676, #00B9F2); color: #FFF; }
+        
+        /* Terms Box */
+        .terms-box { background: #333; border-radius: 16px; padding: 20px; margin-top: 15px; border: 1px solid #444;}
+        .terms-title-main { text-align:center; font-size: 24px; font-weight: 800; color: var(--accent-red); line-height: 1.1; letter-spacing:-0.5px;}
+        .terms-title-sub { text-align:center; font-size: 18px; font-weight: 800; color: var(--accent-red); margin-bottom: 5px; }
+        .terms-desc { text-align:center; font-size: 11px; color: #FFF; font-weight: 500; margin-bottom: 15px; }
+        
+        .terms-section { background: var(--card-base); border-radius: 12px; padding: 15px; margin-bottom: 10px; border: 1px solid #444;}
+        .terms-sec-title { font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px; }
+        .terms-ul { margin: 0; padding-left: 15px; font-size: 11px; color: #DDD; line-height: 1.6; }
+
+        /* Revision Box */
+        .rev-box { border-radius: 16px; padding: 15px; margin-top: 15px; border: 1.5px solid transparent; }
+        .rev-box.red { border-color: var(--accent-red); background: rgba(255, 77, 109, 0.05); }
+        .rev-box.green { border-color: var(--accent-green); background: rgba(0, 230, 118, 0.05); }
+        .rev-title { font-size: 12px; font-weight: 600; margin-bottom: 10px; display:flex; align-items:center; gap:5px;}
+        .rev-item { font-size: 11px; color: #DDD; margin-bottom: 4px; }
+        .rev-img-gallery { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; border-top: 1px dashed #555; border-bottom: 1px dashed #555; margin-top: 10px; margin-bottom: 10px;}
+        .rev-img-gallery div { width: 65px; height: 65px; border-radius: 10px; flex-shrink: 0; background: #FFF; overflow: hidden; }
+        .rev-img-gallery img { width:100%; height:100%; object-fit:cover; }
+        .rev-instruction { text-align:center; font-size:12px; font-weight:700; color:var(--accent-yellow); margin-bottom:10px; }
+
+        /* ================= OVERVIEW / DASHBOARD ================= */
         .stats-container { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 25px; }
-        .stat-box { flex: 1; background: #222222; border-radius: 16px; padding: 20px 10px; text-align: center; border: 1px solid var(--border-color); }
-        .stat-num { font-size: 36px; font-weight: 800; line-height: 1; margin-bottom: 5px; }
+        .stat-box { flex: 1; background: var(--card-base); border-radius: 20px; padding: 20px 10px; text-align: center; }
+        .stat-num { font-size: 36px; font-weight: 800; line-height: 1; margin-bottom: 5px; font-family:'Inter'; }
         .stat-label { font-size: 12px; font-weight: 600; color: #FFF; }
 
-        /* --- Nav Buttons (Staff) --- */
-        .staff-nav-btns { display: flex; gap: 15px; padding: 0 30px; margin-bottom: 20px; }
-        .s-btn { flex: 1; padding: 15px; border-radius: 16px; font-weight: 700; font-size: 14px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .s-btn-create { background: var(--accent-red); color: #FFF; }
-        .s-btn-all { background: var(--accent-blue); color: #FFF; }
-        .s-btn-inactive { background: #333; color: #888; border: 1px solid #444; }
-
-        /* --- Content Container --- */
-        .content-area { padding: 0 30px 20px 30px; min-height: calc(100vh - 350px); display: flex; flex-direction: column; }
-
-        /* --- Transaction Section (Updated based on d1e945.png) --- */
-        .transaction-header { font-weight: 700; font-size: 16px; color: #FFF; margin-bottom: 15px; }
-        .search-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .search-bar { flex: 1; background: #2A2A2A; border-radius: 16px; padding: 12px 20px; display: flex; align-items: center; border: 1px solid #444; }
-        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; font-size: 15px; flex: 1; outline: none; }
-        .search-bar i { color: #888; font-size: 16px; }
-        .filter-btn { background: #2A2A2A; border-radius: 16px; padding: 0 18px; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 1px solid #444; color: #FFF; }
-        .sort-text { font-size: 12px; color: var(--text-muted); }
-        .sort-text b { color: #FFF; font-weight: 600; }
-
-        /* --- Inputs & Elements (Matched to Prototype) --- */
-        .input-label { font-size: 11px; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; margin-top: 15px; font-weight: 600; }
-        input, select, textarea { width: 100%; padding: 14px 16px; background: var(--input-bg); border: none; border-radius: 20px; color: #FFF; font-family: 'Inter', 'Kanit', sans-serif; font-size: 14px; font-weight: 500; outline: none; box-sizing: border-box; }
-        input::placeholder, textarea::placeholder { color: #DDD; font-weight: 400; font-size: 13px; }
-        .dark-input { background: #333; color: #FFF; border: 1px solid #444; }
+        /* ================= MODALS ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-overlay.show { display: flex; }
+        .modal-box { width: 100%; max-width: 380px; background: #5E5E5E; padding: 25px; border-radius: 24px; border: 2px solid #FFF; }
         
-        /* --- Buttons (Matched to Prototype) --- */
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 20px; color: white; font-weight: 600; cursor: pointer; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; box-sizing: border-box; text-decoration: none;}
-        .btn-outline { background: transparent; border: 1.5px solid #FFF; color: #FFF; }
-        .btn-green { background: var(--accent-green); color: #000; }
-        .btn-dark { background: #000; color: #FFF; }
-        .btn-pink { background: var(--accent-red); color: #FFF; }
-        .btn-gradient-confirm { background: linear-gradient(90deg, #00E676, #00B9F2); color: #FFF; border-radius: 12px; font-size: 14px;}
-        .btn-grey-outline { background: #444; color: #FFF; border-radius: 12px; font-weight: 500; font-size: 13px; }
-
-        /* --- Orders Card & Stepper (Updated based on d1e945.png, d1ec89.png) --- */
-        .order-card { background: #2A2A2A; border-radius: 20px; padding: 0; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); overflow: hidden; }
-        .order-card-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; cursor: pointer; background: #222; }
-        .order-icon-box { background: #383838; width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #fff; }
-        .order-no-text { color: #FFF; font-size: 16px; font-weight: 800; }
-        .order-date-text { font-size: 11px; color: #888; margin-top: 2px; }
+        .modal-header-rej { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .modal-icon-rej { background: var(--accent-red); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FFF; font-size: 18px; }
+        .modal-title-rej { font-size: 22px; font-weight: 700; color: var(--accent-red); }
         
-        .order-card-status-area { display: flex; align-items: center; gap: 10px; }
-        .status-badge-inline { font-size: 13px; font-weight: bold; padding: 6px 12px; border-radius: 10px; }
-        .chevron { transition: transform 0.3s ease; color: #888; font-size: 14px; }
-        .chevron.up { transform: rotate(180deg); }
+        .modal-textarea { background: transparent; color: #FFF; border: 1px solid #FFF; border-radius: 12px; padding: 15px; width: 100%; box-sizing: border-box; font-family:'Kanit'; font-size:14px; margin-top: 15px; outline:none;}
+        .modal-textarea::placeholder { color: #ccc; }
+        
+        .btn-modal-cancel { background: #888; color: #FFF; border-radius: 12px; flex: 1; border:none; padding:12px; font-weight:bold; font-family:'Kanit'; cursor:pointer;}
+        .btn-modal-confirm { background: var(--accent-red); color: #FFF; border-radius: 12px; flex: 1.5; border:none; padding:12px; font-weight:bold; font-family:'Kanit'; cursor:pointer;}
 
-        .card-body-collapse { overflow: hidden; transition: max-height 0.3s ease-out; max-height: 0; padding: 0 20px 20px 20px; }
-        .card-body-collapse.open { max-height: 2000px; transition: max-height 0.5s ease-in; border-top: 1px solid #333; }
-
-        /* -- Detail Box (d1ec89.png) -- */
-        .order-detail-box { background: #383838; border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 25px; }
-        .order-style-qty { color: var(--accent-red); font-size: 18px; font-weight: 800; }
-        .order-style-qty span { font-size: 14px; font-weight: 500; color: #ccc; }
-        .order-delivery-label { font-size: 11px; color: #aaa; margin-top: 8px; }
-        .order-delivery-val { font-size: 15px; color: #fff; font-weight: 600; }
-        .order-thumbnail { width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0; }
-        .order-thumbnail img { width:100%; height:100%; object-fit:cover; cursor:pointer; }
-
-        /* -- Stepper (Updated based on d1ec89.png) -- */
-        .stepper-wrapper { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
-        .step-col { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
-        .step-line { position: absolute; top: 11px; left: 50%; width: 100%; height: 3px; z-index: 1; }
-        .step-circle { width: 24px; height: 24px; border-radius: 50%; z-index: 2; margin-bottom: 8px; }
-        .step-name { font-size: 8px; font-weight: 700; text-align: center; line-height: 1.1; width: 120%; }
-        .step-date { font-size: 8px; color: #777; margin-top: 2px; text-align:center; }
-
-        /* -- Revision Box (Updated based on d1ec89.png) -- */
-        .revision-box { border: 1px solid var(--accent-red); border-radius: 12px; padding: 15px; margin-top: 15px; background: rgba(255, 77, 109, 0.05); }
-        .revision-title { color: var(--accent-red); font-size: 12px; font-weight: 600; margin-bottom: 10px; }
-        .revision-item { font-size: 11px; color: #DDD; margin-bottom: 4px; }
-        .revision-item-fixed { font-size: 11px; color: var(--accent-green); margin-bottom: 4px; }
-        .revision-divider { border-top: 1px dashed #777; margin: 10px 0; }
-        .image-gallery { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .image-gallery div { width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #FFF; overflow: hidden; border: 1px solid #555; }
-        .image-gallery img { width:100%; height:100%; object-fit:cover; }
-
-        /* -- Confirmation Disclaimer (d1ec89.png) -- */
-        .confirm-disclaimer-box { background: #333; border: 1px solid #555; border-radius: 12px; padding: 20px; margin-top: 20px; }
-        .disclaimer-title-large { text-align:center; font-size: 22px; font-weight: 800; color: var(--accent-red); line-height: 1.1; }
-        .disclaimer-title { text-align:center; font-size: 18px; font-weight: 800; color: var(--accent-red); margin-bottom: 5px; }
-        .disclaimer-subtitle { text-align:center; font-size: 10px; color: #FFF; font-weight: 600; margin-bottom: 15px; }
-        .disclaimer-section { background: #444; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
-        .disclaimer-section-title { font-size: 12px; font-weight: 700; color: #FFF; margin-bottom: 5px; }
-        .disclaimer-ul { margin: 0; padding-left: 15px; font-size: 10px; color: #DDD; }
-
-        /* --- Edit Profile Tab View (d1e9c0.png) --- */
-        .profile-btn-card { background:#5E5E5E; border-radius: 12px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer; }
-        .profile-btn-icon { background: #7A7A7A; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);}
-        .profile-btn-text { font-size: 16px; font-weight: bold; color: #FFF; }
-        .settings-header { margin: 10px 0 15px 5px; color:var(--text-main); font-size:16px; font-weight: 700; }
-        .settings-group { background:#222222; border:1px solid #333333; border-radius: 12px; margin-bottom: 20px; overflow:hidden; }
-        .settings-item { padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; cursor: pointer; }
-        .settings-item-icon { background: var(--accent-red); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: #FFF;}
-        .settings-item-text { color: #FFF; font-weight: 500; font-size:14px;}
-
-        /* --- Full Edit Profile Overlay (d1ece1.png) --- */
-        .full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 1050; display: none; overflow-y: auto; padding-bottom: 40px; }
+        /* ================= PROFILE (GREY CARD) ================= */
+        .profile-btn-card { background:#5E5E5E; border-radius: 20px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer; }
+        .profile-settings-group { background:var(--card-base); border-radius: 20px; margin-bottom: 20px; overflow:hidden; }
+        .settings-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; cursor: pointer; }
+        
+        .full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-base); z-index: 1050; display: none; overflow-y: auto; padding: 0 15px 40px 15px; box-sizing: border-box; }
         .full-view.show { display: block; }
-        .ep-header { display: flex; align-items: center; padding: 20px 30px; margin-bottom:20px; position:sticky; top:0; background:var(--bg-color); z-index:910; }
-        .ep-back-btn { background:none; border:none; color:#FFF; font-size:24px; cursor:pointer; margin-right:15px; padding: 0;}
-        .ep-title { margin:0; font-size:22px; font-weight:bold; color: #FFF;}
+        .ep-big-card { background: #5E5E5E; padding: 25px 20px; border-radius: 24px; margin: 0 10px 20px 10px; }
+        .ep-input-label { font-size: 11px; color: #FFF; text-transform: uppercase; margin-bottom: 6px; display: block; font-weight: 600; margin-top: 15px;}
+        .ep-input { width: 100%; padding: 14px 16px; background: #7A7A7A; border: none; border-radius: 12px; color: #FFF; font-family: 'Kanit'; font-size: 14px; outline:none; box-sizing:border-box;}
+        .ep-input::placeholder { color: #ccc; }
         
-        .ep-user-centered { text-align:center; margin-bottom:25px; }
-        .ep-avatar { width:90px; height:90px; border-radius:50%; object-fit:cover; border:2px solid var(--accent-yellow); }
-        .ep-name-header { margin:10px 0 0 0; font-size:20px; color: #FFF;}
-        .ep-id-header { font-size: 12px; color: #aaa; margin-top: 5px; }
-
-        .ep-big-card { background: var(--ep-card-bg); padding: 25px 20px; border-radius: 20px; margin: 0 20px 20px 20px; }
-        .ep-form-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .ep-form-icon { background: var(--ep-icon-bg); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);}
-        .ep-form-title { font-size: 18px; font-weight: bold; color: #FFF; }
-        
-        .ep-input-label { color: #FFF; margin-top: 15px; margin-bottom: 6px; }
-        .ep-input { background: var(--ep-input-bg); border: none; border-radius: 12px; margin-bottom: 10px; color: #FFF; }
-        .ep-input::placeholder { color: #ccc; font-weight: 400; }
-        
-        .divider-dotted { border-top: 1px dotted #999; margin: 25px 0; }
-        .ep-section-header { font-size: 13px; color: #FFF; font-weight: 600; margin-bottom: 10px; }
-        
+        /* Checkbox */
         .checkbox-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 15px; cursor: pointer; }
         .checkbox-container input { display: none; }
         .checkmark { width: 22px; height: 22px; background: #FFF; border-radius: 4px; display: flex; justify-content: center; align-items: center; }
         .checkbox-container input:checked + .checkmark::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; color: #000; font-size: 14px; }
-        .checkbox-label { font-size: 12px; color: #FFF; font-weight: 400; }
-        
-        .ep-location-box { background: var(--ep-input-bg); color: #FFF; font-weight: 500; text-align: center; border-radius: 12px; margin-bottom: 10px;}
-        .ep-map-display { height: 150px; border-radius: 12px; margin-bottom: 20px; overflow: hidden; background:#333; border:1px solid #777; }
-        .ep-action-row { display: flex; gap: 10px; margin: 20px; }
 
-        /* --- Modals (Matched to d1ec89.png style) --- */
-        .modal-center { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-center.show { display: flex; }
-        .modal-box { width: 100%; max-width: 400px; background: #333; padding: 25px; border-radius: 20px; border: 2px solid #FFF; position: relative; }
-        .modal-header-rej { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-        .modal-icon-rej { background: var(--accent-red); width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FFF; font-size: 16px; }
-        .modal-title-rej { font-size: 20px; font-weight: 700; color: var(--accent-red); }
-        .modal-subtitle-rej { font-size: 13px; color: var(--accent-yellow); font-weight: 600; }
-        .modal-desc-rej { font-size: 11px; color: var(--accent-yellow); margin-bottom: 15px; }
-        .modal-textarea-rej { background: transparent; color: #FFF; border: 1px solid #FFF; border-radius: 12px; padding: 15px; width: 100%; box-sizing: border-box; }
-        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .modal-btn-cancel { background: #888; color: #FFF; border-radius: 12px; flex: 1; }
-        .modal-btn-confirm-rej { background: var(--accent-red); color: #FFF; border-radius: 12px; flex: 1.5; font-size: 13px; }
-        
-        .modal-normal { width: 100%; max-width: 400px; background: #333; padding: 25px; border-radius: 20px; border: 1px solid #555; position: relative; }
-        .modal-normal h3 { text-align: center; margin-top: 0; margin-bottom: 15px; color: #FFF; }
-        .modal-normal textarea { background:#444; color:#FFF; border-radius: 12px; padding: 12px; }
-
-        /* Global Footer */
-        .global-footer { padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: auto; }
-        .global-footer img { width: 20px; height: 20px; border-radius: 50%; }
-        .global-footer div { font-size: 9px; font-weight: 500; color: #FFF; }
-        
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 3000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-base); z-index: 3000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--text-main)"></i>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Loading Demo Factory...</div>
+        <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--text-white)"></i>
+        <div style="font-size:12px; color:var(--text-grey); margin-top:10px; font-weight:500;">Loading Demo Factory...</div>
     </div>
 
+    <!-- ================= REGISTER VIEW ================= -->
     <div id="viewRegister" class="content-area hidden" style="padding-top: 60px;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://via.placeholder.com/65" id="regLogo" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
+            <div style="width: 70px; height: 70px; border-radius: 50%; background:#222; margin: 0 auto; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:bold;">DF</div>
         </div>
         <h3 style="text-align: center; font-size:32px; font-weight: 800; color: #FFF; margin-bottom: 5px; margin-top:0;">Register</h3>
-        <div style="text-align: center; font-size:13px; color:var(--text-muted); margin-bottom: 40px; font-weight:500;">Thank you for registering.</div>
+        <div style="text-align: center; font-size:13px; color:var(--text-grey); margin-bottom: 40px;">Please create an account to track your orders.</div>
         
-        <label class="input-label" style="margin-top:0;">NAME*</label>
-        <input type="text" id="regName" placeholder="Customer name">
-        <label class="input-label">BRAND NAME</label>
-        <input type="text" id="regBrand" placeholder="Brand name">
-        <label class="input-label">PHONE*</label>
-        <input type="tel" id="regPhone" placeholder="08xxxxxxxx">
-        <label class="input-label">EMAIL ADDRESS</label>
-        <input type="email" id="regEmail" placeholder="your@email.com">
+        <label class="ep-input-label" style="margin-top:0;">NAME*</label>
+        <input type="text" id="regName" class="ep-input" style="background:#222;" placeholder="Customer name">
+        <label class="ep-input-label">BRAND NAME</label>
+        <input type="text" id="regBrand" class="ep-input" style="background:#222;" placeholder="Brand name">
+        <label class="ep-input-label">PHONE*</label>
+        <input type="tel" id="regPhone" class="ep-input" style="background:#222;" placeholder="08xxxxxxxx">
+        <label class="ep-input-label">EMAIL ADDRESS</label>
+        <input type="email" id="regEmail" class="ep-input" style="background:#222;" placeholder="your@email.com">
         
-        <button class="btn btn-outline" style="margin-top: 40px; text-transform: lowercase;" onclick="register()">sign up</button>
+        <button class="action-btn" style="background:var(--accent-pink); margin-top: 40px; border-radius:16px;" onclick="register()">Sign Up</button>
     </div>
 
+    <!-- ================= MAIN APP VIEW ================= -->
     <div id="viewApp" class="hidden">
         
+        <!-- SIDEBAR -->
         <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
         <div class="sidebar" id="sidebarMenu">
             <div class="sidebar-header">
-                <button class="ep-back-btn" style="color: var(--sidebar-text); margin-left: -5px;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <button style="background:transparent; border:none; font-size:24px; cursor:pointer; color:#111;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
             </div>
             <div class="sidebar-menu" id="sidebarMenuCustomer">
-                <a href="#" class="sidebar-item" onclick="switchTab('Orders')"><i class="fas fa-list-alt"></i> Orders</a>
-                <a href="#" class="sidebar-item" onclick="switchTab('Overview')"><i class="fas fa-search"></i> Dashboard</a>
-                <a href="#" class="sidebar-item" onclick="switchTab('Profile')"><i class="fas fa-user"></i> Profile</a>
+                <a class="sidebar-item" onclick="switchTab('Orders')"><i class="fas fa-list-alt" style="color:var(--accent-pink);"></i> Orders</a>
+                <a class="sidebar-item" onclick="switchTab('Overview')"><i class="fas fa-search" style="color:#555;"></i> Dashboard</a>
+                <a class="sidebar-item" onclick="switchTab('Profile')"><i class="fas fa-user" style="color:#555;"></i> Profile</a>
             </div>
+            <!-- Staff Menu -->
             <div class="sidebar-menu hidden" id="sidebarMenuStaff">
-                <a href="#" class="sidebar-item" onclick="switchTab('CreateOrder')" style="color:var(--accent-red);"><i class="fas fa-plus-circle"></i> Create Order</a>
-                <a href="#" class="sidebar-item" onclick="switchTab('StaffOrders')" style="color:var(--accent-blue);"><i class="fas fa-tasks"></i> All Orders</a>
+                <a class="sidebar-item" onclick="switchTab('CreateOrder')" style="color:var(--accent-red);"><i class="fas fa-plus-circle"></i> Create Order</a>
+                <a class="sidebar-item" onclick="switchTab('StaffOrders')" style="color:var(--accent-blue);"><i class="fas fa-tasks"></i> All Orders</a>
             </div>
-            
             <div class="sidebar-footer">
                 <div class="sidebar-user">
                     <img src="https://via.placeholder.com/35" id="sidebarPic">
@@ -311,27 +272,32 @@
             </div>
         </div>
 
+        <!-- APP HEADER -->
         <div class="app-header">
             <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-            <div class="greeting-area">
+            <div style="flex:1; margin-top:45px;">
                 <div class="greeting-text-en">Welcome back</div>
                 <div class="greeting-text-th" id="headerGreetingThai">สวัสดีครับ</div>
                 <div class="user-brand-display" id="headerBrand">Brand name</div>
+                <div class="user-id-display" id="headerId">Customer ID: CUST-0000</div> 
             </div>
             <div class="avatar-container">
-                <img id="headerPic" src="https://via.placeholder.com/65" class="avatar-img">
-                <div class="tier-badge" id="headerTier"><i class="fas fa-crown"></i> VVIP</div>
+                <img id="headerPic" src="https://via.placeholder.com/70" class="avatar-img">
+                <div class="tier-badge" id="headerTier"><i class="fas fa-crown" style="color:#FFD700;"></i> VVIP</div>
             </div>
         </div>
 
+        <!-- ================= CUSTOMER NAV & BANNER ================= -->
         <div id="customerElements" class="hidden">
-            <div id="statusBanner" class="status-banner bg-banner-prep hidden">
-                <div class="status-banner-title">Your Order Process Now</div>
-                <div class="status-banner-status" id="bannerStatusText">Preparation</div>
-                <div class="status-banner-ord" id="bannerOrderNo">ORD-2026-000</div>
-                <div class="status-banner-delivery">Estimated Delivery:<br><span id="bannerDate">00/00/0000</span></div>
+            <!-- Dynamic Status Banner -->
+            <div id="statusBanner" class="status-banner bg-gradient-prep hidden">
+                <div class="sb-title">Your Order Process Now</div>
+                <div class="sb-status" id="bannerStatusText">Preparation</div>
+                <div class="sb-ord" id="bannerOrderNo">ORD-2026-000</div>
+                <div class="sb-delivery">Estimated Delivery:<br><span id="bannerDate">00/00/0000</span></div>
             </div>
 
+            <!-- 3 Squares Nav -->
             <div class="nav-squares">
                 <div class="nav-sq active" id="navSqOrders" onclick="switchTab('Orders')">
                     <i class="fas fa-list-alt"></i><span>Orders</span>
@@ -345,247 +311,270 @@
             </div>
         </div>
 
-        <div id="staffElements" class="hidden">
-            <div class="staff-nav-btns">
-                <div class="s-btn s-btn-create" id="navBtnCreate" onclick="switchTab('CreateOrder')"><i class="fas fa-plus"></i> Create Order</div>
-                <div class="s-btn s-btn-all" id="navBtnAll" onclick="switchTab('StaffOrders')"><i class="fas fa-tasks"></i> All Orders</div>
+        <!-- ================= STAFF ELEMENTS ================= -->
+        <div id="staffElements" class="hidden" style="margin-top: 20px; padding: 0 25px;">
+            <div class="flex-row" style="margin-bottom:20px;">
+                <button class="action-btn" style="background:var(--accent-pink);" onclick="switchTab('CreateOrder')"><i class="fas fa-plus"></i> Create Order</button>
+                <button class="action-btn" style="background:var(--accent-blue);" onclick="switchTab('StaffOrders')"><i class="fas fa-tasks"></i> All Orders</button>
             </div>
         </div>
 
+        <!-- ================= MAIN CONTENT AREAS ================= -->
+
+        <!-- TAB: ORDERS (CUSTOMER) -->
         <div id="tabOrders" class="content-area hidden">
-            <div class="transaction-header">Transaction</div>
             
-            <div class="search-row">
-                <div class="search-bar">
+            <div class="flex-row" style="margin-bottom: 20px;">
+                <div class="search-container">
                     <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-search" style="color:#888;"></i>
                 </div>
-                <div class="filter-btn">
-                    <i class="fas fa-sliders-h"></i>
-                </div>
+                <div class="filter-btn"><i class="fas fa-sliders-h"></i></div>
             </div>
             
             <div class="flex-between" style="margin-bottom: 20px;">
-                <span style="font-weight: 700; font-size: 16px; color: #FFF;"></span> <span class="sort-text">Sort by <b>Latest ▾</b></span>
+                <span class="transaction-header">Transaction</span>
+                <span style="font-size:13px; color:#888;">Sort by <b style="color:#FFF;">Latest ▾</b></span>
             </div>
             
             <div id="orderListContainer">Loading...</div>
         </div>
 
+        <!-- TAB: OVERVIEW/DASHBOARD -->
         <div id="tabOverview" class="content-area hidden">
             <div class="stats-container">
-                <div class="stat-box">
-                    <div class="stat-num" style="color:var(--accent-yellow);" id="statConfirmed">0</div>
-                    <div class="stat-label">Confirmed</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-num" style="color:var(--accent-blue);" id="statInProd">0</div>
-                    <div class="stat-label">In Production</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-num" style="color:var(--accent-green);" id="statDelivered">0</div>
-                    <div class="stat-label">Delivered</div>
-                </div>
+                <div class="stat-box"><div class="stat-num text-yellow" id="stat-confirm">0</div><div class="stat-label">Confirmed</div></div>
+                <div class="stat-box"><div class="stat-num text-blue" id="stat-prod">0</div><div class="stat-label">In Production</div></div>
+                <div class="stat-box"><div class="stat-num text-green" id="stat-done">0</div><div class="stat-label">Delivered</div></div>
             </div>
-            <div style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:20px; font-weight:500;">Summary of your order process</div>
+            <div style="text-align:center; font-size:12px; color:#888; margin-top:20px;">Summary of your order process</div>
         </div>
 
+        <!-- TAB: PROFILE MENU -->
         <div id="tabProfile" class="content-area hidden">
             <div class="profile-btn-card" onclick="openEditProfile()">
-                <div class="profile-btn-icon"><i class="fas fa-pen"></i></div>
-                <div class="profile-btn-text">Edit Profile (แก้ไขข้อมูลส่วนตัว)</div>
+                <div style="background:#7A7A7A; width:45px; height:45px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--accent-pink); font-size:18px;"><i class="fas fa-pen"></i></div>
+                <div style="font-size:16px; font-weight:700; color:#FFF;">Edit Profile</div>
             </div>
             
-            <div class="settings-header">General Settings</div>
-            <div class="settings-group">
+            <div style="font-size:16px; font-weight:800; color:#FFF; margin: 15px 0 10px 5px;">General Settings</div>
+            <div class="profile-settings-group">
                 <div class="settings-item">
-                    <div class="settings-item-icon"><i class="fas fa-question"></i></div>
-                    <div class="settings-item-text">About</div>
+                    <div style="background:var(--accent-pink); width:35px; height:35px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#FFF; font-size:16px;"><i class="fas fa-question"></i></div>
+                    <div style="color:#FFF; font-weight:600; font-size:14px;">About</div>
                 </div>
                 <div class="settings-item">
-                    <div class="settings-item-icon"><i class="fas fa-exclamation"></i></div>
-                    <div class="settings-item-text">Terms & Conditions</div>
+                    <div style="background:var(--accent-pink); width:35px; height:35px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#FFF; font-size:16px;"><i class="fas fa-exclamation"></i></div>
+                    <div style="color:#FFF; font-weight:600; font-size:14px;">Terms & Conditions</div>
                 </div>
-                <div class="settings-item">
-                    <div class="settings-item-icon"><i class="fas fa-lock"></i></div>
-                    <div class="settings-item-text">Privacy Policy</div>
+                <div class="settings-item" style="border-bottom:none;">
+                    <div style="background:var(--accent-pink); width:35px; height:35px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#FFF; font-size:16px;"><i class="fas fa-lock"></i></div>
+                    <div style="color:#FFF; font-weight:600; font-size:14px;">Privacy Policy</div>
                 </div>
             </div>
         </div>
 
+        <!-- TAB: CREATE ORDER (STAFF) -->
         <div id="tabCreateOrder" class="content-area hidden">
-            <div class="order-card" style="padding: 20px;">
-                <h4 style="margin-top:0; color:var(--accent-red); border-bottom:1px solid #444; padding-bottom:10px; font-weight:800; font-size:18px;">Create Order</h4>
-                <label class="input-label" style="margin-top: 5px;">Phone</label><input type="tel" id="ordPhone" class="dark-input" placeholder="08xxxxxxxx">
-                <label class="input-label">Batch Code</label><input type="text" id="ordBatch" class="dark-input" placeholder="QT2026-001">
-                <div class="flex-row">
-                    <div style="flex:1"><label class="input-label">Style</label><select id="ordStyle" class="dark-input"></select></div>
-                    <div style="flex:1"><label class="input-label">Qty</label><input type="number" id="ordQty" class="dark-input" placeholder="0"></div>
-                </div>
-                <label class="input-label">Fabric</label><select id="ordFabric" class="dark-input"></select>
-                <label class="input-label">Est Delivery</label><input type="date" id="ordDate" class="dark-input">
-                <label class="input-label">Detail</label><textarea id="ordDetail" rows="3" class="dark-input" placeholder="Details..."></textarea>
+            <div class="order-card" style="padding: 25px;">
+                <h4 style="margin-top:0; color:var(--accent-pink); border-bottom:1px solid #444; padding-bottom:15px; font-weight:800; font-size:18px;">Create New Order</h4>
                 
-                <label class="input-label">Work Order (WO รูป/PDF)</label>
-                <input type="file" id="ordWoImage" accept="image/*,application/pdf" onchange="processImage(this, 'new_wo', 'wo')" class="dark-input" style="font-size:12px; padding: 10px;">
+                <label class="ep-input-label">Customer Phone</label>
+                <input type="tel" id="ordPhone" class="ep-input" style="background:#111;" placeholder="08xxxxxxxx">
+                
+                <label class="ep-input-label">Batch Code</label>
+                <input type="text" id="ordBatch" class="ep-input" style="background:#111;" placeholder="QT2026-001">
+                
+                <div class="flex-row">
+                    <div style="flex:1"><label class="ep-input-label">Style</label><select id="ordStyle" class="ep-input" style="background:#111;"></select></div>
+                    <div style="flex:1"><label class="ep-input-label">Qty (pcs)</label><input type="number" id="ordQty" class="ep-input" style="background:#111;" placeholder="0"></div>
+                </div>
+                
+                <label class="ep-input-label">Fabric</label>
+                <select id="ordFabric" class="ep-input" style="background:#111;"></select>
+                
+                <label class="ep-input-label">Est Delivery Date</label>
+                <input type="date" id="ordDate" class="ep-input" style="background:#111;">
+                
+                <label class="ep-input-label">Detail</label>
+                <textarea id="ordDetail" rows="3" class="ep-input" style="background:#111;" placeholder="Details..."></textarea>
+                
+                <label class="ep-input-label">Work Order File (Image/PDF)</label>
+                <input type="file" id="ordWoImage" accept="image/*,application/pdf" onchange="processImage(this, 'new_wo', 'wo')" style="width:100%; color:#fff; font-size:12px; margin-bottom:10px;">
                 <div id="status-wo-new_wo" style="font-size:12px; margin-top:5px; display:none;"></div>
                 
-                <button class="btn btn-pink" style="margin-top:25px;" onclick="createOrder()">Create & Notify Customer</button>
+                <button class="action-btn" style="background:var(--accent-pink); margin-top:25px;" onclick="createOrder()">Save & Notify Customer</button>
             </div>
         </div>
 
+        <!-- TAB: STAFF ORDERS (STAFF) -->
         <div id="tabStaffOrders" class="content-area hidden">
-            <div class="transaction-header">All Orders</div>
-            <div class="search-row">
-                <div class="search-bar">
+            <div class="flex-row" style="margin-bottom: 20px;">
+                <div class="search-container">
                     <input type="text" id="staffSearch" placeholder="Search order, phone, name..." onkeyup="filterStaffList()">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-search" style="color:#888;"></i>
                 </div>
-                <div class="filter-btn">
-                    <i class="fas fa-sliders-h"></i>
-                </div>
+                <div class="filter-btn"><i class="fas fa-sliders-h"></i></div>
             </div>
-            <select id="staffStatusFilter" onchange="filterStaffList()" class="dark-input" style="margin-bottom: 20px; border-radius: 16px;">
+            
+            <select id="staffStatusFilter" onchange="filterStaffList()" class="ep-input" style="background:#222; margin-bottom:20px;">
                 <option value="ACTIVE">Active Orders (กำลังดำเนินการ)</option>
                 <option value="ALL">All Orders (ทั้งหมด)</option>
             </select>
+            
             <div id="staffTaskList">Loading...</div>
         </div>
 
         <div class="global-footer">
-            <img src="https://via.placeholder.com/20" id="footerLogo" alt="Logo">
+            <div style="width: 20px; height: 20px; border-radius: 50%; background:#333; display:flex; justify-content:center; align-items:center; font-size:8px; font-weight:bold; color:#fff;">DF</div>
             <div>Powered by Demo Factory</div>
         </div>
-    </div> <div id="viewEditProfile" class="full-view">
-        <div class="ep-header">
-            <button class="ep-back-btn" onclick="closeEditProfile()"><i class="fas fa-chevron-left"></i></button>
-            <h2 class="ep-title">Profile</h2>
+    </div> <!-- END viewApp -->
+
+
+    <!-- ================= EDIT PROFILE OVERLAY (d1ece1.png) ================= -->
+    <div id="viewEditProfile" class="full-view">
+        <div style="display: flex; align-items: center; padding-top:30px; margin-bottom:20px; position:sticky; top:0; background:var(--bg-base); z-index:910;">
+            <button style="background:#FFF; border:none; width:36px; height:36px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:18px; cursor:pointer; margin-right:15px; color:#000;" onclick="closeEditProfile()"><i class="fas fa-bars"></i></button>
+            <h2 style="margin:0; font-size:24px; font-weight:800; font-family:'Inter';">Profile</h2>
         </div>
         
-        <div class="ep-user-centered">
-            <img id="epPic" src="https://via.placeholder.com/100" class="ep-avatar">
-            <h3 class="ep-name-header" id="epHeaderName">Customer name</h3>
-            <div class="ep-id-header" id="epHeaderId">ID: CUST-0000</div>
+        <div style="text-align:center; margin-bottom:30px;">
+            <img id="epPic" src="https://via.placeholder.com/100" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid var(--text-white);">
+            <div style="margin-top:10px;"><span class="tier-badge" id="epTier" style="font-size:14px; font-family:'Inter';"><i class="fas fa-crown" style="color:#FFD700;"></i> VVIP</span></div>
+            <h3 style="margin:5px 0 0 0; font-size:24px; font-weight:800; font-family:'Inter';" id="epHeaderName">Customer name</h3>
+            <div style="font-size: 13px; color: #aaa; margin-top: 5px; font-weight:600;" id="epHeaderId">Customer ID: CUST-0000</div>
         </div>
         
-        <div class="ep-big-card">
-            <div class="ep-form-header">
-                <div class="ep-form-icon"><i class="fas fa-pen"></i></div>
-                <div class="ep-form-title">Edit Profile</div>
+        <div style="background: #5E5E5E; padding: 30px 20px; border-radius: 28px; margin-bottom: 25px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                <div style="background: #7A7A7A; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-pink); font-size:18px;"><i class="fas fa-pen"></i></div>
+                <div style="font-size: 20px; font-weight: 800; color: #FFF; font-family:'Inter';">Edit Profile</div>
             </div>
 
-            <div class="ep-section-header" style="text-transform: uppercase; margin-bottom: 5px;">GENERAL</div>
+            <!-- GENERAL -->
             <label class="ep-input-label" style="margin-top:0;">NAME*</label>
             <input type="text" id="epName" class="ep-input" placeholder="Customer name">
-            <label class="ep-input-label">BRAND NAME</label>
+            <label class="ep-input-label">BRAND NAME*</label>
             <input type="text" id="epBrand" class="ep-input" placeholder="Brand name">
             <div class="flex-row">
-                <div style="flex:1;"><label class="ep-input-label">PHONE*</label><input type="tel" id="epPhone" class="ep-input" placeholder="08xxxxxxxx"></div>
-                <div style="flex:1;"><label class="ep-input-label">EMAIL</label><input type="email" id="epEmail" class="ep-input" placeholder="your@email.com"></div>
+                <div style="flex:1;"><label class="ep-input-label">PHONE NUMBER*</label><input type="tel" id="epPhone" class="ep-input" placeholder="08xxxxxxxx"></div>
+                <div style="flex:1;"><label class="ep-input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail" class="ep-input" placeholder="your@email.com"></div>
             </div>
 
-            <div class="divider-dotted"></div>
+            <div class="divider"></div>
 
-            <div class="ep-section-header">BILLING ADDRESS (FOR TAX INVOICE)</div>
+            <!-- BILLING -->
+            <div style="font-size: 12px; color: #FFF; font-weight: 600; margin-bottom: 15px; text-transform:uppercase; letter-spacing:0.5px;">BILLING ADDRESS (FOR TAX INVOICE)</div>
             <div class="flex-row">
-                <div style="flex:1;"><label class="ep-input-label" style="margin-top:5px;">COMPANY NAME</label><input type="text" id="epBillCompany" class="ep-input" placeholder="Company Name"></div>
-                <div style="flex:1;"><label class="ep-input-label" style="margin-top:5px;">TAX ID</label><input type="text" id="epBillTax" class="ep-input" placeholder="Tax ID"></div>
+                <div style="flex:1;"><label class="ep-input-label" style="margin-top:0;">COMPANY NAME</label><input type="text" id="epBillCompany" class="ep-input"></div>
+                <div style="flex:1;"><label class="ep-input-label" style="margin-top:0;">PHONE NUMBER</label><input type="tel" id="epBillPhone" class="ep-input"></div>
             </div>
+            <label class="ep-input-label">TAX ID</label>
+            <input type="text" id="epBillTax" class="ep-input">
+            
             <label class="ep-input-label">ADDRESS*</label>
-            <input type="text" id="epBillAddress" class="ep-input" placeholder="House no, Building, Street...">
+            <input type="text" id="epBillAddress" class="ep-input">
+            
             <div class="flex-row">
-                <div style="flex:1;"><label class="ep-input-label">CITY / DISTRICT*</label><input type="text" id="epBillCity" class="ep-input" placeholder="District"></div>
-                <div style="flex:1;"><label class="ep-input-label">PROVINCE*</label><input type="text" id="epBillProv" class="ep-input" placeholder="Province"></div>
+                <div style="flex:1;"><label class="ep-input-label">CITY / DISTRICT*</label><input type="text" id="epBillCity" class="ep-input"></div>
+                <div style="flex:1;"><label class="ep-input-label">PROVINCE / STATE*</label><input type="text" id="epBillProv" class="ep-input"></div>
             </div>
             <div class="flex-row">
-                <div style="flex:1;"><label class="ep-input-label">POSTAL CODE*</label><input type="text" id="epBillZip" class="ep-input" placeholder="Postal Code"></div>
+                <div style="flex:1;"><label class="ep-input-label">POSTAL CODE*</label><input type="text" id="epBillZip" class="ep-input"></div>
                 <div style="flex:1;"><label class="ep-input-label">COUNTRY*</label><input type="text" id="epBillCountry" value="Thailand" class="ep-input"></div>
             </div>
 
-            <div class="divider-dotted"></div>
+            <div class="divider"></div>
 
-            <div class="ep-section-header">SHIPPING ADDRESS</div>
+            <!-- SHIPPING -->
+            <div style="font-size: 12px; color: #FFF; font-weight: 600; margin-bottom: 10px; text-transform:uppercase; letter-spacing:0.5px;">SHIPPING ADDRESS</div>
             <label class="checkbox-container">
                 <input type="checkbox" id="cbSameAsBill" onchange="toggleShippingForm()">
                 <div class="checkmark"></div>
-                <span class="checkbox-label">Same as Billing Address</span>
+                <span class="checkbox-label" style="font-family:'Inter';">Same as Billing Address</span>
             </label>
 
             <div id="shippingSection">
                 <div class="flex-row">
-                    <div style="flex:1;"><label class="ep-input-label" style="margin-top:5px;">RECIPIENT NAME</label><input type="text" id="epShipName" class="ep-input" placeholder="Recipient Name"></div>
-                    <div style="flex:1;"><label class="ep-input-label" style="margin-top:5px;">PHONE NO.</label><input type="tel" id="epShipPhone" class="ep-input" placeholder="Phone No."></div>
+                    <div style="flex:1;"><label class="ep-input-label">RECIPIENT NAME</label><input type="text" id="epShipName" class="ep-input"></div>
+                    <div style="flex:1;"><label class="ep-input-label">PHONE NO.</label><input type="tel" id="epShipPhone" class="ep-input"></div>
                 </div>
                 <label class="ep-input-label">ADDRESS</label>
-                <input type="text" id="epShipAddress" class="ep-input" placeholder="House no, Street...">
+                <input type="text" id="epShipAddress" class="ep-input">
                 <div class="flex-row">
-                    <div style="flex:1;"><label class="ep-input-label">CITY / DISTRICT</label><input type="text" id="epShipCity" class="ep-input" placeholder="District"></div>
-                    <div style="flex:1;"><label class="ep-input-label">PROVINCE</label><input type="text" id="epShipProv" class="ep-input" placeholder="Province"></div>
+                    <div style="flex:1;"><label class="ep-input-label">CITY / DISTRICT</label><input type="text" id="epShipCity" class="ep-input"></div>
+                    <div style="flex:1;"><label class="ep-input-label">PROVINCE / STATE</label><input type="text" id="epShipProv" class="ep-input"></div>
                 </div>
                 <div class="flex-row">
-                    <div style="flex:1;"><label class="ep-input-label">POSTAL CODE</label><input type="text" id="epShipZip" class="ep-input" placeholder="Postal Code"></div>
+                    <div style="flex:1;"><label class="ep-input-label">POSTAL CODE</label><input type="text" id="epShipZip" class="ep-input"></div>
                     <div style="flex:1;"><label class="ep-input-label">COUNTRY</label><input type="text" id="epShipCountry" value="Thailand" class="ep-input"></div>
                 </div>
 
                 <label class="ep-input-label">SHIPPING LOCATION</label>
-                <input type="text" id="epLocation" placeholder="GPS Location" readonly class="ep-input ep-location-box">
+                <input type="text" id="epLocation" placeholder="Search Address" readonly class="ep-input" style="text-align:center; font-weight:600; color:#000; background:#FFF;">
                 
-                <div class="ep-map-display" id="mapDisplay">
+                <div style="height: 160px; border-radius: 12px; margin-bottom: 20px; overflow: hidden; background:#333;" id="mapDisplay">
                      <iframe src="about:blank" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>
                 </div>
                 
                 <div class="flex-row">
-                    <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:12px; border-radius: 12px; padding: 12px;" onclick="getLocation()"><i class="fas fa-map-marker-alt"></i> My Location</button>
-                    <button class="btn" style="background:var(--accent-red); color:#FFF; flex:1.5; font-size:12px; border-radius: 12px; padding: 12px;" onclick="openMap()">Select Delivery Location</button>
+                    <button class="action-btn" style="background:#FFF; color:#000; flex:1;" onclick="getLocation()"><i class="fas fa-map-marker-alt"></i> My Location</button>
+                    <button class="action-btn" style="background:var(--accent-pink); color:#FFF; flex:1.5;" onclick="openMap()">Select Delivery Location</button>
                 </div>
             </div>
-        </div> <div class="ep-action-row">
-            <button class="btn" onclick="closeEditProfile()" style="background:#222; border:1.5px solid #555; border-radius: 16px; flex:1;">Cancel</button>
-            <button class="btn" onclick="saveProfile()" style="background:var(--accent-green); color: #000; border-radius: 16px; flex:2;">Save Changes</button>
+        </div> 
+        
+        <div class="flex-row" style="margin-bottom:30px;">
+            <button class="action-btn" onclick="closeEditProfile()" style="background:#000; color:#FFF; flex:1; border-radius:24px;">Cancel</button>
+            <button class="action-btn" onclick="saveProfile()" style="background:var(--accent-green); color:#000; flex:2; border-radius:24px;">Save Changes</button>
         </div>
     </div>
 
-
-    <div id="modalReject" class="modal-center">
-        <div class="modal-box">
-            <div class="modal-header-rej">
-                <div class="modal-icon-rej"><i class="fas fa-times"></i></div>
-                <div class="modal-title-rej">ไม่อนุมัติ (PP Reject)</div>
+    <!-- ================= MODALS ================= -->
+    
+    <!-- Reject Model (d1ec89.png style) -->
+    <div id="modalReject" class="modal-overlay">
+        <div class="modal-box" style="background:#333;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                <div style="background: var(--accent-red); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FFF; font-size: 18px;"><i class="fas fa-times"></i></div>
+                <div style="font-size: 24px; font-weight: 800; color: var(--accent-red); font-family:'Kanit';">ไม่อนุมัติ (PP Reject)</div>
             </div>
             
-            <div class="modal-subtitle-rej">ระบุสาเหตุ จุดที่ต้องการแก้ไข</div>
-            <div class="modal-desc-rej">Please specify the reason and the areas that need to be revised</div>
+            <div style="font-size: 14px; color: var(--accent-yellow); font-weight: 600;">ระบุสาเหตุ จุดที่ต้องการแก้ไข</div>
+            <div style="font-size: 12px; color: var(--accent-yellow); margin-bottom: 15px; font-family:'Inter';">Please specify the reason and the areas that need to be revised</div>
             
             <input type="hidden" id="rejOrderNo">
-            <textarea id="rejReason" rows="6" class="modal-textarea-rej" placeholder="แขนเสื้อสั้นไป , สีโลโก้ไม่ตรง ....\nSleeves are too short , The logo color is incorrect..."></textarea>
+            <textarea id="rejReason" rows="6" class="modal-textarea" placeholder="แขนเสื้อสั้นไป , สีโลโก้ไม่ตรง ....\nSleeves are too short , The logo color is incorrect..."></textarea>
             
-            <div class="modal-btns">
-                <button class="btn modal-btn-cancel" onclick="closeModal('modalReject')">Cancel</button>
-                <button class="btn modal-btn-confirm-rej" onclick="confirmReject()">แจ้งฝ่ายผลิต / Notify Production</button>
+            <div class="flex-row" style="margin-top:20px;">
+                <button class="btn-modal-cancel" onclick="closeModal('modalReject')">Cancel</button>
+                <button class="btn-modal-confirm" onclick="confirmReject()">แจ้งฝ่ายผลิต / Notify Production</button>
             </div>
         </div>
     </div>
 
-    <div id="modalFeedback" class="modal-center">
-        <div class="modal-normal">
-            <h3 style="color:var(--accent-red);"><i class="fas fa-undo"></i> ตีกลับงาน (QC)</h3>
+    <!-- Generic Modals for Staff -->
+    <div id="modalFeedback" class="modal-overlay">
+        <div class="modal-box" style="background:#222; border:1px solid #444;">
+            <h3 style="color:var(--accent-red); text-align:center; margin-top:0;"><i class="fas fa-undo"></i> ตีกลับงาน (QC)</h3>
             <input type="hidden" id="fbOrderNo">
-            <textarea id="fbReason" rows="5" placeholder="ระบุสาเหตุที่ต้องการให้แก้ไข...\nReason for revision..."></textarea>
-            <div class="modal-btns">
-                <button class="btn btn-dark" style="border-radius:12px; flex:1;" onclick="closeModal('modalFeedback')">Cancel</button>
-                <button class="btn btn-pink" style="border-radius:12px; flex:1.5;" onclick="confirmRollback()">แจ้ง PM / Notify PM</button>
+            <textarea id="fbReason" rows="5" class="modal-textarea" style="background:#111; border:none;" placeholder="ระบุสาเหตุ..."></textarea>
+            <div class="flex-row" style="margin-top:15px;">
+                <button class="btn-modal-cancel" style="background:#444;" onclick="closeModal('modalFeedback')">Cancel</button>
+                <button class="btn-modal-confirm" onclick="confirmRollback()">ยืนยัน</button>
             </div>
         </div>
     </div>
 
-    <div id="modalFixPP" class="modal-center">
-        <div class="modal-normal">
-            <h3 style="color:var(--accent-green);"><i class="fas fa-check-circle"></i> บันทึกการแก้ไขแบบ</h3>
+    <div id="modalFixPP" class="modal-overlay">
+        <div class="modal-box" style="background:#222; border:1px solid #444;">
+            <h3 style="color:var(--accent-green); text-align:center; margin-top:0;"><i class="fas fa-check-circle"></i> บันทึกการแก้ไขแบบ</h3>
             <input type="hidden" id="fixPPOrderNo">
-            <textarea id="fixPPDetail" rows="5" placeholder="ระบุรายละเอียดที่ได้ทำการแก้ไขแบบ...\nDetails of revisions made..."></textarea>
-            <div class="modal-btns">
-                <button class="btn btn-dark" style="border-radius:12px; flex:1;" onclick="closeModal('modalFixPP')">Cancel</button>
-                <button class="btn btn-green" style="border-radius:12px; flex:1.5;" onclick="confirmFixPP()">บันทึก / Save</button>
+            <textarea id="fixPPDetail" rows="5" class="modal-textarea" style="background:#111; border:none;" placeholder="รายละเอียดการแก้ไข..."></textarea>
+            <div class="flex-row" style="margin-top:15px;">
+                <button class="btn-modal-cancel" style="background:#444;" onclick="closeModal('modalFixPP')">Cancel</button>
+                <button class="btn-modal-confirm" style="background:var(--accent-green); color:#000;" onclick="confirmFixPP()">บันทึก</button>
             </div>
         </div>
     </div>
@@ -608,22 +597,20 @@
             const d = new Date(ts);
             if(isNaN(d.getTime())) return "-";
             const pad = n => String(n).padStart(2, '0');
-            // Matched to prototype format: DD/MM/YYYY
             return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
         }
 
-        // Convert Drive URL to a safe embeddable thumbnail URL
+        // แปลงภาพจาก Google Drive
         function getSafeImageUrl(url) {
             if (!url || url === '-') return null;
             const match = url.match(/id=([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
-                // Using standard drive preview link for thumbnails
                 return `https://drive.google.com/uc?export=view&id=${match[1]}`;
             }
             return url;
         }
 
-        // Get Base64 for file uploads, handle PDF vs Image resizing
+        // แปลงไฟล์เป็น Base64
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -634,7 +621,7 @@
                         img.src = event.target.result;
                         img.onload = () => {
                             const canvas = document.createElement('canvas');
-                            const MAX_WIDTH = 1000; // slightly higher resolution for staff uploads
+                            const MAX_WIDTH = 1000; 
                             let scale = 1;
                             if (img.width > MAX_WIDTH) scale = MAX_WIDTH / img.width;
                             canvas.width = img.width * scale; canvas.height = img.height * scale;
@@ -642,9 +629,9 @@
                             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                             resolve(canvas.toDataURL('image/jpeg', 0.8)); 
                         };
-                        img.onerror = () => resolve(event.target.result); // Fallback to unresized if image load fails
+                        img.onerror = () => resolve(event.target.result); 
                     } else { 
-                        resolve(event.target.result); // Resolve raw base64 for PDF
+                        resolve(event.target.result); 
                     } 
                 };
                 reader.onerror = error => reject(error);
@@ -660,13 +647,13 @@
                 if(status) { 
                     status.style.display = 'block'; 
                     status.style.color = 'var(--accent-yellow)'; 
-                    status.innerHTML = 'กำลังประมวลผล / Processing...'; 
+                    status.innerHTML = 'กำลังประมวลผล...'; 
                 }
                 try {
                     preloadedImages[key] = await getBase64(input.files[0]); 
                     if(status) { 
                         status.style.color = 'var(--accent-green)'; 
-                        status.innerHTML = '<i class="fas fa-check-circle"></i> ไฟล์พร้อมส่ง / Ready'; 
+                        status.innerHTML = '<i class="fas fa-check-circle"></i> ไฟล์พร้อมส่ง'; 
                     }
                 } catch (e) { 
                     if(status) { 
@@ -686,13 +673,8 @@
                 await liff.init({ liffId: LIFF_ID }); 
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 userProfile = await liff.getProfile(); 
-                
-                // Update placeholder images/logo with placeholder
-                document.getElementById('regLogo').src = 'https://via.placeholder.com/65/000000/FFFFFF?text=DF';
-                document.getElementById('footerLogo').src = 'https://via.placeholder.com/20/000000/FFFFFF?text=DF';
-                
                 checkUser();
-            } catch(e) { alert("LIFF Init Error: " + e.message); }
+            } catch(e) { alert("LIFF Init Error"); }
         }
         main();
 
@@ -706,8 +688,7 @@
             })
             .catch(e => { 
                 document.getElementById('loader').classList.add('hidden'); 
-                alert("Error connecting to server. Please try again."); 
-                console.error(e);
+                alert("Error connecting to server."); 
             });
         }
 
@@ -724,17 +705,15 @@
                     dbUserData = res.data;
                     document.getElementById('viewApp').classList.remove('hidden');
                     
-                    // Update main header greeting based on time of day (Thai)
                     const hour = new Date().getHours();
                     let greetingThai = "สวัสดีครับ";
                     if(hour >= 5 && hour < 12) greetingThai = "อรุณสวัสดิ์ครับ";
                     else if(hour >= 12 && hour < 17) greetingThai = "สวัสดีตอนบ่ายครับ";
                     else if(hour >= 17 && hour < 21) greetingThai = "สวัสดีตอนเย็นครับ";
-                    else greetingThai = "สวัสดีครับ";
                     
-                    document.getElementById('headerGreetingThai').innerText = greetingThai + " คุณ " + dbUserData.RealName;
-                    document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand name';
-                    document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/65';
+                    document.getElementById('headerGreetingThai').innerText = greetingThai + " คุณ\n" + dbUserData.RealName;
+                    document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'ControlPanel';
+                    document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/70';
                     document.getElementById('headerTier').innerHTML = getTierIcon(dbUserData.Tier);
                     
                     document.getElementById('sidebarPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/35';
@@ -753,6 +732,7 @@
                     } else { 
                         isStaff = false;
                         document.getElementById('sidebarRole').innerText = "ID: " + (dbUserData.CustomerID || 'CUST-0000');
+                        document.getElementById('headerId').innerText = "Customer ID: " + (dbUserData.CustomerID || 'CUST-0000');
                         document.getElementById('sidebarMenuStaff').classList.add('hidden');
                         document.getElementById('sidebarMenuCustomer').classList.remove('hidden');
                         document.getElementById('customerElements').classList.remove('hidden');
@@ -760,10 +740,6 @@
                     }
                 } else { 
                     document.getElementById('viewRegister').classList.remove('hidden'); 
-                    // Populate register email if available from LIFF
-                    if(liff.getDecodedIDToken() && liff.getDecodedIDToken().email) {
-                        document.getElementById('regEmail').value = liff.getDecodedIDToken().email;
-                    }
                 }
             });
         }
@@ -771,14 +747,13 @@
         function register() {
             const payload = { 
                 userId: userProfile.userId, 
-                displayName: userProfile.displayName,
                 realName: document.getElementById('regName').value, 
                 brandName: document.getElementById('regBrand').value, 
                 phone: document.getElementById('regPhone').value, 
                 email: document.getElementById('regEmail').value 
             };
-            if(!payload.realName || !payload.phone) return alert("Please fill in Name and Phone number.");
-            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); else alert(res.message); });
+            if(!payload.realName || !payload.phone) return alert("Please fill Name and Phone");
+            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); });
         }
 
         function toggleSidebar() { 
@@ -829,22 +804,25 @@
             return 1;
         }
         
-        function getStatusColor(status) {
-            if(status === 'Shipped') return 'var(--accent-green)';
-            if(['PP Rejected', 'Correction Needed'].includes(status)) return 'var(--accent-red)';
+        function getStatusColorClass(status) {
+            if(status === 'Shipped') return 'text-green';
+            if(['PP Rejected', 'Correction Needed'].includes(status)) return 'text-red';
             const display = getDisplayStatus(status);
-            if(display === 'In Production') return '#B388FF'; 
-            if(display === 'Preparation' || display === 'Order Received') return '#FFB300'; 
-            if(display === 'Quality Check') return '#4FC3F7'; 
-            return 'var(--text-main)';
+            if(display === 'Order Received') return 'text-yellow'; 
+            if(display === 'Preparation') return 'text-yellow'; 
+            if(display === 'In Production') return 'text-pink'; 
+            if(display === 'Quality Check') return 'text-blue'; 
+            return '';
         }
         
-        // Return CSS gradient string for specific statuses
-        function getStatusGradient(status) {
-             if (['Pending Customer Confirmation', 'Order Confirmation'].includes(status)) return `linear-gradient(90deg, var(--accent-yellow), var(--accent-pink))`;
-             if (['Pre-Production Approved', 'Bulk Production (50%)'].includes(status)) return `linear-gradient(90deg, #B388FF, var(--accent-cyan))`;
-             if (status === 'Shipped') return `linear-gradient(90deg, var(--accent-green), var(--accent-cyan))`;
-             return null;
+        function getStatusGradientClass(status) {
+             const display = getDisplayStatus(status);
+             if (display === 'Order Received') return `bg-gradient-received`;
+             if (display === 'Preparation') return `bg-gradient-prep`;
+             if (display === 'In Production') return `bg-gradient-prod`;
+             if (display === 'Quality Check') return `bg-gradient-qc`;
+             if (display === 'Delivered') return `bg-gradient-deliv`;
+             return '';
         }
 
         function updateCustomerBanner(latestOrder) {
@@ -857,12 +835,7 @@
             document.getElementById('bannerDate').innerText = latestOrder.delivery;
 
             const banner = document.getElementById('statusBanner');
-            banner.className = 'status-banner'; 
-            const step = getStepIndex(latestOrder.status);
-            if(step === 1 || step === 2) banner.classList.add('bg-banner-prep'); 
-            if(step === 3) banner.classList.add('bg-banner-prod');
-            if(step === 4) banner.classList.add('bg-banner-qc');
-            if(step === 5) banner.classList.add('bg-banner-deliv');
+            banner.className = 'status-banner ' + getStatusGradientClass(latestOrder.status); 
         }
 
         function toggleOrderCollapse(orderNo) {
@@ -873,7 +846,7 @@
         function renderCustomerOrders(orders) {
             const container = document.getElementById('orderListContainer');
             if (orders.length === 0) { 
-                container.innerHTML = '<div class="order-card text-center" style="padding: 40px 20px; color:#aaa;">คุณยังไม่มีรายการสั่งผลิต / No orders yet.</div>'; 
+                container.innerHTML = '<div style="text-align:center; padding: 40px 20px; color:#aaa;">คุณยังไม่มีรายการสั่งผลิต</div>'; 
                 updateCustomerBanner(null);
                 return; 
             }
@@ -882,7 +855,6 @@
             let activeOrderForBanner = null;
             let html = '';
 
-            // Auto-expand first non-shipped order
             if (!expandedOrderNo && orders.length > 0) {
                 let active = orders.find(o => o.status !== 'Shipped');
                 expandedOrderNo = active ? active.orderNo : orders[0].orderNo;
@@ -897,33 +869,32 @@
                 else if(step <= 4) cProd++;
                 else cDeliv++;
 
-                // Set order for top banner (first non-delivered)
                 if(!activeOrderForBanner && step < 5) activeOrderForBanner = o;
 
-                let statusColor = getStatusColor(o.status);
-                let statusGradient = getStatusGradient(o.status);
+                let statusColorClass = getStatusColorClass(o.status);
                 
-                let badgeStyle = `color: ${statusColor}; border: 1.5px solid ${statusColor}; background: transparent;`;
-                if(statusGradient) {
-                    badgeStyle = `background: ${statusGradient}; color: #000;`;
-                } else if (o.status === 'PP Rejected' || o.status === 'Correction Needed') {
-                    badgeStyle = `background: var(--accent-red); color: #FFF;`;
+                let badgeHtml = '';
+                if (o.status === 'PP Rejected' || o.status === 'Correction Needed') {
+                    badgeHtml = `<span style="color:var(--accent-red); font-size:12px; font-weight:bold;">${displayStatus}</span>`;
+                } else if(isExpanded) {
+                    badgeHtml = `<span class="${getStatusColorClass(o.status)}" style="font-size:12px; font-weight:bold;">${displayStatus}</span>`;
+                } else {
+                    let gradClass = getStatusGradientClass(o.status);
+                    badgeHtml = `<span class="${gradClass}" style="font-size:12px; font-weight:800; padding:6px 12px; border-radius:8px;">${displayStatus}</span>`;
                 }
 
                 let cardHtml = `
                 <div class="order-card">
-                    <div class="order-card-header" onclick="toggleOrderCollapse('${o.orderNo}')">
+                    <div class="oc-header" onclick="toggleOrderCollapse('${o.orderNo}')">
                         <div style="display:flex; align-items:center; gap:12px;">
-                            <div class="order-icon-box">
-                                <i class="fas fa-tshirt"></i>
-                            </div>
+                            <div class="oc-icon"><i class="fas fa-tshirt"></i></div>
                             <div>
-                                <div class="order-no-text">${o.orderNo}</div>
-                                <div class="order-date-text">Date: ${o.startDate !== '-' ? o.startDate : o.updatedDate}</div>
+                                <div class="oc-no">${o.orderNo}</div>
+                                <div class="oc-date">Date: ${o.startDate !== '-' ? o.startDate : o.updatedDate}</div>
                             </div>
                         </div>
-                        <div class="order-card-status-area">
-                            <span class="status-badge-inline" style="${badgeStyle}">${displayStatus}</span>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            ${badgeHtml}
                             <i class="fas fa-chevron-down chevron ${isExpanded ? 'up' : ''}"></i>
                         </div>
                     </div>`;
@@ -937,22 +908,7 @@
                         { name: 'Delivered', date: o.shipDate }
                     ];
 
-                    let stepperHtml = '<div class="stepper-wrapper">';
-                    steps.forEach((s, idx) => {
-                        const stepNum = idx + 1;
-                        const isCompleted = stepNum <= step;
-                        const circleColor = isCompleted ? 'var(--accent-green)' : '#555';
-                        const lineBg = stepNum < step ? 'var(--accent-green)' : '#555';
-                        stepperHtml += `
-                        <div class="step-col">
-                            ${idx < steps.length - 1 ? `<div class="step-line" style="background: ${lineBg};"></div>` : ''}
-                            <div class="step-circle" style="background: ${circleColor};"></div>
-                            <div class="step-name" style="color: ${isCompleted ? '#FFF' : '#888'};">${s.name}</div>
-                            <div class="step-date">${s.date !== '-' ? s.date : ''}</div>
-                        </div>`;
-                    });
-                    stepperHtml += '</div>';
-
+                    // 1. Detail Box
                     let origThumbUrl = null;
                     if (o.shipImage && o.shipImage !== '-') origThumbUrl = o.shipImage;
                     else if (o.sampleImage && o.sampleImage !== '-') origThumbUrl = o.sampleImage;
@@ -960,57 +916,78 @@
                     let displayThumbUrl = getSafeImageUrl(origThumbUrl);
 
                     let detailBox = `
-                    <div class="order-detail-box">
+                    <div class="oc-detail-box">
                         <div>
-                            <div class="order-style-qty">${o.style} <span>(${o.qty} pcs)</span></div>
-                            <div class="order-delivery-label">Estimated Delivery:<br><span class="order-delivery-val">${o.delivery}</span></div>
+                            <div class="oc-style ${statusColorClass}">${o.style} <span style="font-family:'Kanit';">(${o.qty} pcs)</span></div>
+                            <div class="oc-del-label">Estimated Delivery:<br><span class="oc-del-val">${o.delivery}</span></div>
                         </div>
-                        ${origThumbUrl ? `<div class="order-thumbnail"><img src="${displayThumbUrl || origThumbUrl}" onclick="window.open('${origThumbUrl}', '_blank')"></div>` : ''}
+                        ${origThumbUrl ? `<div class="oc-thumb"><img src="${displayThumbUrl || origThumbUrl}" onclick="window.open('${origThumbUrl}', '_blank')"></div>` : ''}
                     </div>`;
 
-                    // Actions Area based on status
+                    // 2. Stepper
+                    let progressWidth = (step - 1) * 25; // 0, 25, 50, 75, 100
+                    let stepperHtml = `
+                    <div class="stepper-container">
+                        <div class="step-bg-line"></div>
+                        <div class="step-progress-line" style="width: ${progressWidth}%;"></div>
+                        <div class="step-dots-wrapper">
+                    `;
+                    steps.forEach((s, idx) => {
+                        const stepNum = idx + 1;
+                        const isCompleted = stepNum <= step;
+                        const dotColor = isCompleted ? 'var(--accent-green)' : '#555';
+                        stepperHtml += `
+                        <div class="step-col">
+                            <div class="step-circle" style="background: ${isCompleted ? 'rgba(0, 230, 118, 0.2)' : 'transparent'};">
+                                <div class="step-circle-inner" style="background: ${dotColor};"></div>
+                            </div>
+                            <div class="step-label" style="color: ${isCompleted ? '#FFF' : '#666'};">${s.name}</div>
+                            <div class="step-date-label">${s.date !== '-' ? s.date : ''}</div>
+                        </div>`;
+                    });
+                    stepperHtml += '</div></div>';
+
+                    // 3. Actions / Disclaimer
                     let actionHtml = '';
                     if (o.status === 'Pending Customer Confirmation') {
                         actionHtml = `
-                        <div style="margin-top:20px; border-top:1px dashed #555; padding-top:20px;">
-                            <div style="text-align:center; font-size:11px; color:var(--accent-yellow); margin-bottom:15px; font-weight:600;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
-                            ${o.woUrl !== '-' ? `<button class="btn btn-grey-outline" style="margin-bottom:10px;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
-                            <button class="btn btn-gradient-confirm" onclick="confirmWOAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ (Confirm Order)</button>
+                        <div style="margin-top:30px; text-align:center;">
+                            <div style="font-size:12px; color:var(--accent-yellow); margin-bottom:15px; font-weight:600;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
+                            ${o.woUrl !== '-' ? `<button class="action-btn btn-grey" style="margin-bottom:10px;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
+                            <button class="action-btn btn-grad-confirm" onclick="confirmWOAction('${o.orderNo}')"><i class="far fa-check-circle" style="font-size:18px;"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button>
                             
-                            <div class="confirm-disclaimer-box">
-                                <div style="text-align:center; margin-bottom: 15px;">
-                                    <div class="disclaimer-title-large">กรุณาอ่านก่อนคอนเฟิร์ม</div>
-                                    <div class="disclaimer-title">Please Read Carefully</div>
-                                    <div class="disclaimer-subtitle">หลังจากยืนยันแล้ว จะไม่สามารถแก้ไขรายละเอียดของออเดอร์ได้อีก</div>
-                                </div>
-                                <div class="disclaimer-section">
-                                    <div class="disclaimer-section-title">สำหรับการทำตัวอย่างสินค้า / For Sample Development</div>
-                                    <ul class="disclaimer-ul">
-                                        <li>สามารถแก้ไขตัวอย่างได้ 1 ครั้งเท่านั้น</li>
-                                        <li>ขนาดการตัดเย็บอาจมีความคลาดเคลื่อนประมาณ 0.5-2 นิ้ว</li>
+                            <div class="terms-box">
+                                <div class="terms-title-main">กรุณาอ่านก่อนคอนเฟิร์ม</div>
+                                <div class="terms-title-sub">Please Read Carefully</div>
+                                <div class="terms-desc">หลังจากยืนยันแล้ว จะไม่สามารถแก้ไขรายละเอียดของออเดอร์ได้อีก<br>After confirmation, no further changes can be made to the order details.</div>
+                                
+                                <div class="terms-section">
+                                    <div class="terms-sec-title">สำหรับการทำตัวอย่างสินค้า</div>
+                                    <ul class="terms-ul">
+                                        <li>สามารถแก้ไขตัวอย่างได้ 1 ครั้งเท่านั้น หลังจากยืนยันแล้ว การทำตัวอย่างจะใช้เวลาประมาณ 5-10 วัน ขึ้นอยู่กับรายละเอียดของงาน</li>
+                                        <li>ขนาดการตัดเย็บและแพทเทิร์นอาจมีค่าความคลาดเคลื่อนประมาณ 0.5-2 นิ้ว</li>
                                     </ul>
                                 </div>
-                                <div class="disclaimer-section">
-                                    <div class="disclaimer-section-title">สำหรับออเดอร์ผลิตแบบสั่งทำ / Custom Orders</div>
-                                    <ul class="disclaimer-ul">
-                                        <li>สามารถปรับแก้ได้: วิธีการเย็บ / ปกเสื้อ / คอเสื้อ / ป้ายแบรนด์</li>
-                                        <li>การเปลี่ยนรูปแบบเสื้อ ผ้า เทคนิคพิมพ์ จะมีค่าใช้จ่ายเพิ่มเติม</li>
+                                <div class="terms-section" style="background:transparent; border:1px solid #555;">
+                                    <div class="terms-sec-title">For Sample Development</div>
+                                    <ul class="terms-ul">
+                                        <li>Only one sample revision is allowed. After confirmation, sample production will take approximately 5-10 days, depending on the order details.</li>
+                                        <li>Sewing and pattern measurements may have a tolerance of approximately 0.5-2 inches.</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>`;
                     } 
                     
-                    // Revision/Gallery Area (Sampling, Rejected, Shipped)
+                    // 4. Revision History / Sample Actions
                     let revHtml = '';
                     if (o.status === 'Sampling Stage' || o.status === 'PP Rejected' || o.status === 'Shipped') {
                         let historyItems = '';
                         if (o.revCount > 0 && o.revHistory.length > 0) {
                             o.revHistory.forEach(r => {
-                                // Wording from d1ec89.png
-                                historyItems += `<div class="revision-item">• Revision ${r.round} (Not Approved) : ${r.rejectReason}</div>`;
-                                if(r.fixDetail) historyItems += `<div class="revision-item-fixed">• Revised (${r.fixBy || 'Merchandiser'}) : ${r.fixDetail}</div>`;
-                                else if (o.status === 'PP Rejected') historyItems += `<div class="revision-item" style="color: var(--accent-yellow);"><i class="fas fa-hourglass-half"></i> กำลังรอฝ่ายผลิตแก้ไข... / Waiting for revision...</div>`;
+                                historyItems += `<div class="rev-item">• Revision ${r.round} (Not Approved) : ${r.rejectReason} <span style="color:#888">(${formatDateTime(r.rejectDate)})</span></div>`;
+                                if(r.fixDetail) historyItems += `<div class="rev-item-fixed">• Revised (Wink): ${r.fixDetail} <span style="color:#888">(${formatDateTime(r.fixDate)})</span></div>`;
+                                else if (o.status === 'PP Rejected') historyItems += `<div class="rev-item" style="color: var(--accent-yellow);"><i class="fas fa-hourglass-half"></i> กำลังรอฝ่ายผลิตแก้ไข...</div>`;
                             });
                             historyItems += `<div class="revision-divider"></div>`;
                         }
@@ -1018,46 +995,49 @@
                         let imageGalleryHtml = '';
                         if (o.sampleImage && o.sampleImage !== '-') {
                             let dsImg = getSafeImageUrl(o.sampleImage) || o.sampleImage;
-                            imageGalleryHtml = `<div class="image-gallery"><div><img src="${dsImg}" onclick="window.open('${o.sampleImage}', '_blank')"></div></div>`;
+                            imageGalleryHtml = `
+                            <div class="rev-img-gallery">
+                                <div><img src="${dsImg}" onclick="window.open('${o.sampleImage}', '_blank')"></div>
+                                <div style="background:#555; display:flex; justify-content:center; align-items:center; color:#888;"><i class="fas fa-cloud"></i></div>
+                                <div style="background:#555; display:flex; justify-content:center; align-items:center; color:#888;"><i class="fas fa-cloud"></i></div>
+                            </div>`;
                         }
 
                         if (o.status === 'Sampling Stage') {
                             revHtml = `
-                            <div class="revision-box">
-                                <div class="revision-title"><i class="fas fa-arrow-right"></i> Revision History (${o.revCount} time)</div>
+                            <div class="rev-box red">
+                                <div class="rev-title text-red"><i class="far fa-arrow-alt-circle-right" style="font-size:16px;"></i> Revision History (${o.revCount} time)</div>
                                 ${historyItems}
                                 ${imageGalleryHtml}
-                                <div style="text-align:center; font-size:11px; color:var(--accent-yellow); margin:15px 0 10px 0; font-weight:600;">กรุณาตรวจสอบตัวอย่างและอนุมัติการผลิต<br>Please review the sample and approve the production</div>
+                                <div class="rev-instruction">กรุณาตรวจสอบตัวอย่างและอนุมัติการผลิต<br><span style="color:#aaa; font-weight:500;">Please review the sample and approve the production</span></div>
                                 <div class="flex-row">
-                                    <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#000; flex:1; font-size:12px; border-radius:12px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต / Approve Production</button>
-                                    <button class="btn" style="background:transparent; border:1.5px solid var(--accent-red); color:var(--accent-red); flex:0.7; font-size:12px; border-radius:12px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button>
+                                    <button class="action-btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#000; flex:1;" onclick="approveAction('${o.orderNo}')"><i class="far fa-check-circle" style="font-size:16px;"></i> อนุมัติผลิต / Approve Production</button>
+                                    <button class="action-btn" style="background:transparent; border:1px solid var(--accent-red); color:var(--accent-red); flex:0.7;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button>
                                 </div>
                             </div>`;
                         } else if (o.status === 'PP Rejected') {
                             revHtml = `
-                            <div class="revision-box">
-                                <div class="revision-title"><i class="fas fa-arrow-right"></i> Revision History (${o.revCount} time)</div>
+                            <div class="rev-box red">
+                                <div class="rev-title text-red"><i class="far fa-arrow-alt-circle-right" style="font-size:16px;"></i> Revision History (${o.revCount} time)</div>
                                 ${historyItems}
-                                <div style="text-align:center; color:var(--accent-red); font-size:13px; font-weight:700; margin-top:10px;">โรงงานกำลังดำเนินการแก้ไขตัวแบบ<br>Factory is revising the sample</div>
+                                <div style="text-align:center; color:var(--accent-red); font-size:13px; font-weight:700; margin-top:10px;">โรงงานกำลังดำเนินการแก้ไขตัวแบบ</div>
                             </div>`;
                         } else if (o.status === 'Shipped') {
                              let shipGallery = '';
                              if (o.shipImage && o.shipImage !== '-') {
                                  let shipThumb = getSafeImageUrl(o.shipImage) || o.shipImage;
-                                 shipGallery = `<div class="image-gallery" style="margin-bottom: 15px;"><div><img src="${shipThumb}" onclick="window.open('${o.shipImage}', '_blank')"></div></div>`;
+                                 shipGallery = `<div class="rev-img-gallery" style="border:none; padding:0; margin: 15px 0;"><div><img src="${shipThumb}" onclick="window.open('${o.shipImage}', '_blank')"></div><div style="background:#555; display:flex; justify-content:center; align-items:center; color:#888;"><i class="fas fa-cloud"></i></div></div>`;
                              }
-                             let delText = o.deliveryMethod === 'Messenger' ? `Messenger: ${o.messengerPhone}` : `J&T Tracking: ${o.tracking}`;
                              revHtml = `
-                             <div class="revision-box" style="border-color: var(--accent-green); background: rgba(0, 230, 118, 0.05);">
-                                <div class="revision-title" style="color: var(--accent-green);"><i class="fas fa-box"></i> Shipped / Delivered</div>
-                                <div style="font-size: 12px; color: #FFF; margin-bottom: 10px;">${delText}</div>
+                             <div class="rev-box green">
+                                <div class="rev-title text-green"><i class="far fa-arrow-alt-circle-right" style="font-size:16px;"></i> Delivered</div>
                                 ${shipGallery}
-                                <div style="text-align:center; color:var(--accent-green); font-size:14px; font-weight:800;">Thank you for using Demo Factory</div>
+                                <div style="text-align:center; color:var(--accent-green); font-size:14px; font-weight:800;">Thank you for using AWESOME.SCREEN</div>
                              </div>`;
                         }
                     }
 
-                    cardHtml += `<div class="card-body-collapse open">${detailBox}${stepperHtml}${actionHtml}${revHtml}</div>`;
+                    cardHtml += `<div class="oc-body open">${detailBox}${stepperHtml}${actionHtml}${revHtml}</div>`;
                 }
 
                 cardHtml += `</div>`;
@@ -1065,13 +1045,10 @@
             });
             container.innerHTML = html;
 
-            // Update top banner with latest active order or first order if none active
             updateCustomerBanner(activeOrderForBanner || orders[0]);
-
-            // Update stats
-            document.getElementById('statConfirmed').innerText = cPrep;
-            document.getElementById('statInProd').innerText = cProd;
-            document.getElementById('statDelivered').innerText = cDeliv;
+            document.getElementById('stat-confirm').innerText = cPrep;
+            document.getElementById('stat-prod').innerText = cProd;
+            document.getElementById('stat-done').innerText = cDeliv;
         }
 
         function fetchCustomerOrders() { 
@@ -1081,7 +1058,7 @@
             }); 
         }
 
-        // ================= EDIT PROFILE FOR CUSTOMER (Full View - d1ece1.png) =================
+        // ================= EDIT PROFILE FOR CUSTOMER =================
         function toggleShippingForm() {
             const isChecked = document.getElementById('cbSameAsBill').checked;
             document.getElementById('shippingSection').style.display = isChecked ? 'none' : 'block';
@@ -1089,18 +1066,17 @@
 
         function openEditProfile() {
             try {
-                // Set Header info
                 document.getElementById('epPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
                 document.getElementById('epHeaderName').innerText = dbUserData.RealName || 'Customer name';
-                document.getElementById('epHeaderId').innerText = "ID: " + (dbUserData.CustomerID || 'CUST-0000');
+                document.getElementById('epHeaderId').innerText = "Customer ID: " + (dbUserData.CustomerID || 'CUST-0000');
 
-                // Populate Form Fields
                 document.getElementById('epName').value = dbUserData.RealName || '';
                 document.getElementById('epBrand').value = dbUserData.BrandName || '';
                 document.getElementById('epPhone').value = dbUserData.Phone || '';
                 document.getElementById('epEmail').value = dbUserData.Email || '';
 
                 document.getElementById('epBillCompany').value = dbUserData.BillCompany || '';
+                document.getElementById('epBillPhone').value = '';
                 document.getElementById('epBillTax').value = dbUserData.BillTaxId || '';
                 document.getElementById('epBillAddress').value = dbUserData.BillAddress || '';
                 document.getElementById('epBillCity').value = dbUserData.BillCity || '';
@@ -1116,7 +1092,6 @@
                 document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
                 document.getElementById('epShipCountry').value = dbUserData.ShipCountry || 'Thailand';
 
-                // Map/Location handling
                 if (dbUserData.ShipLocation && typeof dbUserData.ShipLocation === 'string' && dbUserData.ShipLocation.includes(',')) {
                     document.getElementById('epLocation').value = dbUserData.ShipLocation;
                     const coords = dbUserData.ShipLocation.split(','); 
@@ -1132,13 +1107,12 @@
                 document.getElementById('cbSameAsBill').checked = false; 
                 toggleShippingForm();
                 
-                // Show Overlay
                 document.getElementById('viewApp').classList.add('hidden'); 
                 document.getElementById('viewEditProfile').classList.add('show'); 
                 document.getElementById('sidebarMenu').classList.remove('open');
                 document.getElementById('sidebarOverlay').classList.remove('show');
                 window.scrollTo(0,0);
-            } catch (err) { console.error("Profile Load Error", err); alert("Error loading profile data."); }
+            } catch (err) { console.error("Profile Load Error", err); }
         }
 
         function closeEditProfile() { 
@@ -1151,20 +1125,13 @@
             const isSameAsBill = document.getElementById('cbSameAsBill').checked;
             const payload = { 
                 userId: userProfile.userId, 
-                realName: document.getElementById('epName').value, 
-                brandName: document.getElementById('epBrand').value, 
-                phone: document.getElementById('epPhone').value, 
-                email: document.getElementById('epEmail').value, 
+                realName: document.getElementById('epName').value, brandName: document.getElementById('epBrand').value, 
+                phone: document.getElementById('epPhone').value, email: document.getElementById('epEmail').value, 
                 
-                billCompany: document.getElementById('epBillCompany').value, 
-                billTaxId: document.getElementById('epBillTax').value,
-                billAddress: document.getElementById('epBillAddress').value, 
-                billCity: document.getElementById('epBillCity').value,
-                billProvince: document.getElementById('epBillProv').value, 
-                billZip: document.getElementById('epBillZip').value, 
-                billCountry: document.getElementById('epBillCountry').value,
+                billCompany: document.getElementById('epBillCompany').value, billTaxId: document.getElementById('epBillTax').value,
+                billAddress: document.getElementById('epBillAddress').value, billCity: document.getElementById('epBillCity').value,
+                billProvince: document.getElementById('epBillProv').value, billZip: document.getElementById('epBillZip').value, billCountry: document.getElementById('epBillCountry').value,
                 
-                // If same as billing, populate shipping fields from billing
                 shipName: isSameAsBill ? (document.getElementById('epBillCompany').value || document.getElementById('epName').value) : document.getElementById('epShipName').value,
                 shipPhone: isSameAsBill ? document.getElementById('epPhone').value : document.getElementById('epShipPhone').value,
                 shipAddress: isSameAsBill ? document.getElementById('epBillAddress').value : document.getElementById('epShipAddress').value,
@@ -1175,17 +1142,12 @@
                 shipLocation: document.getElementById('epLocation').value
             };
 
-            // Validation for required fields based on d1ece1.png (*)
             if(!payload.realName || !payload.phone || !payload.billAddress || !payload.billCity || !payload.billProvince || !payload.billZip || !payload.billCountry) {
                 return alert("กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วน\nPlease fill in all required fields marked with *.");
             }
 
             callBackend('update_profile', payload, (res) => { 
-                if(res.status === 'success') { 
-                    alert("บันทึกข้อมูลเรียบร้อยแล้ว!\nProfile saved successfully!"); 
-                    closeEditProfile(); 
-                    checkUser(); // reload data
-                } 
+                if(res.status === 'success') { alert("บันทึกข้อมูลเรียบร้อยแล้ว!\nProfile saved successfully!"); closeEditProfile(); checkUser(); } 
                 else { alert("Error: " + res.message); }
             });
         }
@@ -1199,13 +1161,7 @@
                         document.getElementById('epLocation').value = `${lat}, ${lng}`;
                         document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
                     },
-                    (err) => { 
-                        let msg = "กรุณาอนุญาตให้เข้าถึง Location / Please allow location access.";
-                        if(err.code === 1) msg = "User denied Geolocation access.";
-                        alert(msg); 
-                        document.getElementById('epLocation').value = ""; 
-                        document.getElementById('mapDisplay').innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#888; font-size:12px;">Location access denied</div>`;
-                    },
+                    (err) => { alert("กรุณาอนุญาตให้เข้าถึง Location / Please allow location access."); document.getElementById('epLocation').value = ""; },
                     { enableHighAccuracy: true, timeout: 10000 }
                 );
             } else { alert("อุปกรณ์ไม่รองรับ GPS / GPS not supported on this device."); }
@@ -1213,27 +1169,22 @@
 
         function openMap() {
             let loc = document.getElementById('epLocation').value;
-            // standard coordinates validation needed here in real app
             if (loc && loc.includes(',') && !loc.includes('กำลังค้นหา')) { 
-                const coords = loc.split(',');
-                window.open(`https://www.google.com/maps/search/?api=1&query=${coords[0].trim()},${coords[1].trim()}`, '_blank'); 
-            } 
-            else { alert("กรุณากด My Location เพื่อหาพิกัดปัจจุบันก่อน หรือป้อนพิกัดคู่ลำดับ (lat, lng)\nPlease use 'My Location' first or enter coordinates."); }
+                const coords = loc.split(','); window.open(`https://www.google.com/maps/search/?api=1&query=${coords[0].trim()},${coords[1].trim()}`, '_blank'); 
+            } else { alert("กรุณากด My Location เพื่อหาพิกัดปัจจุบันก่อน หรือป้อนพิกัดคู่ลำดับ (lat, lng)\nPlease use 'My Location' first or enter coordinates."); }
         }
 
         // ================= CUSTOMER ACTIONS & MODALS =================
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
         function openRejectModal(no) { document.getElementById('rejOrderNo').value = no; document.getElementById('rejReason').value = ''; document.getElementById('modalReject').classList.add('show'); }
         
-        // Customer Confirms Work Order (Start Prep)
         function confirmWOAction(no) { 
-            if(!confirm('ยืนยันออเดอร์ถูกต้อง? หลังจากยืนยันแล้วจะไม่สามารถแก้ไขรายละเอียดได้\nConfirm order details are correct? You cannot edit details after confirmation.')) return;
+            if(!confirm('ยืนยันออเดอร์ถูกต้อง? หลังจากยืนยันแล้วจะไม่สามารถแก้ไขรายละเอียดได้\nConfirm order details are correct?')) return;
             callBackend('update_status', { orderNo: no, actionType: 'CUST_CONFIRM_WO', staffName: 'Customer' }, (res) => {
                 if(res.status === 'success') fetchCustomerOrders(); else alert(res.message);
             }); 
         }
         
-        // Customer Approves PP Sample (Start Prod)
         function approveAction(no) { 
             if(!confirm('อนุมัติการผลิตตามตัวอย่างนี้?\nApprove production based on this sample?')) return;
             callBackend('update_status', { orderNo: no, actionType: 'PP_APPROVE', staffName: 'Customer' }, (res) => {
@@ -1241,10 +1192,8 @@
             }); 
         }
         
-        // Customer Rejects PP Sample
         function confirmReject() { 
-            const no = document.getElementById('rejOrderNo').value; 
-            const reason = document.getElementById('rejReason').value; 
+            const no = document.getElementById('rejOrderNo').value; const reason = document.getElementById('rejReason').value; 
             if(!reason) return alert("กรุณาระบุสาเหตุที่ต้องการแก้ไข\nPlease specify the reason for revision."); 
             callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: reason, staffName: 'Customer' }, (res) => { 
                 closeModal('modalReject'); 
@@ -1258,8 +1207,7 @@
         function fetchOptions() { 
             callBackend('get_options', {}, (res) => { 
                 const s = document.getElementById('ordStyle'); const f = document.getElementById('ordFabric'); 
-                s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ / Select Style...</option>'; 
-                f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า / Select Fabric...</option>'; 
+                s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ / Select Style...</option>'; f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า / Select Fabric...</option>'; 
                 if(res.data) {
                     res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); 
                     res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`); 
@@ -1270,21 +1218,13 @@
         function createOrder() { 
             let woImg = preloadedImages['wo-new_wo'] || null;
             const payload = { 
-                adminName: dbUserData.RealName, 
-                phone: document.getElementById('ordPhone').value, 
-                batch: document.getElementById('ordBatch').value, 
-                style: document.getElementById('ordStyle').value, 
-                qty: document.getElementById('ordQty').value, 
-                fabric: document.getElementById('ordFabric').value, 
-                deliveryDate: document.getElementById('ordDate').value, 
-                detail: document.getElementById('ordDetail').value, 
-                address: '-', // Address to be filled by customer later
-                woImage: woImg 
+                adminName: dbUserData.RealName, phone: document.getElementById('ordPhone').value, batch: document.getElementById('ordBatch').value, 
+                style: document.getElementById('ordStyle').value, qty: document.getElementById('ordQty').value, fabric: document.getElementById('ordFabric').value, 
+                deliveryDate: document.getElementById('ordDate').value, detail: document.getElementById('ordDetail').value, address: '-', woImage: woImg 
             };
             if(!payload.phone || !payload.batch || !payload.style || !payload.qty) return alert("Please fill Phone, Batch, Style, Qty."); 
-            
             callBackend('create_order', payload, (res) => { 
-                if(res.status === 'success') { alert("สร้างออเดอร์เรียบร้อย / Order created successfully."); location.reload(); } else { alert("Error: " + res.message); }
+                if(res.status === 'success') { alert("สร้างออเดอร์เรียบร้อย / Order created."); location.reload(); } else { alert("Error: " + res.message); }
             }); 
         }
 
@@ -1300,11 +1240,10 @@
             
             if(filter === 'ACTIVE') filtered = filtered.filter(o => o.status !== 'Shipped');
             else if(filter !== 'ALL') filtered = filtered.filter(o => o.status === filter);
-            
             if (search) filtered = filtered.filter(o => o.orderNo.toLowerCase().includes(search) || (o.custName && o.custName.toLowerCase().includes(search)) || (o.custPhone && o.custPhone.includes(search)) || (o.batch && o.batch.toLowerCase().includes(search)));
 
             const list = document.getElementById('staffTaskList');
-            if(filtered.length === 0) { list.innerHTML = '<div class="order-card text-center" style="padding: 20px; color:#aaa;">ไม่มีงานในระบบ / No orders found.</div>'; return; }
+            if(filtered.length === 0) { list.innerHTML = '<div class="order-card" style="padding: 20px; text-align:center; color:#aaa;">ไม่มีงานในระบบ / No orders found.</div>'; return; }
 
             let html = ''; const role = dbUserData.Role;
             filtered.forEach(o => {
@@ -1312,40 +1251,37 @@
                 let origThumbUrl = (o.woUrl && o.woUrl !== '-') ? o.woUrl : null;
                 let displayThumbUrl = getSafeImageUrl(origThumbUrl);
                 
-                // --- Staff Action Buttons based on Role & Status ---
-                
                 // PM / Admin Actions
                 if (['Admin', 'Production Manager'].includes(role)) {
-                    if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue); border-radius:12px;" onclick="updateStaffStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order (เริ่มเตรียมงาน)</button>`;
-                    if (o.status === 'Pre-Production Approved') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue); border-radius:12px;" onclick="updateStaffStatus('${o.orderNo}', 'UPDATE_50')">แจ้งผลิตเสร็จ 50%</button>`;
-                    if (o.status === 'Correction Needed') btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px; background:rgba(255,0,0,0.1); padding:8px; border-radius:8px;"><b>ตีกลับจาก QC:</b> ${o.feedback}</div><button class="btn btn-green" style="margin-top:10px; border-radius:12px;" onclick="updateStaffStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้ไขเสร็จสิ้น ส่ง QC ใหม่</button>`;
+                    if (o.status === 'Order Confirmation') btns += `<button class="action-btn btn-grey" style="margin-top:10px; border:1px solid var(--accent-blue); color:var(--accent-blue);" onclick="updateStaffStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
+                    if (o.status === 'Pre-Production Approved') btns += `<button class="action-btn btn-grey" style="margin-top:10px; border:1px solid var(--accent-blue); color:var(--accent-blue);" onclick="updateStaffStatus('${o.orderNo}', 'UPDATE_50')">แจ้งผลิตเสร็จ 50%</button>`;
+                    if (o.status === 'Correction Needed') btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px; background:rgba(255,0,0,0.1); padding:8px; border-radius:8px;"><b>ตีกลับจาก QC:</b> ${o.feedback}</div><button class="action-btn" style="background:var(--accent-green); color:#000; margin-top:10px;" onclick="updateStaffStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้ไขเสร็จสิ้น ส่ง QC ใหม่</button>`;
                 }
 
                 // Merch / Admin Actions
                 if (['Admin', 'Merchandiser'].includes(role)) {
                     if (o.status === 'Work Order Review Stage') {
-                        // Action to send Sample
                         btns += `
-                        <div style="background:#333; padding:15px; border-radius:12px; margin-top:15px; border:1px solid #555;">
-                            <label class="input-label" style="margin-top:0; color:var(--accent-yellow);">จัดส่งตัวอย่าง (PP Sample)</label>
-                            <select id="del-s-${o.orderNo}" class="dark-input" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:10px; border-radius:12px; border:1px solid #555;"><option value="Parcel">ส่งพัสดุ (J&T)</option><option value="Messenger">แมสเซ็นเจอร์</option></select>
-                            <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" class="dark-input" placeholder="Tracking No" style="margin-bottom:10px; border-radius:12px; border:1px solid #555;"></div>
-                            <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" class="dark-input" placeholder="เบอร์แมสเซ็นเจอร์" style="margin-bottom:10px; border-radius:12px; border:1px solid #555;"></div>
-                            <label class="input-label" style="margin-top:0;">แนบรูปพัสดุ/ตัวอย่าง (Optional)</label>
-                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="background:#444; color:#FFF; font-size:11px; padding:8px; border-radius:12px; width:100%;">
-                            <div id="status-s-${o.orderNo}" style="font-size:11px; margin-top:5px; display:none;"></div>
-                            <button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:15px; border-radius:12px; border-color:#AAA; color:#AAA;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่างให้ลูกค้า</button>
+                        <div style="background:#333; padding:15px; border-radius:16px; margin-top:15px; border:1px solid #444;">
+                            <label class="ep-input-label" style="margin-top:0; color:var(--accent-yellow);">จัดส่งตัวอย่าง (PP Sample)</label>
+                            <select id="del-s-${o.orderNo}" class="ep-input" onchange="toggleDelivery('${o.orderNo}', this.value, 's')"><option value="Parcel">ส่งพัสดุ (J&T)</option><option value="Messenger">แมสเซ็นเจอร์</option></select>
+                            <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" class="ep-input" placeholder="Tracking No"></div>
+                            <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" class="ep-input" placeholder="เบอร์แมสเซ็นเจอร์"></div>
+                            <label class="ep-input-label">แนบรูปพัสดุ/ตัวอย่าง (Optional)</label>
+                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="width:100%; font-size:12px; color:#fff; margin-bottom:10px;">
+                            <div id="status-s-${o.orderNo}" style="font-size:11px; margin-bottom:10px; display:none;"></div>
+                            <button class="action-btn btn-grey" id="btn-s-${o.orderNo}" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่างให้ลูกค้า</button>
                         </div>`;
                     }
                     if (o.status === 'PP Rejected') {
-                         btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px; background:rgba(255,0,0,0.1); padding:8px; border-radius:8px;"><b>ลูกค้าไม่อนุมัติแบบ:</b> ${o.ppFeedback}</div><button class="btn btn-outline" style="border-color:#FFC107; color:#FFC107; margin-top:10px; border-radius:12px;" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้ไขแบบ (ส่ง Sampling ใหม่)</button>`;
+                         btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px; background:rgba(255,0,0,0.1); padding:8px; border-radius:8px;"><b>ลูกค้าไม่อนุมัติแบบ:</b> ${o.ppFeedback}</div><button class="action-btn btn-grey" style="border:1px solid var(--accent-yellow); color:var(--accent-yellow); margin-top:10px;" onclick="openFixPPModal('${o.orderNo}')">บันทึกการแก้ไขแบบ (ส่งใหม่)</button>`;
                     }
                 }
 
                 // QC / Admin Actions
                 if (['Admin', 'Quality Control'].includes(role)) {
                     if (o.status === 'Bulk Production (50%)') {
-                        btns += `<div class="flex-row" style="margin-top:15px;"><button class="btn btn-green" style="flex:1; border-radius:12px;" onclick="updateStaffStatus('${o.orderNo}', 'QC_PASS')">ผ่าน QC</button><button class="btn btn-reject" style="flex:1; border-radius:12px; background:transparent; border:1.5px solid var(--accent-red); color:var(--accent-red);" onclick="openFeedbackModal('${o.orderNo}')">QC ไม่ผ่าน (ตีกลับ PM)</button></div>`;
+                        btns += `<div class="flex-row" style="margin-top:15px;"><button class="action-btn" style="background:var(--accent-green); color:#000; flex:1;" onclick="updateStaffStatus('${o.orderNo}', 'QC_PASS')">ผ่าน QC</button><button class="action-btn btn-grey" style="flex:1; border:1px solid var(--accent-red); color:var(--accent-red);" onclick="openFeedbackModal('${o.orderNo}')">QC ไม่ผ่าน</button></div>`;
                     }
                 }
 
@@ -1353,15 +1289,15 @@
                 if (['Admin', 'Sales Admin'].includes(role)) {
                     if (o.status === 'Quality Control Passed') {
                         btns += `
-                        <div style="background:#333; padding:15px; border-radius:12px; margin-top:15px; border:1px solid #555;">
-                            <label class="input-label" style="margin-top:0; color:var(--accent-green);">จัดส่งสินค้าจริง (Bulk Shipping)</label>
-                            <select id="del-ship-${o.orderNo}" class="dark-input" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:10px; border-radius:12px; border:1px solid #555;"><option value="Parcel">ส่งพัสดุ (J&T)</option><option value="Messenger">แมสเซ็นเจอร์</option></select>
-                            <div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" class="dark-input" placeholder="Tracking No" style="margin-bottom:10px; border-radius:12px; border:1px solid #555;"></div>
-                            <div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" class="dark-input" placeholder="เบอร์แมสเซ็นเจอร์" style="margin-bottom:10px; border-radius:12px; border:1px solid #555;"></div>
-                            <label class="input-label" style="margin-top:0;">แนบรูปลัง/สลิป (Optional)</label>
-                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="background:#444; color:#FFF; font-size:11px; padding:8px; border-radius:12px; width:100%;">
-                            <div id="status-ship-${o.orderNo}" style="font-size:11px; margin-top:5px; display:none;"></div>
-                            <button class="btn btn-green" id="btn-ship-${o.orderNo}" style="margin-top:15px; border-radius:12px; color:#000;" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งสินค้า</button>
+                        <div style="background:#333; padding:15px; border-radius:16px; margin-top:15px; border:1px solid #444;">
+                            <label class="ep-input-label" style="margin-top:0; color:var(--accent-green);">จัดส่งสินค้าจริง (Bulk Shipping)</label>
+                            <select id="del-ship-${o.orderNo}" class="ep-input" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')"><option value="Parcel">ส่งพัสดุ (J&T)</option><option value="Messenger">แมสเซ็นเจอร์</option></select>
+                            <div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" class="ep-input" placeholder="Tracking No"></div>
+                            <div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" class="ep-input" placeholder="เบอร์แมสเซ็นเจอร์"></div>
+                            <label class="ep-input-label">แนบรูปลัง/สลิป (Optional)</label>
+                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="width:100%; font-size:12px; color:#fff; margin-bottom:10px;">
+                            <div id="status-ship-${o.orderNo}" style="font-size:11px; margin-bottom:10px; display:none;"></div>
+                            <button class="action-btn" style="background:var(--accent-green); color:#000;" id="btn-ship-${o.orderNo}" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งสินค้า</button>
                         </div>`;
                     } else if (o.status === 'Shipped') {
                         let delText = o.deliveryMethod === 'Messenger' ? `Messenger: ${o.messengerPhone}` : `J&T Tracking: ${o.tracking}`;
@@ -1369,15 +1305,14 @@
                     }
                 }
                 
-                // Common Actions for Admin/Coord
                 if (['Admin', 'Sales coordinater'].includes(role) && o.status === 'Pending Customer Confirmation') {
-                     btns += `<div style="margin-top:10px; font-size:12px; color:var(--accent-yellow); text-align:center;">⏳ รอให้ลูกค้ายืนยันออเดอร์ / Waiting for customer confirmation</div>`;
+                     btns += `<div style="margin-top:10px; font-size:12px; color:var(--accent-yellow); text-align:center;">⏳ รอให้ลูกค้ายืนยันออเดอร์</div>`;
                 }
 
                 html += `
                 <div class="order-card" style="padding: 20px;">
-                    <div class="flex-between" style="border-bottom: 1px solid #444; padding-bottom: 12px; margin-bottom:12px;">
-                        <strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong>
+                    <div class="flex-between" style="border-bottom: 1px solid #444; padding-bottom: 12px; margin-bottom:15px;">
+                        <strong style="color:var(--text-white); font-size:18px; font-family:'Inter';">${o.orderNo}</strong>
                         <div style="color:${getStatusColor(o.status)}; font-size:12px; font-weight:bold; border:1px solid ${getStatusColor(o.status)}; padding:4px 8px; border-radius:8px;">${o.status}</div>
                     </div>
                     <div class="flex-row" style="align-items:flex-start;">
@@ -1386,11 +1321,9 @@
                             <div style="margin-bottom:6px;">Style: <span style="color:#FFF; font-weight:600;">${o.style}</span> (${o.qty} pcs)</div>
                             <div style="margin-bottom:6px;">Batch: <span style="color:#FFF;">${o.batch}</span></div>
                             <div>Est Delivery: <span style="color:#FFF; font-weight:600;">${o.delivery}</span></div>
-                            ${ (o.woUrl && o.woUrl !== '-') ? `<div style="margin-top:8px;"><a href="${o.woUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none; font-size:12px;"><i class="fas fa-file-pdf"></i> View Work Order (WO)</a></div>` : '' }
+                            ${ (o.woUrl && o.woUrl !== '-') ? `<div style="margin-top:10px;"><a href="${o.woUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none; font-size:12px; border:1px solid #444; padding:6px 12px; border-radius:8px; display:inline-block;"><i class="fas fa-file-pdf"></i> View Work Order (WO)</a></div>` : '' }
                         </div>
-                        ${origThumbUrl ? `<div class="order-thumbnail" style="width: 70px; height: 70px;">
-                            <img src="${displayThumbUrl || origThumbUrl}" onclick="window.open('${origThumbUrl}', '_blank')">
-                        </div>` : ''}
+                        ${origThumbUrl ? `<div class="oc-thumb"><img src="${displayThumbUrl || origThumbUrl}" onclick="window.open('${origThumbUrl}', '_blank')"></div>` : ''}
                     </div>
                     ${btns}
                 </div>`;
@@ -1406,11 +1339,9 @@
             }); 
         }
         
-        // Modal openers for Staff
         function openFeedbackModal(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('fbReason').value = ''; document.getElementById('modalFeedback').classList.add('show'); }
         function openFixPPModal(no) { document.getElementById('fixPPOrderNo').value = no; document.getElementById('fixPPDetail').value = ''; document.getElementById('modalFixPP').classList.add('show'); }
         
-        // QC Tries to rollback to PM
         function confirmRollback() { 
             const no = document.getElementById('fbOrderNo').value; const reason = document.getElementById('fbReason').value; 
             if(!reason) return alert("กรุณาระบุสาเหตุ / Please specify reason."); 
@@ -1420,7 +1351,6 @@
             }); 
         }
         
-        // Merch records PP Fix resolution
         function confirmFixPP() { 
             const no = document.getElementById('fixPPOrderNo').value; const detail = document.getElementById('fixPPDetail').value; 
             if(!detail) return alert("กรุณาระบุรายละเอียดการแก้ไข / Please specify fix details."); 
@@ -1430,52 +1360,28 @@
             }); 
         }
 
-        // Send Sample Action (Merch)
         async function sendSample(no) { 
             const m = document.getElementById(`del-s-${no}`).value; const t = document.getElementById(`track-s-${no}`).value; const p = document.getElementById(`phone-s-${no}`).value; 
-            if(m === 'Parcel' && !t) return alert("กรุณาระบุเลข Tracking J&T / Please enter Tracking No."); 
-            if(m === 'Messenger' && !p) return alert("กรุณาระบุเบอร์โทรแมสเซ็นเจอร์ / Please enter Messenger Phone."); 
+            if(m === 'Parcel' && !t) return alert("กรุณาระบุเลข Tracking J&T"); 
+            if(m === 'Messenger' && !p) return alert("กรุณาระบุเบอร์โทรแมสเซ็นเจอร์"); 
+            if(!confirm('ยืนยันแจ้งส่งตัวอย่างให้ลูกค้า? / Confirm?')) return;
             
-            if(!confirm('ยืนยันแจ้งส่งตัวอย่างให้ลูกค้า? / Confirm notifying customer about sample shipment?')) return;
-            
-            callBackend('update_status', { 
-                orderNo: no, 
-                actionType: 'SEND_SAMPLE', 
-                deliveryMethod: m, 
-                tracking: t, 
-                messengerPhone: p, 
-                image: preloadedImages[`s-${no}`] || null, 
-                staffName: dbUserData.RealName 
-            }, (res) => {
+            callBackend('update_status', { orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`s-${no}`] || null, staffName: dbUserData.RealName }, (res) => {
                 if(res.status === 'success') fetchStaffData(); else alert(res.message);
             }); 
         }
 
-        // Final Ship Order Action (Sales Admin)
         async function shipOrder(no) { 
             const m = document.getElementById(`del-ship-${no}`).value; const t = document.getElementById(`track-ship-${no}`).value; const p = document.getElementById(`phone-ship-${no}`).value; 
-            if(m === 'Parcel' && !t) return alert("กรุณาระบุเลข Tracking J&T / Please enter Tracking No."); 
-            if(m === 'Messenger' && !p) return alert("กรุณาระบุเบอร์โทรแมสเซ็นเจอร์ / Please enter Messenger Phone."); 
-            
-            if(!confirm('ยืนยันแจ้งจัดส่งสินค้าให้ลูกค้า? / Confirm notifying customer about final shipment?')) return;
+            if(m === 'Parcel' && !t) return alert("กรุณาระบุเลข Tracking J&T"); 
+            if(m === 'Messenger' && !p) return alert("กรุณาระบุเบอร์โทรแมสเซ็นเจอร์"); 
+            if(!confirm('ยืนยันแจ้งจัดส่งสินค้าให้ลูกค้า? / Confirm?')) return;
 
-            callBackend('update_status', { 
-                orderNo: no, 
-                actionType: 'SHIP', 
-                deliveryMethod: m, 
-                tracking: t, 
-                messengerPhone: p, 
-                image: preloadedImages[`ship-${no}`] || null, 
-                staffName: dbUserData.RealName 
-            }, (res) => {
+            callBackend('update_status', { orderNo: no, actionType: 'SHIP', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`ship-${no}`] || null, staffName: dbUserData.RealName }, (res) => {
                 if(res.status === 'success') fetchStaffData(); else alert(res.message);
             }); 
         }
-
-        // Generic close modal
-        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
         
-        // Simple search filter for customer order list
         function filterOrders() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const filtered = globalOrders.filter(o => o.orderNo.toLowerCase().includes(query) || o.style.toLowerCase().includes(query));
