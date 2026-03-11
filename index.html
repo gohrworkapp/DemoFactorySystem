@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AWESOME.SCREEN</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -18,42 +18,30 @@
             --accent-green: #00E676; 
             --accent-red: #FF4D6D; 
             --accent-blue: #00B9F2;
+            --accent-yellow: #FFC107;
             --border-color: #333333;
             --sidebar-bg: #D9D9D9; 
             --sidebar-text: #111111;
         }
 
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            font-family: 'Inter', 'Kanit', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', 'Kanit', sans-serif; margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .hidden { display: none !important; }
         .flex-row { display: flex; gap: 10px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         
-        /* --- Topbar --- */
+        /* --- Topbar & Sidebar --- */
         .topbar { position: sticky; top: 0; left: 0; width: 100%; height: 60px; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 900; }
         .topbar h2 { margin: 0; font-size: 20px; font-weight: 700; color: #FFF; letter-spacing: 0.5px; }
         .menu-btn { position: absolute; left: 20px; background: #FFF; color: #000; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         
-        /* --- Sidebar Overlay & Menu --- */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 998; display: none; transition: 0.3s; }
         .overlay.show { display: block; }
-        
         .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: var(--sidebar-bg); z-index: 1000; transition: 0.3s ease-in-out; display: flex; flex-direction: column; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
         .sidebar.open { left: 0; }
-        
         .sidebar-header { padding: 20px 20px 10px 20px; }
         .sidebar-menu { flex: 1; padding: 10px 25px; display: flex; flex-direction: column; gap: 25px; }
         .sidebar-item { display: flex; align-items: center; gap: 15px; color: var(--sidebar-text); font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .sidebar-item i { font-size: 22px; width: 24px; text-align: center; }
-        
         .sidebar-footer { padding: 20px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
         .sidebar-user { display: flex; align-items: center; gap: 10px; }
         .sidebar-user img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
@@ -62,91 +50,115 @@
         .sidebar-user-info .id { font-size: 10px; font-weight: 600; color: #333; }
         .sidebar-powered { font-size: 8px; font-weight: 600; color: #555; padding-left: 40px;}
 
-        /* --- Global Footer --- */
-        .global-footer { padding: 20px; display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
-        .global-footer img { width: 24px; height: auto; border-radius: 50%; }
-        .global-footer div { font-size: 9px; font-weight: 500; color: #FFF; }
+        /* --- Header Layout (Profile & Greeting) --- */
+        .app-header { padding: 10px 30px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .greeting-text { font-size: 24px; font-weight: 800; background: linear-gradient(90deg, #FFC805, #FF0080, #00B9F2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; line-height: 1.1;}
+        .user-name-display { font-size: 18px; font-weight: 700; color: #FFF; }
+        .user-brand-display { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .user-id-display { font-size: 12px; font-weight: 600; color: #FFF; margin-top: 5px; }
+        .avatar-container { text-align: center; }
+        .avatar-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+        .tier-badge { background: transparent; color: #FFF; font-size: 12px; font-weight: 700; margin-top: 5px; }
+
+        /* --- Status Banner (Customer Only) --- */
+        .status-banner { margin: 15px 30px; padding: 20px; border-radius: 20px; color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .bg-received { background: linear-gradient(135deg, #A5D6A7, #4CAF50); }
+        .bg-prep { background: linear-gradient(135deg, #FFD54F, #FF8A65); }
+        .bg-prod { background: linear-gradient(135deg, #4FC3F7, #9575CD); color: #FFF; }
+        .bg-qc { background: linear-gradient(135deg, #81D4FA, #0288D1); color: #FFF; }
+        .bg-deliv { background: linear-gradient(135deg, #81C784, #388E3C); color: #FFF; }
+        
+        /* --- Nav Squares (Customer) --- */
+        .nav-squares { display: flex; justify-content: space-between; padding: 0 30px; margin-bottom: 20px; gap: 15px; }
+        .nav-sq { flex: 1; background: #333; border-radius: 16px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .nav-sq i { font-size: 32px; color: #888; margin-bottom: 8px; }
+        .nav-sq span { font-size: 12px; font-weight: 600; color: #FFF; }
+        .nav-sq.active { background: #444; }
+        .nav-sq.active i.fa-list-alt { color: var(--accent-red); }
+        .nav-sq.active i.fa-search { color: var(--accent-yellow); }
+        .nav-sq.active i.fa-user { color: var(--text-main); }
+
+        /* --- Nav Buttons (Staff) --- */
+        .staff-nav-btns { display: flex; gap: 15px; padding: 0 30px; margin-bottom: 20px; }
+        .s-btn { flex: 1; padding: 15px; border-radius: 16px; font-weight: 700; font-size: 14px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .s-btn-create { background: var(--accent-red); color: #FFF; }
+        .s-btn-all { background: var(--accent-blue); color: #FFF; }
+        .s-btn-inactive { background: #333; color: #888; border: 1px solid #444; }
 
         /* --- Content Container --- */
-        .content-area { padding: 0 30px 20px 30px; min-height: calc(100vh - 120px); display: flex; flex-direction: column; }
+        .content-area { padding: 0 30px 20px 30px; min-height: calc(100vh - 250px); display: flex; flex-direction: column; }
 
-        /* --- Typography & Elements --- */
-        h3 { font-size: 24px; font-weight: 600; margin: 0 0 5px 0; }
+        /* --- Overview Stats --- */
+        .stats-container { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+        .stat-box { flex: 1; background: var(--card-bg); border-radius: 16px; padding: 20px 10px; text-align: center; border: 1px solid var(--border-color); }
+        .stat-num { font-size: 36px; font-weight: 800; line-height: 1; margin-bottom: 5px; }
+        .stat-label { font-size: 11px; font-weight: 600; color: #FFF; }
+
+        /* --- Global Footer --- */
+        .global-footer { padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: auto; }
+        .global-footer img { width: 20px; height: 20px; border-radius: 50%; }
+        .global-footer div { font-size: 9px; font-weight: 500; color: #FFF; }
+
+        /* --- Inputs & Elements --- */
         .input-label { font-size: 10px; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; margin-top: 15px; font-weight: 600; }
-        
         input, select, textarea { width: 100%; padding: 14px 16px; background: var(--input-bg); border: none; border-radius: 20px; color: #FFF; font-family: 'Inter', 'Kanit', sans-serif; font-size: 14px; font-weight: 500; outline: none; box-sizing: border-box; }
-        input::placeholder, textarea::placeholder { color: #DDDDDD; font-weight: 400; }
-        input:focus, textarea:focus { border: 1px solid var(--accent-green); }
+        input::placeholder, textarea::placeholder { color: #DDD; font-weight: 400; }
         .dark-input { background: #333; color: #FFF; }
+        .search-bar { background: #2A2A2A; border-radius: 16px; padding: 15px 20px; display: flex; align-items: center; margin-bottom: 20px; }
+        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; font-size: 15px; }
 
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 20px; color: white; font-weight: 600; cursor: pointer; font-size: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; box-sizing: border-box; }
-        .btn-outline { background: transparent; border: 1px solid #777; color: #FFF; }
+        /* --- Buttons --- */
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 20px; color: white; font-weight: 600; cursor: pointer; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; box-sizing: border-box; }
+        .btn-outline { background: transparent; border: 1.5px solid #FFF; color: #FFF; }
         .btn-green { background: var(--accent-green); color: #000; }
         .btn-dark { background: #000; color: #FFF; }
-        .btn-pink { background: var(--text-pink); color: #FFF; }
+        .btn-pink { background: var(--accent-red); color: #FFF; }
         .btn-reject { background: transparent; border: 1.5px solid var(--accent-red); color: var(--accent-red); }
 
-        .checkbox-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; cursor: pointer; }
-        .checkbox-container input { display: none; }
-        .checkmark { width: 22px; height: 22px; background: #FFF; border-radius: 4px; display: flex; justify-content: center; align-items: center; }
-        .checkbox-container input:checked + .checkmark::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; color: #000; font-size: 14px; }
-        .checkbox-label { font-size: 12px; color: #FFF; font-weight: 600; }
-
-        /* --- Profile Header --- */
-        .profile-img-container { position: relative; margin: 0 auto; width: 100px; height: 100px; margin-top: 20px; }
-        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .tier-badge { display: inline-block; background: transparent; color: #FFF; font-size: 16px; font-weight: 700; margin-top: 10px; text-align: center; width: 100%; }
-        .profile-name { text-align: center; font-size: 24px; font-weight: 700; margin: 5px 0 0 0; }
-        .profile-id { text-align: center; font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 25px; }
-
-        /* --- Cards & Buttons --- */
+        /* --- Profile Settings (Customer) --- */
         .action-pill { background: #888888; border-radius: 30px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer; }
         .action-pill .icon { background: #444; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: var(--accent-red); }
-        .action-pill .text { font-size: 16px; font-weight: 500; color: #FFF; }
-
         .settings-card { background: #2A2A2A; border-radius: 20px; padding: 10px; margin-bottom: 20px; }
         .setting-row { padding: 10px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #444; cursor: pointer; }
         .setting-row:last-child { border-bottom: none; }
         .setting-row .icon { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; color: #FFF; }
-        .bg-pink { background: #FF4D6D; }
-        .bg-gray-red { background: #555; color: #FF4D6D !important; }
-        .bg-gray-pink { background: #555; color: #FF4D6D !important; }
-
-        /* --- Stepper & Orders --- */
+        
+        /* --- Orders Card & Stepper --- */
         .order-card { background: #2A2A2A; border-radius: 20px; padding: 20px; margin-bottom: 20px; }
         .stepper-wrapper { display: flex; justify-content: space-between; margin: 25px 0 10px 0; position: relative; }
         .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; z-index: 2; }
         .stepper-item::after { content: ""; position: absolute; top: 12px; left: 50%; width: 100%; height: 4px; background: #444; z-index: -1; }
         .stepper-item:last-child::after { content: none; }
-        .step-counter { width: 28px; height: 28px; border-radius: 50%; background: #444; }
+        .step-counter { width: 28px; height: 28px; border-radius: 50%; background: #444; border: 2px solid #2A2A2A;}
         .stepper-item.completed .step-counter, .stepper-item.active .step-counter { background: var(--accent-green); }
         .stepper-item.completed::after { background: var(--accent-green); }
-        .step-name { margin-top: 10px; font-size: 10px; color: var(--text-main); text-align: center; font-weight: 600; line-height: 1.2; }
-        
-        .search-bar { background: #2A2A2A; border-radius: 16px; padding: 15px 20px; display: flex; align-items: center; margin-bottom: 20px; }
-        .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; font-size: 15px; }
+        .step-name { margin-top: 10px; font-size: 9px; color: var(--text-main); text-align: center; font-weight: 600; line-height: 1.2; }
+        .step-date { font-size: 8px; color: #888; margin-top: 4px;}
 
-        .full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 950; display: none; overflow-y: auto; padding-bottom: 40px; }
-        .full-view.show { display: block; }
-        
-        .modal-center { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1001; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-center.show { display: flex; }
-        .modal-box { width: 100%; max-width: 400px; background: #222; padding: 24px; border-radius: 20px; }
-
-        .map-placeholder { height: 180px; border-radius: 20px; margin-bottom: 20px; border: 2px solid #555; position: relative; overflow: hidden; }
-        .map-placeholder iframe { width: 100%; height: 100%; border: none; }
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .divider { border-top: 1px dotted #666; margin: 30px 0; }
-
-        /* Attachment Buttons (WO & Images) */
+        /* --- Attachments & Revisions --- */
         .attachment-zone { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; border-top: 1px dashed #444; padding-top: 15px; }
-        .btn-attach { background: transparent; border: 1px solid #777; color: #FFF; padding: 8px 12px; border-radius: 8px; font-size: 11px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
-        .btn-attach:hover { background: #444; }
-
-        /* Revision Box */
+        .btn-attach { background: #333; border: 1px solid #555; color: #FFF; padding: 8px 12px; border-radius: 8px; font-size: 11px; display: flex; align-items: center; gap: 5px; cursor: pointer; font-family:'Kanit'; font-weight:500;}
         .revision-box { border: 1px solid var(--accent-red); border-radius: 12px; padding: 12px; margin-top: 15px; background: rgba(255, 77, 109, 0.05); }
         .revision-title { color: var(--accent-red); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
         .revision-item { font-size: 11px; color: #DDD; margin-bottom: 4px; }
+
+        /* --- Modals & Full Views --- */
+        .full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 950; display: none; overflow-y: auto; padding-bottom: 40px; }
+        .full-view.show { display: block; }
+        .modal-center { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1001; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-center.show { display: flex; }
+        .modal-box { width: 100%; max-width: 400px; background: #222; padding: 24px; border-radius: 20px; border: 1px solid #444;}
+        .map-placeholder { height: 180px; border-radius: 20px; margin-bottom: 20px; border: 2px solid #555; position: relative; overflow: hidden; background:#333; display:flex; justify-content:center; align-items:center; color:#aaa;}
+        .map-placeholder iframe { width: 100%; height: 100%; border: none; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        
+        /* Checkbox */
+        .checkbox-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; cursor: pointer; }
+        .checkbox-container input { display: none; }
+        .checkmark { width: 22px; height: 22px; background: #FFF; border-radius: 4px; display: flex; justify-content: center; align-items: center; }
+        .checkbox-container input:checked + .checkmark::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; color: #000; font-size: 14px; }
+        .checkbox-label { font-size: 12px; color: #FFF; font-weight: 600; }
+        .divider { border-top: 1px dotted #666; margin: 30px 0; }
     </style>
 </head>
 <body>
@@ -156,7 +168,7 @@
         <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Loading AWESOME.SCREEN...</div>
     </div>
 
-    <div id="viewRegister" class="container hidden" style="padding-top: 60px;">
+    <div id="viewRegister" class="content-area hidden" style="padding-top: 60px;">
         <div style="text-align: center; margin-bottom: 20px;">
             <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
         </div>
@@ -187,18 +199,18 @@
             <div class="sidebar-header">
                 <button class="menu-btn" style="position:static;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
             </div>
-            <div class="sidebar-menu">
+            
+            <div class="sidebar-menu" id="sidebarMenuCustomer">
                 <div class="sidebar-item" onclick="switchTab('Orders')"><i class="fas fa-list-alt"></i> Orders</div>
                 <div class="sidebar-item" onclick="switchTab('Overview')"><i class="fas fa-search"></i> Overview</div>
                 <div class="sidebar-item" onclick="switchTab('Profile')"><i class="fas fa-user"></i> Profile</div>
-                
-                <div id="navAdminCreate" class="sidebar-item hidden" onclick="switchTab('CreateOrder')" style="color:var(--accent-red); margin-top:20px;">
-                    <i class="fas fa-plus-circle"></i> Create Order
-                </div>
-                <div id="navAdminList" class="sidebar-item hidden" onclick="switchTab('StaffOrders')" style="color:var(--accent-blue);">
-                    <i class="fas fa-tasks"></i> All Orders
-                </div>
             </div>
+            <div class="sidebar-menu hidden" id="sidebarMenuStaff">
+                <div class="sidebar-item" onclick="switchTab('CreateOrder')" style="color:var(--accent-red);"><i class="fas fa-plus-circle"></i> Create Order</div>
+                <div class="sidebar-item" onclick="switchTab('StaffOrders')" style="color:var(--accent-blue);"><i class="fas fa-tasks"></i> All Orders</div>
+                <div class="sidebar-item" onclick="switchTab('Profile')"><i class="fas fa-user"></i> Profile</div>
+            </div>
+
             <div class="sidebar-footer">
                 <div class="sidebar-user">
                     <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" id="sidebarPic">
@@ -211,19 +223,52 @@
             </div>
         </div>
 
-        <div id="tabProfile" class="content-area">
-            <div class="profile-img-container">
-                <img id="profilePicLg" src="https://via.placeholder.com/100" class="profile-img">
+        <div class="app-header">
+            <div>
+                <div class="greeting-text">Welcome back</div>
+                <div class="user-name-display" id="headerName">User Name</div>
+                <div class="user-brand-display" id="headerBrand">Brand name</div>
+                <div class="user-id-display" id="headerId">Customer ID: CUST-0000</div> 
             </div>
-            <div class="tier-badge" id="profileTier"><i class="fas fa-user"></i> Regular</div>
-            <h3 class="profile-name" id="profileName">User Name</h3>
-            <div class="profile-id" id="profileId">Customer ID: CUST-0000</div>
+            <div class="avatar-container">
+                <img id="headerPic" src="https://via.placeholder.com/100" class="avatar-img">
+                <div class="tier-badge" id="headerTier"><i class="fas fa-user"></i> Regular</div>
+            </div>
+        </div>
 
+        <div id="customerElements" class="hidden">
+            <div id="statusBanner" class="status-banner bg-prep">
+                <div style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">Your Order Process Now</div>
+                <div style="font-size: 32px; font-weight: 800; line-height: 1;" id="bannerStatusText">Preparation</div>
+                <div style="font-size: 14px; font-weight: 600; margin-top: 5px;" id="bannerOrderNo">ORD-2026-000</div>
+                <div style="font-size: 12px; font-weight: 600; margin-top: 15px;">Estimated Delivery:<br><span style="font-size:16px;" id="bannerDate">00/00/0000</span></div>
+            </div>
+
+            <div class="nav-squares">
+                <div class="nav-sq" id="navSqOrders" onclick="switchTab('Orders')">
+                    <i class="fas fa-list-alt"></i><span>Orders</span>
+                </div>
+                <div class="nav-sq" id="navSqOverview" onclick="switchTab('Overview')">
+                    <i class="fas fa-search"></i><span>Overview</span>
+                </div>
+                <div class="nav-sq" id="navSqProfile" onclick="switchTab('Profile')">
+                    <i class="fas fa-user"></i><span>Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="staffElements" class="hidden">
+            <div class="staff-nav-btns">
+                <div class="s-btn s-btn-create" id="navBtnCreate" onclick="switchTab('CreateOrder')"><i class="fas fa-plus"></i> Create Order</div>
+                <div class="s-btn s-btn-all" id="navBtnAll" onclick="switchTab('StaffOrders')"><i class="fas fa-tasks"></i> All Orders</div>
+            </div>
+        </div>
+
+        <div id="tabProfile" class="content-area hidden">
             <div class="action-pill" onclick="openEditProfile()">
                 <div class="icon"><i class="fas fa-pen"></i></div>
                 <div class="text">Edit Profile</div>
             </div>
-
             <h4 style="margin: 10px 0 15px 5px; color:var(--text-main); font-weight:700; font-size:18px;">General Settings</h4>
             <div class="settings-card">
                 <div class="setting-row"><div class="icon bg-pink"><i class="fas fa-question"></i></div><div class="text">About</div></div>
@@ -233,46 +278,69 @@
         </div>
 
         <div id="tabOrders" class="content-area hidden">
-            <div class="search-bar" style="margin-top:10px;">
+            <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()">
                 <i class="fas fa-search"></i>
+            </div>
+            <div class="flex-between" style="margin-bottom: 15px;">
+                <span style="font-weight: 700; font-size: 16px;">Transaction</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Sort by Latest ▾</span>
             </div>
             <div id="orderListContainer"></div>
         </div>
 
         <div id="tabOverview" class="content-area hidden">
-            <div class="order-card" style="text-align:center; padding: 60px 20px; margin-top:20px;">
-                <i class="fas fa-chart-pie fa-4x" style="color:#444; margin-bottom: 20px;"></i>
-                <h3 style="color:#FFF;">Overview</h3>
-                <p class="text-muted">Summary and statistics will be available here soon.</p>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-num" style="color:var(--accent-yellow);" id="statConfirmed">0</div>
+                    <div class="stat-label">Confirmed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-num" style="color:var(--accent-blue);" id="statInProd">0</div>
+                    <div class="stat-label">In Production</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-num" style="color:var(--accent-green);" id="statDelivered">0</div>
+                    <div class="stat-label">Delivered</div>
+                </div>
             </div>
+            <div style="text-align:center; font-size:11px; color:#666; margin-top:20px;">Summary of your order process</div>
         </div>
 
         <div id="tabCreateOrder" class="content-area hidden">
-            <div class="order-card" style="margin-top:10px;">
-                <h4 style="margin-top:0; color:var(--accent-green); border-bottom:1px solid #444; padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
+            <div class="order-card">
+                <h4 style="margin-top:0; color:var(--accent-red); border-bottom:1px solid #444; padding-bottom:10px;">เปิดออเดอร์ใหม่ (Create Order)</h4>
                 <label class="input-label">เบอร์โทรลูกค้า</label><input type="tel" id="ordPhone" class="dark-input">
-                <label class="input-label">Batch</label><input type="text" id="ordBatch" class="dark-input">
+                <label class="input-label">Batch Code</label><input type="text" id="ordBatch" class="dark-input" placeholder="QT2026-001">
                 <div class="flex-row">
                     <div style="flex:1"><label class="input-label">ทรงเสื้อ</label><select id="ordStyle" class="dark-input"></select></div>
-                    <div style="flex:1"><label class="input-label">จำนวน</label><input type="number" id="ordQty" class="dark-input"></div>
+                    <div style="flex:1"><label class="input-label">จำนวน (Qty)</label><input type="number" id="ordQty" class="dark-input"></div>
                 </div>
-                <label class="input-label">ชนิดผ้า</label><select id="ordFabric" class="dark-input"></select>
-                <label class="input-label">วันที่ส่งมอบ</label><input type="date" id="ordDate" class="dark-input">
-                <label class="input-label">ที่อยู่จัดส่ง</label><textarea id="ordAddress" rows="2" class="dark-input"></textarea>
-                <label class="input-label">รายละเอียด</label><textarea id="ordDetail" rows="2" class="dark-input"></textarea>
-                <label class="input-label">ใบสั่งงาน (WO)</label><input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" class="dark-input">
+                <label class="input-label">ชนิดผ้า (Fabric)</label><select id="ordFabric" class="dark-input"></select>
+                <label class="input-label">วันที่ส่งมอบ (Est Delivery)</label><input type="date" id="ordDate" class="dark-input">
+                <label class="input-label">รายละเอียด (Detail)</label><textarea id="ordDetail" rows="2" class="dark-input"></textarea>
+                <label class="input-label">ใบสั่งงาน (WO PDF/Image)</label>
+                <input type="file" id="ordWoImage" accept="image/*,application/pdf" onchange="processImage(this, 'new_wo', 'wo')" class="dark-input" style="font-size:12px;">
                 <div id="status-wo-new_wo" style="font-size:12px; margin-top:5px; display:none;"></div>
-                <button class="btn btn-green" style="margin-top:20px;" onclick="createOrder()">บันทึก & แจ้งลูกค้า</button>
+                <button class="btn btn-pink" style="margin-top:20px;" onclick="createOrder()">บันทึก & แจ้งลูกค้า</button>
             </div>
         </div>
 
         <div id="tabStaffOrders" class="content-area hidden">
-            <select id="staffStatusFilter" onchange="filterStaffList()" class="dark-input" style="margin:10px 0 20px 0;">
-                <option value="ACTIVE">Active Orders</option>
-                <option value="ALL">All Orders</option>
+            <div class="search-bar">
+                <input type="text" id="staffSearch" placeholder="Search order, phone..." onkeyup="filterStaffList()">
+                <i class="fas fa-search"></i>
+            </div>
+            <select id="staffStatusFilter" onchange="filterStaffList()" class="dark-input" style="margin-bottom: 20px;">
+                <option value="ACTIVE">Active Orders (กำลังดำเนินการ)</option>
+                <option value="ALL">All Orders (ทั้งหมด)</option>
             </select>
             <div id="staffTaskList">Loading...</div>
+        </div>
+
+        <div class="global-footer">
+            <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo">
+            <div>Powered by AWESOME.SCREEN CO., LTD.</div>
         </div>
     </div>
 
@@ -280,7 +348,7 @@
         <div class="topbar" style="background:var(--bg-color); position:sticky; top:0; z-index:910;">
             <h2 style="font-size:20px;">Profile</h2>
         </div>
-        <div class="content-area" style="padding-top:10px;">
+        <div class="content-area" style="padding-top:10px; min-height: auto;">
             <div style="text-align:center; margin-bottom:20px;">
                 <img id="epPic" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
                 <div style="margin-top:5px;"><span class="tier-badge" id="epTier" style="font-size:16px;">VVIP</span></div>
@@ -301,7 +369,7 @@
                 <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress">
                 
                 <label class="input-label">SHIPPING LOCATION (พิกัด GPS)</label>
-                <input type="text" id="epLocation" placeholder="Search Address" readonly style="text-align:center; margin-bottom:15px; font-weight:600;">
+                <input type="text" id="epLocation" placeholder="Search Address" readonly style="text-align:center; margin-bottom:15px; font-weight:600; color:#111;">
                 <div class="map-placeholder" id="mapDisplay">
                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5866160161474!2d100.53696807490074!3d13.743452486648712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2992db54e58f3%3A0xc3b5ed1eb10aab64!2sPratunam%20Market!5e0!3m2!1sen!2sth!4v1716373801234!5m2!1sen!2sth" allowfullscreen="" loading="lazy"></iframe>
                 </div>
@@ -365,6 +433,7 @@
         let preloadedImages = {}; 
         let currentLat = null; 
         let currentLng = null;
+        let isStaff = false;
 
         function formatDateTime(ts) { 
             if(!ts) return ""; 
@@ -402,7 +471,7 @@
             if (tier === 'VVIP') return '<i class="fas fa-crown"></i> ' + tier;
             if (tier === 'VIP') return '<i class="fas fa-star"></i> ' + tier;
             if (tier === 'Regular') return '<i class="fas fa-user"></i> ' + tier;
-            if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(tier)) return '<i class="fas fa-user"></i> Staff';
+            if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(tier)) return '<i class="fas fa-user-shield"></i> Staff';
             return '<i class="fas fa-user"></i> ' + (tier || 'Regular');
         }
 
@@ -477,21 +546,38 @@
                     dbUserData = res.data;
                     document.getElementById('viewApp').classList.remove('hidden');
                     
+                    // Common Header Setup
+                    document.getElementById('headerName').innerText = dbUserData.RealName;
+                    document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand';
+                    document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
+                    document.getElementById('headerTier').innerHTML = getTierIcon(dbUserData.Tier);
+                    
+                    // Sidebar Setup
                     document.getElementById('sidebarPic').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
                     document.getElementById('sidebarName').innerText = dbUserData.RealName;
                     
                     const role = dbUserData.Role;
                     if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(role)) {
-                        // --- Staff View Setup ---
+                        isStaff = true;
                         document.getElementById('sidebarRole').innerText = role; 
-                        document.getElementById('navAdminCreate').classList.remove('hidden');
-                        document.getElementById('navAdminList').classList.remove('hidden');
+                        document.getElementById('headerId').classList.add('hidden'); // ซ่อน ID ฝั่ง Staff
+                        
+                        document.getElementById('sidebarMenuStaff').classList.remove('hidden');
+                        document.getElementById('sidebarMenuCustomer').classList.add('hidden');
+                        
+                        document.getElementById('staffElements').classList.remove('hidden');
                         switchTab('StaffOrders'); 
                         fetchOptions(); 
                         fetchStaffData();
                     } else { 
-                        // --- Customer View Setup ---
+                        isStaff = false;
                         document.getElementById('sidebarRole').innerText = "ID: " + (dbUserData.CustomerID || '-');
+                        document.getElementById('headerId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
+                        
+                        document.getElementById('sidebarMenuStaff').classList.add('hidden');
+                        document.getElementById('sidebarMenuCustomer').classList.remove('hidden');
+                        
+                        document.getElementById('customerElements').classList.remove('hidden');
                         setupCustomerView(); 
                     }
                 } else { 
@@ -519,15 +605,27 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.content-area').forEach(el => el.classList.add('hidden'));
+            
+            // Nav styles update
+            if(!isStaff) {
+                document.querySelectorAll('.nav-sq').forEach(el => el.classList.remove('active'));
+                if(document.getElementById('navSq' + tabId)) document.getElementById('navSq' + tabId).classList.add('active');
+            } else {
+                document.querySelectorAll('.s-btn').forEach(el => { el.classList.remove('s-btn-create','s-btn-all'); el.classList.add('s-btn-inactive'); });
+                if(tabId === 'CreateOrder') { document.getElementById('navBtnCreate').classList.remove('s-btn-inactive'); document.getElementById('navBtnCreate').classList.add('s-btn-create'); }
+                if(tabId === 'StaffOrders') { document.getElementById('navBtnAll').classList.remove('s-btn-inactive'); document.getElementById('navBtnAll').classList.add('s-btn-all'); }
+            }
+
             document.getElementById('sidebarMenu').classList.remove('open'); 
             document.getElementById('sidebarOverlay').classList.remove('show');
             document.getElementById('tab' + tabId).classList.remove('hidden');
-            document.getElementById('topbarTitle').innerText = tabId === 'StaffOrders' ? 'All Orders' : tabId;
+            
+            document.getElementById('topbarTitle').innerText = tabId === 'StaffOrders' ? 'All Orders' : (tabId === 'CreateOrder' ? 'Create Order' : tabId);
         }
 
         // ================= CUSTOMER VIEW =================
         function setupCustomerView() {
-            switchTab('Profile'); 
+            switchTab('Orders'); 
             document.getElementById('profileName').innerText = dbUserData.RealName;
             document.getElementById('profileId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
             document.getElementById('profileTier').innerHTML = getTierIcon(dbUserData.Tier);
@@ -543,50 +641,86 @@
             if(['Shipped'].includes(status)) return 5;
             return 1;
         }
+        
+        function getStatusColor(status) {
+            if(['Shipped'].includes(status)) return 'var(--accent-green)';
+            if(['PP Rejected', 'Correction Needed'].includes(status)) return 'var(--accent-red)';
+            if(['Sampling Stage', 'Work Order Review Stage', 'Bulk Production (50%)'].includes(status)) return 'var(--accent-yellow)';
+            if(['Quality Control Passed'].includes(status)) return 'var(--accent-blue)';
+            return 'var(--text-main)';
+        }
 
-        // ฟังก์ชันช่วยสร้างปุ่มกดดูเอกสารแนบ (ใช้ร่วมกันทั้งฝั่ง Customer และ Staff)
-        function renderAttachments(o) {
-            let attachHtml = '';
-            if (o.woUrl !== '-' || o.sampleImage !== '-' || o.shipImage !== '-') {
-                attachHtml += `<div class="attachment-zone">`;
-                if(o.woUrl !== '-') attachHtml += `<button class="btn-attach" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ใบสั่งงาน (WO)</button>`;
-                if(o.sampleImage && o.sampleImage !== '-') attachHtml += `<button class="btn-attach" onclick="window.open('${o.sampleImage}', '_blank')"><i class="fas fa-image"></i> รูปตัวอย่าง</button>`;
-                if(o.shipImage && o.shipImage !== '-') attachHtml += `<button class="btn-attach" onclick="window.open('${o.shipImage}', '_blank')"><i class="fas fa-box"></i> รูปจัดส่ง</button>`;
-                attachHtml += `</div>`;
+        function updateCustomerBanner(latestOrder) {
+            if(!latestOrder) {
+                document.getElementById('statusBanner').classList.add('hidden');
+                return;
             }
-            return attachHtml;
+            document.getElementById('statusBanner').classList.remove('hidden');
+            document.getElementById('bannerStatusText').innerText = latestOrder.status;
+            document.getElementById('bannerOrderNo').innerText = latestOrder.orderNo;
+            document.getElementById('bannerDate').innerText = latestOrder.delivery;
+
+            // Update Background Gradient
+            const banner = document.getElementById('statusBanner');
+            banner.className = 'status-banner'; // reset
+            const step = getStepIndex(latestOrder.status);
+            if(step === 1) banner.classList.add('bg-received');
+            if(step === 2) banner.classList.add('bg-prep');
+            if(step === 3) banner.classList.add('bg-prod');
+            if(step === 4) banner.classList.add('bg-qc');
+            if(step === 5) banner.classList.add('bg-deliv');
+        }
+
+        function renderAttachments(o) {
+            let html = '';
+            if (o.woUrl !== '-' || o.sampleImage !== '-' || o.shipImage !== '-') {
+                html += `<div class="attachment-zone">`;
+                if(o.woUrl !== '-') html += `<div class="btn-attach" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf" style="color:var(--accent-red)"></i> ใบสั่งงาน</div>`;
+                if(o.sampleImage && o.sampleImage !== '-') html += `<div class="btn-attach" onclick="window.open('${o.sampleImage}', '_blank')"><i class="fas fa-image" style="color:var(--accent-yellow)"></i> รูปตัวอย่าง</div>`;
+                if(o.shipImage && o.shipImage !== '-') html += `<div class="btn-attach" onclick="window.open('${o.shipImage}', '_blank')"><i class="fas fa-box" style="color:var(--accent-blue)"></i> รูปจัดส่ง</div>`;
+                html += `</div>`;
+            }
+            return html;
         }
 
         function renderCustomerOrders(orders) {
             const container = document.getElementById('orderListContainer');
-            if (orders.length === 0) { container.innerHTML = '<div class="order-card text-center" style="color:#aaa;">ไม่มีรายการสั่งผลิต</div>'; return; }
+            if (orders.length === 0) { 
+                container.innerHTML = '<div class="order-card text-center" style="color:#aaa;">ไม่มีรายการสั่งผลิต</div>'; 
+                updateCustomerBanner(null);
+                return; 
+            }
+
+            // Overview Stats Calc
+            let cPrep=0, cProd=0, cDeliv=0;
+            let activeOrder = null;
 
             let html = '';
             orders.forEach(o => {
-                const currentStep = getStepIndex(o.status);
-                let statusColor = 'var(--text-main)';
-                if(o.status === 'Shipped') statusColor = 'var(--accent-green)';
-                if(o.status === 'PP Rejected') statusColor = 'var(--accent-red)';
+                const step = getStepIndex(o.status);
+                if(step <= 2) cPrep++;
+                else if(step <= 4) cProd++;
+                else cDeliv++;
 
+                if(!activeOrder && step < 5) activeOrder = o; // หา Order ล่าสุดที่ยังไม่ส่ง
+
+                let statusColor = getStatusColor(o.status);
                 const steps = [{name:'Order'},{name:'Prep'},{name:'Prod'},{name:'QC'},{name:'Ship'}];
                 let stepperHtml = '<div class="stepper-wrapper">';
                 steps.forEach((s, idx) => {
                     const stepNum = idx + 1;
-                    let stateClass = stepNum < currentStep ? 'completed' : (stepNum === currentStep ? 'active' : '');
+                    let stateClass = stepNum < step ? 'completed' : (stepNum === step ? 'active' : '');
                     stepperHtml += `<div class="stepper-item ${stateClass}"><div class="step-counter"></div><div class="step-name">${s.name}</div></div>`;
                 });
                 stepperHtml += '</div>';
 
-                // เอกสารและรูปภาพที่แนบ (ดูได้ตลอดเวลา)
                 let attachments = renderAttachments(o);
 
                 let actionHtml = '';
                 if (o.status === 'Pending Customer Confirmation') {
-                    actionHtml = `<div style="text-align:center; margin-top:15px;"><button class="btn btn-green" onclick="confirmWOAction('${o.orderNo}')">ยืนยันออเดอร์ (Confirm)</button></div>`;
+                    actionHtml = `<div style="text-align:center; margin-top:15px;"><button class="btn btn-green" onclick="confirmWOAction('${o.orderNo}')">ยืนยันออเดอร์ถูกต้อง (Confirm)</button></div>`;
                 } else if (o.status === 'Sampling Stage') {
-                    actionHtml = `<div style="text-align:center; margin-top:15px;"><button class="btn btn-green" style="margin-bottom:10px;" onclick="approveAction('${o.orderNo}')">อนุมัติผลิต</button><button class="btn btn-reject" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ</button></div>`;
-                } else if (o.status === 'PP Rejected') {
-                    actionHtml = `<div style="text-align:center; color:var(--accent-red); margin-top:10px;">โรงงานกำลังแก้ไขแบบ</div>`;
+                    actionHtml = `<div style="text-align:center; margin-top:15px;"><button class="btn btn-green" style="margin-bottom:10px;" onclick="approveAction('${o.orderNo}')">อนุมัติให้ผลิต (Approve)</button><button class="btn btn-reject" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ (Reject)</button></div>`;
                 }
 
                 // ประวัติการแก้แบบ
@@ -604,7 +738,7 @@
                     <div class="order-card">
                         <div class="flex-between" style="margin-bottom: 12px;">
                             <div style="font-size:16px; font-weight:700;">${o.orderNo}</div>
-                            <div style="color:${statusColor}; font-size:14px; font-weight:700;">${o.status}</div>
+                            <div style="color:${statusColor}; font-size:13px; font-weight:700;">${o.status}</div>
                         </div>
                         <div style="background:#333; border-radius:16px; padding:16px;">
                             <div style="color:var(--text-pink); font-size:16px; font-weight:700;">${o.style} <span style="color:#aaa; font-weight:400; font-size:13px;">(${o.qty} pcs)</span></div>
@@ -617,6 +751,14 @@
                     </div>`;
             });
             container.innerHTML = html;
+
+            // Update Header Banner
+            updateCustomerBanner(activeOrder || orders[0]);
+
+            // Update Overview Stats
+            document.getElementById('statConfirmed').innerText = cPrep;
+            document.getElementById('statInProd').innerText = cProd;
+            document.getElementById('statDelivered').innerText = cDeliv;
         }
 
         function fetchCustomerOrders() { 
@@ -636,10 +778,7 @@
             if (dbUserData.ShipLocation) {
                 document.getElementById('epLocation').value = dbUserData.ShipLocation;
                 const c = dbUserData.ShipLocation.split(','); 
-                if(c.length===2) { 
-                    currentLat=c[0]; currentLng=c[1]; 
-                    updateMap(currentLat, currentLng); 
-                }
+                if(c.length===2) { currentLat=c[0]; currentLng=c[1]; updateMap(currentLat, currentLng); }
             }
             document.getElementById('viewApp').classList.add('hidden'); 
             document.getElementById('viewEditProfile').classList.add('show'); 
@@ -653,12 +792,9 @@
         
         function saveProfile() {
             const payload = { 
-                userId: userProfile.userId, 
-                realName: document.getElementById('epName').value, 
-                brandName: document.getElementById('epBrand').value, 
-                phone: document.getElementById('epPhone').value, 
-                email: document.getElementById('epEmail').value, 
-                shipAddress: document.getElementById('epShipAddress').value, 
+                userId: userProfile.userId, realName: document.getElementById('epName').value, 
+                brandName: document.getElementById('epBrand').value, phone: document.getElementById('epPhone').value, 
+                email: document.getElementById('epEmail').value, shipAddress: document.getElementById('epShipAddress').value, 
                 shipLocation: document.getElementById('epLocation').value 
             };
             callBackend('update_profile', payload, (res) => { 
@@ -679,10 +815,7 @@
 
         // ================= STAFF VIEW =================
         function fetchStaffData() { 
-            callBackend('get_all_orders', {}, (res) => { 
-                globalOrders = res.orders; 
-                filterStaffList(); 
-            }); 
+            callBackend('get_all_orders', {}, (res) => { globalOrders = res.orders; filterStaffList(); }); 
         }
 
         function fetchOptions() { 
@@ -697,47 +830,47 @@
         
         function createOrder() { 
             const payload = { 
-                adminName: dbUserData.RealName, 
-                phone: document.getElementById('ordPhone').value, 
-                batch: document.getElementById('ordBatch').value, 
-                style: document.getElementById('ordStyle').value, 
-                qty: document.getElementById('ordQty').value, 
-                fabric: document.getElementById('ordFabric').value, 
-                deliveryDate: document.getElementById('ordDate').value, 
-                detail: document.getElementById('ordDetail').value, 
-                address: '-', 
-                woImage: preloadedImages['wo-new_wo'] || null 
+                adminName: dbUserData.RealName, phone: document.getElementById('ordPhone').value, 
+                batch: document.getElementById('ordBatch').value, style: document.getElementById('ordStyle').value, 
+                qty: document.getElementById('ordQty').value, fabric: document.getElementById('ordFabric').value, 
+                deliveryDate: document.getElementById('ordDate').value, detail: document.getElementById('ordDetail').value, 
+                address: '-', woImage: preloadedImages['wo-new_wo'] || null 
             };
-            if(!payload.phone) return alert("ระบุเบอร์โทร"); 
+            if(!payload.phone || !payload.batch) return alert("ระบุเบอร์โทรและ Batch"); 
             callBackend('create_order', payload, (res) => { 
-                if(res.status === 'success') { alert("สำเร็จ"); location.reload(); } 
+                if(res.status === 'success') { alert("สร้างออเดอร์เรียบร้อย"); location.reload(); } 
+                else { alert(res.message); }
             }); 
         }
 
         function filterStaffList() {
+            const search = document.getElementById('staffSearch').value.toLowerCase();
             const filter = document.getElementById('staffStatusFilter').value;
             let filtered = globalOrders;
+            
             if(filter === 'ACTIVE') filtered = filtered.filter(o => o.status !== 'Shipped');
             else if(filter !== 'ALL') filtered = filtered.filter(o => o.status === filter);
             
+            if (search) {
+                filtered = filtered.filter(o => o.orderNo.toLowerCase().includes(search) || (o.custName && o.custName.toLowerCase().includes(search)) || (o.custPhone && o.custPhone.includes(search)));
+            }
+
             const list = document.getElementById('staffTaskList');
-            if(filtered.length === 0) { list.innerHTML = '<div class="order-card text-center" style="color:#aaa;">ไม่มีงาน</div>'; return; }
+            if(filtered.length === 0) { list.innerHTML = '<div class="order-card text-center" style="color:#aaa;">ไม่มีงานในระบบ</div>'; return; }
 
             let html = ''; const role = dbUserData.Role;
             filtered.forEach(o => {
                 let btns = '';
+                let attachments = renderAttachments(o); // ใช้ฟังก์ชันร่วมเพื่อโชว์ไฟล์แนบ
                 
-                // เอกสารแนบสำหรับ Staff
-                let attachments = renderAttachments(o);
-                
-                // --- Logic การกดปุ่มของ Staff ---
+                // --- Logic การกดปุ่มของ Staff (อิงจาก Code.gs เดิม 100%) ---
                 if (['Admin', 'Production Manager'].includes(role)) {
                     if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
                     if (o.status === 'Pre-Production Approved') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')">แจ้งผลิตเสร็จ 50%</button>`;
                     if (o.status === 'Correction Needed') btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px;">ตีกลับ: ${o.feedback}</div><button class="btn btn-green" style="margin-top:5px;" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้เสร็จแล้ว ส่ง QC ใหม่</button>`;
                 }
 
-                // *Feature: ให้ Sales Admin ส่งตัวอย่างได้เหมือน Merchandiser*
+                // *เพิ่ม Sales Admin ให้ส่งตัวอย่างได้*
                 if (['Admin', 'Merchandiser', 'Sales Admin'].includes(role)) {
                     if (o.status === 'Work Order Review Stage') {
                         btns += `
@@ -752,7 +885,7 @@
                         </div>`;
                     }
                     if (o.status === 'PP Rejected') {
-                         btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px;">ลูกค้าไม่อนุมัติ: ${o.ppFeedback}</div><button class="btn btn-outline" style="border-color:#FF9800; color:#FF9800; margin-top:5px;" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้ไขแบบ</button>`;
+                         btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px;">ลูกค้าไม่อนุมัติ: ${o.ppFeedback}</div><button class="btn btn-outline" style="border-color:#FFC107; color:#FFC107; margin-top:5px;" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้ไขแบบ</button>`;
                     }
                 }
 
