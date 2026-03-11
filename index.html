@@ -68,7 +68,7 @@
         .global-footer div { font-size: 9px; font-weight: 500; color: #FFF; }
 
         /* --- Content Container --- */
-        .content-area { padding: 0 30px 20px 30px; /* เพิ่ม padding ซ้ายขวาเป็น 30px */ min-height: calc(100vh - 120px); display: flex; flex-direction: column; }
+        .content-area { padding: 0 30px 20px 30px; min-height: calc(100vh - 120px); display: flex; flex-direction: column; }
 
         /* --- Typography & Elements --- */
         h3 { font-size: 24px; font-weight: 600; margin: 0 0 5px 0; }
@@ -80,7 +80,7 @@
         .dark-input { background: #333; color: #FFF; }
 
         .btn { width: 100%; padding: 16px; border: none; border-radius: 20px; color: white; font-weight: 600; cursor: pointer; font-size: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; box-sizing: border-box; }
-        .btn-outline { background: transparent; border: 1.5px solid #FFF; color: #FFF; }
+        .btn-outline { background: transparent; border: 1px solid #777; color: #FFF; }
         .btn-green { background: var(--accent-green); color: #000; }
         .btn-dark { background: #000; color: #FFF; }
         .btn-pink { background: var(--text-pink); color: #FFF; }
@@ -99,7 +99,7 @@
         .profile-name { text-align: center; font-size: 24px; font-weight: 700; margin: 5px 0 0 0; }
         .profile-id { text-align: center; font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 25px; }
 
-        /* --- Cards & Buttons (Profile View) --- */
+        /* --- Cards & Buttons --- */
         .action-pill { background: #888888; border-radius: 30px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer; }
         .action-pill .icon { background: #444; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: var(--accent-red); }
         .action-pill .text { font-size: 16px; font-weight: 500; color: #FFF; }
@@ -108,8 +108,6 @@
         .setting-row { padding: 10px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #444; cursor: pointer; }
         .setting-row:last-child { border-bottom: none; }
         .setting-row .icon { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; color: #FFF; }
-        .setting-row .text { font-size: 14px; font-weight: 500; color: #FFF; }
-        
         .bg-pink { background: #FF4D6D; }
         .bg-gray-red { background: #555; color: #FF4D6D !important; }
         .bg-gray-pink { background: #555; color: #FF4D6D !important; }
@@ -127,41 +125,28 @@
         
         .search-bar { background: #2A2A2A; border-radius: 16px; padding: 15px 20px; display: flex; align-items: center; margin-bottom: 20px; }
         .search-bar input { background: transparent; border: none; color: #FFF; padding: 0; font-size: 15px; }
-        .search-bar i { color: #888; font-size: 20px; }
 
-        /* --- Full Screen View (Edit Profile) --- */
         .full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 950; display: none; overflow-y: auto; padding-bottom: 40px; }
         .full-view.show { display: block; }
         
-        /* Modal Center (Reject & Staff) */
         .modal-center { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1001; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-center.show { display: flex; }
         .modal-box { width: 100%; max-width: 400px; background: #222; padding: 24px; border-radius: 20px; }
 
-        /* Map Placeholder */
-        .map-placeholder { 
-            height: 180px; /* เพิ่มความสูงเพื่อให้เห็นแผนที่ชัดเจนขึ้น */
-            border-radius: 20px; 
-            margin-bottom: 20px; 
-            border: 2px solid #555; 
-            position: relative; 
-            overflow: hidden; /* ซ่อนส่วนที่ล้นของแผนที่ */
-        }
-        .map-placeholder iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
+        .map-placeholder { height: 180px; border-radius: 20px; margin-bottom: 20px; border: 2px solid #555; position: relative; overflow: hidden; }
+        .map-placeholder iframe { width: 100%; height: 100%; border: none; }
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .divider { border-top: 1px dotted #666; margin: 30px 0; }
 
-        /* Revision History Box */
+        /* Attachment Buttons (WO & Images) */
+        .attachment-zone { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; border-top: 1px dashed #444; padding-top: 15px; }
+        .btn-attach { background: transparent; border: 1px solid #777; color: #FFF; padding: 8px 12px; border-radius: 8px; font-size: 11px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .btn-attach:hover { background: #444; }
+
+        /* Revision Box */
         .revision-box { border: 1px solid var(--accent-red); border-radius: 12px; padding: 12px; margin-top: 15px; background: rgba(255, 77, 109, 0.05); }
         .revision-title { color: var(--accent-red); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
         .revision-item { font-size: 11px; color: #DDD; margin-bottom: 4px; }
-        .revision-images { display: flex; gap: 8px; overflow-x: auto; margin-top: 10px; }
-        .rev-img-box { width: 60px; height: 60px; background: #333; border-radius: 8px; flex-shrink: 0; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -214,13 +199,12 @@
                     <i class="fas fa-tasks"></i> All Orders
                 </div>
             </div>
-            
             <div class="sidebar-footer">
                 <div class="sidebar-user">
-                    <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo" id="sidebarPic">
+                    <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" id="sidebarPic">
                     <div class="sidebar-user-info">
                         <div class="name" id="sidebarName">Name</div>
-                        <div class="id" id="sidebarId">ID</div>
+                        <div class="id" id="sidebarRole">Role</div>
                     </div>
                 </div>
                 <div class="sidebar-powered">Powered by AWESOME.SCREEN CO., LTD.</div>
@@ -242,23 +226,9 @@
 
             <h4 style="margin: 10px 0 15px 5px; color:var(--text-main); font-weight:700; font-size:18px;">General Settings</h4>
             <div class="settings-card">
-                <div class="setting-row">
-                    <div class="icon bg-pink"><i class="fas fa-question"></i></div>
-                    <div class="text">About</div>
-                </div>
-                <div class="setting-row">
-                    <div class="icon bg-gray-red"><i class="fas fa-exclamation"></i></div>
-                    <div class="text">Terms & Conditions</div>
-                </div>
-                <div class="setting-row">
-                    <div class="icon bg-gray-pink"><i class="fas fa-lock"></i></div>
-                    <div class="text">Privacy Policy</div>
-                </div>
-            </div>
-            
-            <div class="global-footer">
-                <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo">
-                <div>Powered by AWESOME.SCREEN CO., LTD.</div>
+                <div class="setting-row"><div class="icon bg-pink"><i class="fas fa-question"></i></div><div class="text">About</div></div>
+                <div class="setting-row"><div class="icon bg-gray-red"><i class="fas fa-exclamation"></i></div><div class="text">Terms & Conditions</div></div>
+                <div class="setting-row"><div class="icon bg-gray-pink"><i class="fas fa-lock"></i></div><div class="text">Privacy Policy</div></div>
             </div>
         </div>
 
@@ -266,10 +236,6 @@
             <div class="search-bar" style="margin-top:10px;">
                 <input type="text" id="searchInput" placeholder="Search here" onkeyup="filterOrders()">
                 <i class="fas fa-search"></i>
-            </div>
-            <div class="flex-between" style="margin-bottom: 20px;">
-                <span style="font-weight: 700; font-size: 16px;">Transaction</span>
-                <span style="font-size: 13px; color: var(--text-muted); font-weight:500;">Sort by Latest ▾</span>
             </div>
             <div id="orderListContainer"></div>
         </div>
@@ -285,16 +251,17 @@
         <div id="tabCreateOrder" class="content-area hidden">
             <div class="order-card" style="margin-top:10px;">
                 <h4 style="margin-top:0; color:var(--accent-green); border-bottom:1px solid #444; padding-bottom:10px;">เปิดออเดอร์ใหม่</h4>
-                <label class="input-label" style="color:#aaa;">1. เบอร์โทรลูกค้า</label><input type="tel" id="ordPhone" placeholder="08x-xxx-xxxx" class="dark-input">
-                <label class="input-label" style="color:#aaa;">2. Batch</label><input type="text" id="ordBatch" placeholder="QT2026-001" class="dark-input">
+                <label class="input-label">เบอร์โทรลูกค้า</label><input type="tel" id="ordPhone" class="dark-input">
+                <label class="input-label">Batch</label><input type="text" id="ordBatch" class="dark-input">
                 <div class="flex-row">
-                    <div style="flex:1"><label class="input-label" style="color:#aaa;">3. ทรงเสื้อ</label><select id="ordStyle" class="dark-input"></select></div>
-                    <div style="flex:1"><label class="input-label" style="color:#aaa;">4. จำนวน</label><input type="number" id="ordQty" placeholder="100" class="dark-input"></div>
+                    <div style="flex:1"><label class="input-label">ทรงเสื้อ</label><select id="ordStyle" class="dark-input"></select></div>
+                    <div style="flex:1"><label class="input-label">จำนวน</label><input type="number" id="ordQty" class="dark-input"></div>
                 </div>
-                <label class="input-label" style="color:#aaa;">5. ชนิดผ้า</label><select id="ordFabric" class="dark-input"></select>
-                <label class="input-label" style="color:#aaa;">6. วันที่ส่งมอบ</label><input type="date" id="ordDate" class="dark-input">
-                <label class="input-label" style="color:#aaa;">7. รายละเอียด</label><textarea id="ordDetail" rows="2" class="dark-input"></textarea>
-                <label class="input-label" style="color:#aaa;">8. แนบใบสั่งงาน (WO)</label><input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" style="padding:10px; font-size:12px; background:#333; color:#fff;">
+                <label class="input-label">ชนิดผ้า</label><select id="ordFabric" class="dark-input"></select>
+                <label class="input-label">วันที่ส่งมอบ</label><input type="date" id="ordDate" class="dark-input">
+                <label class="input-label">ที่อยู่จัดส่ง</label><textarea id="ordAddress" rows="2" class="dark-input"></textarea>
+                <label class="input-label">รายละเอียด</label><textarea id="ordDetail" rows="2" class="dark-input"></textarea>
+                <label class="input-label">ใบสั่งงาน (WO)</label><input type="file" id="ordWoImage" accept="image/*" onchange="processImage(this, 'new_wo', 'wo')" class="dark-input">
                 <div id="status-wo-new_wo" style="font-size:12px; margin-top:5px; display:none;"></div>
                 <button class="btn btn-green" style="margin-top:20px;" onclick="createOrder()">บันทึก & แจ้งลูกค้า</button>
             </div>
@@ -304,11 +271,6 @@
             <select id="staffStatusFilter" onchange="filterStaffList()" class="dark-input" style="margin:10px 0 20px 0;">
                 <option value="ACTIVE">Active Orders</option>
                 <option value="ALL">All Orders</option>
-                <option value="Order Received">1. Order Received</option>
-                <option value="Preparation">2. Preparation</option>
-                <option value="In Production">3. In Production</option>
-                <option value="Quality Check">4. Quality Check</option>
-                <option value="Delivered">5. Delivered</option>
             </select>
             <div id="staffTaskList">Loading...</div>
         </div>
@@ -318,124 +280,51 @@
         <div class="topbar" style="background:var(--bg-color); position:sticky; top:0; z-index:910;">
             <h2 style="font-size:20px;">Profile</h2>
         </div>
-        
-        <div class="content-area" style="padding-top:10px;"> <div style="text-align:center; margin-bottom:20px;">
+        <div class="content-area" style="padding-top:10px;">
+            <div style="text-align:center; margin-bottom:20px;">
                 <img id="epPic" src="https://via.placeholder.com/100" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
                 <div style="margin-top:5px;"><span class="tier-badge" id="epTier" style="font-size:16px;">VVIP</span></div>
                 <h3 style="margin:0; font-size:22px;" id="epHeaderName">User Name</h3>
-                <div style="font-size:12px; color:#FFF; font-weight:600;" id="epHeaderId">Customer ID: CUST-0000</div>
             </div>
-
             <div style="background:#888; border-radius: 20px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                <div style="background: #444; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: var(--accent-red);">
-                    <i class="fas fa-pen"></i>
-                </div>
+                <div style="background: #444; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);"><i class="fas fa-pen"></i></div>
                 <div style="font-size: 16px; font-weight: 500; color: #FFF;">Edit Profile</div>
             </div>
 
             <div style="background: #333; padding: 20px; border-radius: 20px;">
-                <label class="input-label" style="margin-top: 0;">NAME*</label><input type="text" id="epName" placeholder="Your full name">
-                <label class="input-label">BRAND NAME*</label><input type="text" id="epBrand" placeholder="Your brand name">
+                <label class="input-label" style="margin-top: 0;">NAME*</label><input type="text" id="epName">
+                <label class="input-label">BRAND NAME</label><input type="text" id="epBrand">
                 <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">PHONE NUMBER*</label><input type="tel" id="epPhone" placeholder="08xxxxxxxx"></div>
-                    <div style="flex:1;"><label class="input-label">EMAIL ADDRESS*</label><input type="email" id="epEmail" placeholder="your@email.com"></div>
-                </div>
-                <label class="input-label">ADDRESS*</label><input type="text" id="epPerAddress">
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epPerCity"></div>
-                    <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epPerProv"></div>
-                </div>
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epPerZip"></div>
-                    <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epPerCountry" value="Thailand"></div>
-                </div>
-
-                <div class="divider"></div>
-
-                <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">BILLING ADDRESS (FOR TAX INVOICE)</div>
-                <label class="checkbox-container">
-                    <input type="checkbox" id="cbSameShip1">
-                    <div class="checkmark"></div>
-                    <span class="checkbox-label">Same as Shipping Address</span>
-                </label>
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">COMPANY NAME</label><input type="text" id="epBillComp"></div>
-                    <div style="flex:1;"><label class="input-label">PHONE NUMBER</label><input type="text" id="epBillPhone"></div>
-                </div>
-                <label class="input-label">TAX ID</label><input type="text" id="epBillTax">
-                <label class="input-label">ADDRESS*</label><input type="text" id="epBillAddress">
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">CITY / DISTRICT*</label><input type="text" id="epBillCity"></div>
-                    <div style="flex:1;"><label class="input-label">PROVINCE / STATE*</label><input type="text" id="epBillProv"></div>
-                </div>
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">POSTAL CODE*</label><input type="text" id="epBillZip"></div>
-                    <div style="flex:1;"><label class="input-label">COUNTRY*</label><input type="text" id="epBillCountry" value="Thailand"></div>
-                </div>
-
-                <div class="divider"></div>
-
-                <div style="font-size:11px; font-weight:600; color:#FFF; letter-spacing:0.5px;">SHIPPING ADDRESS</div>
-                <label class="checkbox-container">
-                    <input type="checkbox" id="cbSameShip2">
-                    <div class="checkmark"></div>
-                    <span class="checkbox-label">Same as Shipping Address</span>
-                </label>
-                <label class="checkbox-container">
-                    <input type="checkbox" id="cbSameBill">
-                    <div class="checkmark"></div>
-                    <span class="checkbox-label">Same as Billing Address</span>
-                </label>
-
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">RECIPIENT NAME</label><input type="text" id="epShipName"></div>
-                    <div style="flex:1;"><label class="input-label">PHONE NO.</label><input type="text" id="epShipPhone"></div>
+                    <div style="flex:1;"><label class="input-label">PHONE*</label><input type="tel" id="epPhone"></div>
+                    <div style="flex:1;"><label class="input-label">EMAIL</label><input type="email" id="epEmail"></div>
                 </div>
                 <label class="input-label">ADDRESS</label><input type="text" id="epShipAddress">
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">CITY / DISTRICT</label><input type="text" id="epShipCity"></div>
-                    <div style="flex:1;"><label class="input-label">PROVINCE / STATE</label><input type="text" id="epShipProv"></div>
-                </div>
-                <div class="flex-row">
-                    <div style="flex:1;"><label class="input-label">POSTAL CODE</label><input type="text" id="epShipZip"></div>
-                    <div style="flex:1;"><label class="input-label">COUNTRY</label><input type="text" id="epShipCountry" value="Thailand"></div>
-                </div>
-
+                
                 <label class="input-label">SHIPPING LOCATION (พิกัด GPS)</label>
                 <input type="text" id="epLocation" placeholder="Search Address" readonly style="text-align:center; margin-bottom:15px; font-weight:600;">
-                
                 <div class="map-placeholder" id="mapDisplay">
-                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5866160161474!2d100.53696807490074!3d13.743452486648712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2992db54e58f3%3A0xc3b5ed1eb10aab64!2sPratunam%20Market!5e0!3m2!1sen!2sth!4v1716373801234!5m2!1sen!2sth" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5866160161474!2d100.53696807490074!3d13.743452486648712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2992db54e58f3%3A0xc3b5ed1eb10aab64!2sPratunam%20Market!5e0!3m2!1sen!2sth!4v1716373801234!5m2!1sen!2sth" allowfullscreen="" loading="lazy"></iframe>
                 </div>
-
                 <div class="flex-row" style="margin-bottom: 30px;">
                     <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:13px; border-radius:30px;" onclick="getLocation()"><i class="fas fa-location-arrow"></i> My Location</button>
-                    <button class="btn btn-pink" style="flex:1.5; font-size:13px; background:#FF4D6D; border-radius:30px;" onclick="openMap()">Open Map</button>
+                    <button class="btn btn-pink" style="flex:1.5; font-size:13px; border-radius:30px;" onclick="openMap()">Open Map</button>
                 </div>
-
-                <div class="flex-row" style="padding-bottom: 20px;">
-                    <button class="btn btn-dark" onclick="closeEditProfile()" style="background:#000; border-radius:30px;">Cancel</button>
-                    <button class="btn btn-green" onclick="saveProfile()" style="border-radius:30px;">Save Changes</button>
+                <div class="flex-row">
+                    <button class="btn btn-dark" onclick="closeEditProfile()" style="border-radius:30px;">Cancel</button>
+                    <button class="btn btn-green" onclick="saveProfile()" style="border-radius:30px;">Save</button>
                 </div>
-            </div>
-            
-            <div style="text-align:center; padding-top:20px; padding-bottom:30px;">
-                <img src="https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" style="width:20px; border-radius:50%; vertical-align:middle; margin-right:5px;">
-                <span style="font-size:9px; color:#FFF;">Powered by AWESOME.SCREEN CO., LTD.</span>
             </div>
         </div>
     </div>
 
     <div id="modalReject" class="modal-center">
         <div class="modal-box">
-            <div style="text-align:center; font-size:18px; font-weight:700; margin-bottom:5px; color:#FFF;"><i class="fas fa-times-circle" style="color:var(--accent-red);"></i> ไม่อนุมัติ (Not Approved)</div>
-            <div style="font-size:12px; text-align:center; color:var(--text-muted); margin-bottom: 15px; font-weight:500;">ระบุสาเหตุ จุดที่ต้องการแก้ไข<br>Please specify the reason and the areas to revise.</div>
+            <div style="text-align:center; font-size:18px; font-weight:700; margin-bottom:5px; color:#FFF;">ไม่อนุมัติ (Not Approved)</div>
             <input type="hidden" id="rejOrderNo">
-            <textarea id="rejReason" rows="4" placeholder="แขนเสื้อสั้นไป...
-Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
+            <textarea id="rejReason" rows="4" placeholder="ระบุสาเหตุ..." style="background:#444; color:#FFF;"></textarea>
             <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
                 <button class="btn btn-dark" onclick="closeModal('modalReject')">Cancel</button>
-                <button class="btn btn-reject" onclick="confirmReject()">แจ้งฝ่ายผลิต / Notify Production</button>
+                <button class="btn btn-reject" onclick="confirmReject()">แจ้งฝ่ายผลิต</button>
             </div>
         </div>
     </div>
@@ -466,135 +355,119 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbyH6MW5PHgN9oAPBpDNOPR9Z-SZ4VLYhiVFndMoZ3GAnsV1BG-GUshKNSQUV49QOTHCTw/exec'; // <--- เปลี่ยนใส่ Web App URL ของคุณที่นี่
-        const LIFF_ID = '2009142530-l2sIA52W'; // <--- เปลี่ยนใส่ LIFF ID ของคุณที่นี่
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbzQKukQOamROu9N4uNIxlPz5mNnILXEpD6Kis3XdiWlX1sWiFtcsITuuuj0GE3evJ7Phg/exec'; // <--- ใส่ Web App URL ของคุณที่นี่
+        const LIFF_ID = '2009142530-l2sIA52W'; // <--- ใส่ LIFF ID ของคุณที่นี่
         // =================================================
 
         let userProfile = {};
         let dbUserData = {};
         let globalOrders = [];
         let preloadedImages = {}; 
-        let currentLat = null;
+        let currentLat = null; 
         let currentLng = null;
 
-        // Utilities
-        function formatDateTime(ts) {
-            if(!ts) return ""; const d = new Date(ts); if(isNaN(d.getTime())) return "";
-            const pad = n => String(n).padStart(2, '0');
-            return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+        function formatDateTime(ts) { 
+            if(!ts) return ""; 
+            const d = new Date(ts); 
+            if(isNaN(d.getTime())) return ""; 
+            const pad = n => String(n).padStart(2, '0'); 
+            return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`; 
         }
 
-        // --- ฟังก์ชันดึงพิกัด GPS ---
         function getLocation() {
             if (navigator.geolocation) {
-                document.getElementById('epLocation').value = "กำลังค้นหาตำแหน่ง...";
+                document.getElementById('epLocation').value = "กำลังค้นหา...";
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLat = position.coords.latitude;
-                        currentLng = position.coords.longitude;
-                        const coordsStr = `${currentLat},${currentLng}`;
-                        
-                        document.getElementById('epLocation').value = coordsStr;
-                        
-                        // อัปเดตแผนที่ให้ชี้ไปที่พิกัดที่ได้
-                        updateMap(currentLat, currentLng);
+                    (pos) => {
+                        currentLat = pos.coords.latitude; 
+                        currentLng = pos.coords.longitude;
+                        document.getElementById('epLocation').value = `${currentLat},${currentLng}`;
+                        document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=${currentLat},${currentLng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
                     },
-                    (error) => {
-                        document.getElementById('epLocation').value = "ไม่สามารถดึงตำแหน่งได้";
-                        alert("กรุณาอนุญาตให้เข้าถึงตำแหน่ง (Location) ในการตั้งค่าของอุปกรณ์");
-                    },
+                    () => { alert("กรุณาอนุญาต Location"); document.getElementById('epLocation').value = ""; },
                     { enableHighAccuracy: true }
                 );
-            } else {
-                alert("เบราว์เซอร์ของคุณไม่รองรับการระบุตำแหน่ง");
-            }
+            } else { alert("ไม่รองรับ GPS"); }
         }
 
-        // อัปเดต iFrame แผนที่
-        function updateMap(lat, lng) {
-             const mapDisplay = document.getElementById('mapDisplay');
-             mapDisplay.innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`;
-        }
-
-        // เปิดแผนที่ Google Maps (ในหน้าต่างใหม่)
         function openMap() {
             if (currentLat && currentLng) {
                 window.open(`https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLng}`, '_blank');
             } else {
-                alert("กรุณากดปุ่ม My Location เพื่อค้นหาตำแหน่งก่อน");
+                alert("กรุณากด My Location ก่อน");
             }
         }
 
-        // --- ฟังก์ชันแสดงไอคอน Tier ---
         function getTierIcon(tier) {
             if (tier === 'VVIP') return '<i class="fas fa-crown"></i> ' + tier;
             if (tier === 'VIP') return '<i class="fas fa-star"></i> ' + tier;
             if (tier === 'Regular') return '<i class="fas fa-user"></i> ' + tier;
-            if (tier === 'Staff' || tier === 'Admin') return 'Staff';
+            if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(tier)) return '<i class="fas fa-user"></i> Staff';
             return '<i class="fas fa-user"></i> ' + (tier || 'Regular');
         }
 
-        // Base64 Image Processor (For WO, Sample, Shipped Images)
         function getBase64(file) {
             return new Promise((resolve, reject) => {
-                const reader = new FileReader(); reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image(); img.src = event.target.result;
+                const reader = new FileReader(); 
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image(); 
+                    img.src = e.target.result;
                     img.onload = () => {
-                        const canvas = document.createElement('canvas'); const MAX_WIDTH = 800; 
-                        const scaleSize = MAX_WIDTH / img.width; canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize;
-                        const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const canvas = document.createElement('canvas'); 
+                        const MAX_WIDTH = 800; 
+                        const scale = MAX_WIDTH / img.width; 
+                        canvas.width = MAX_WIDTH; 
+                        canvas.height = img.height * scale;
+                        const ctx = canvas.getContext('2d'); 
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         resolve(canvas.toDataURL('image/jpeg', 0.7)); 
                     };
-                    img.onerror = error => reject(error);
                 };
-                reader.onerror = error => reject(error);
             });
         }
 
         async function processImage(input, orderNo, type) {
-            let btnId = ''; let statusId = '';
-            if(type === 's') { btnId = `btn-s-${orderNo}`; statusId = `status-s-${orderNo}`; }
-            else if(type === 'ship') { btnId = `btn-ship-${orderNo}`; statusId = `status-ship-${orderNo}`; }
-            else if(type === 'wo') { statusId = `status-wo-${orderNo}`; } 
-
-            const btn = btnId ? document.getElementById(btnId) : null; const status = document.getElementById(statusId);
+            let statusId = `status-${type}-${orderNo}`; 
+            const status = document.getElementById(statusId);
             const key = `${type}-${orderNo}`;
-
+            
             if (input.files.length > 0) {
-                if(btn) { btn.classList.add('btn-disabled'); btn.disabled = true; }
-                status.style.display = 'block'; status.style.color = '#FFC805'; status.innerHTML = 'กำลังประมวลผล...';
+                if(status) { status.style.display = 'block'; status.style.color = '#FFC805'; status.innerHTML = 'กำลังประมวลผล...'; }
                 try {
-                    const base64 = await getBase64(input.files[0]); preloadedImages[key] = base64; 
-                    status.style.color = 'var(--accent-green)'; status.innerHTML = 'ไฟล์พร้อมส่ง';
-                    if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
-                } catch (e) {
-                    status.style.color = 'var(--accent-red)'; status.innerHTML = 'เกิดข้อผิดพลาด';
-                    if(btn) { btn.classList.remove('btn-disabled'); btn.disabled = false; }
+                    preloadedImages[key] = await getBase64(input.files[0]); 
+                    if(status) { status.style.color = 'var(--accent-green)'; status.innerHTML = 'ไฟล์พร้อมส่ง'; }
+                } catch (e) { 
+                    if(status) { status.style.color = 'var(--accent-red)'; status.innerHTML = 'Error'; } 
                 }
-            } else { status.style.display = 'none'; delete preloadedImages[key]; }
+            } else { 
+                if(status) status.style.display = 'none'; 
+                delete preloadedImages[key]; 
+            }
         }
 
         // ================= CORE SYSTEM =================
         async function main() {
-            try {
-                await liff.init({ liffId: LIFF_ID });
+            try { 
+                await liff.init({ liffId: LIFF_ID }); 
                 if (!liff.isLoggedIn()) { liff.login(); return; }
-                userProfile = await liff.getProfile();
+                userProfile = await liff.getProfile(); 
                 checkUser();
-            } catch(e) { alert("LIFF Init Error: กรุณาตรวจสอบ LIFF ID"); }
+            } catch(e) { alert("LIFF Init Error"); }
         }
         main();
 
         function callBackend(action, data, callback) {
             document.getElementById('loader').classList.remove('hidden');
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: action, data: data }) })
-            .then(r => r.json()).then(res => {
-                document.getElementById('loader').classList.add('hidden');
-                if(callback) callback(res);
-            }).catch(e => {
-                document.getElementById('loader').classList.add('hidden'); alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
-                console.error(e);
+            .then(r => r.json())
+            .then(res => { 
+                document.getElementById('loader').classList.add('hidden'); 
+                if(callback) callback(res); 
+            })
+            .catch(e => { 
+                document.getElementById('loader').classList.add('hidden'); 
+                alert("Error connecting to server"); 
             });
         }
 
@@ -604,262 +477,212 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
                     dbUserData = res.data;
                     document.getElementById('viewApp').classList.remove('hidden');
                     
-                    // Setup Sidebar Info
                     document.getElementById('sidebarPic').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
-                    document.getElementById('sidebarName').innerText = dbUserData.RealName || userProfile.displayName;
-                    document.getElementById('sidebarId').innerText = "ID: " + (dbUserData.CustomerID || '-');
+                    document.getElementById('sidebarName').innerText = dbUserData.RealName;
                     
                     const role = dbUserData.Role;
-                    // Check if User is Staff
                     if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser'].includes(role)) {
+                        // --- Staff View Setup ---
+                        document.getElementById('sidebarRole').innerText = role; 
                         document.getElementById('navAdminCreate').classList.remove('hidden');
                         document.getElementById('navAdminList').classList.remove('hidden');
-                        switchTab('StaffOrders');
-                        fetchOptions();
+                        switchTab('StaffOrders'); 
+                        fetchOptions(); 
                         fetchStaffData();
-                    } else {
-                        // User is Customer
-                        setupCustomerView();
+                    } else { 
+                        // --- Customer View Setup ---
+                        document.getElementById('sidebarRole').innerText = "ID: " + (dbUserData.CustomerID || '-');
+                        setupCustomerView(); 
                     }
-                } else {
-                    document.getElementById('viewRegister').classList.remove('hidden');
+                } else { 
+                    document.getElementById('viewRegister').classList.remove('hidden'); 
                 }
             });
         }
 
         function register() {
-            const payload = {
-                userId: userProfile.userId, realName: document.getElementById('regName').value,
-                brandName: document.getElementById('regBrand').value, phone: document.getElementById('regPhone').value,
-                email: document.getElementById('regEmail').value
+            const payload = { 
+                userId: userProfile.userId, 
+                realName: document.getElementById('regName').value, 
+                brandName: document.getElementById('regBrand').value, 
+                phone: document.getElementById('regPhone').value, 
+                email: document.getElementById('regEmail').value 
             };
-            if(!payload.realName || !payload.phone) return alert("กรุณากรอกชื่อและเบอร์โทรศัพท์");
+            if(!payload.realName || !payload.phone) return alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
             callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); });
         }
 
-        // ================= NAVIGATION =================
-        function toggleSidebar() {
-            document.getElementById('sidebarMenu').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('show');
+        function toggleSidebar() { 
+            document.getElementById('sidebarMenu').classList.toggle('open'); 
+            document.getElementById('sidebarOverlay').classList.toggle('show'); 
         }
 
         function switchTab(tabId) {
-            // Hide all tabs
-            document.getElementById('tabProfile').classList.add('hidden');
-            document.getElementById('tabOrders').classList.add('hidden');
-            document.getElementById('tabOverview').classList.add('hidden');
-            document.getElementById('tabCreateOrder').classList.add('hidden');
-            document.getElementById('tabStaffOrders').classList.add('hidden');
-            
-            // Close Sidebar
-            document.getElementById('sidebarMenu').classList.remove('open');
+            document.querySelectorAll('.content-area').forEach(el => el.classList.add('hidden'));
+            document.getElementById('sidebarMenu').classList.remove('open'); 
             document.getElementById('sidebarOverlay').classList.remove('show');
-
-            // Show selected tab & Update Title
             document.getElementById('tab' + tabId).classList.remove('hidden');
-            let title = tabId;
-            if(tabId === 'StaffOrders') title = 'All Orders';
-            if(tabId === 'CreateOrder') title = 'Create Order';
-            document.getElementById('topbarTitle').innerText = title;
+            document.getElementById('topbarTitle').innerText = tabId === 'StaffOrders' ? 'All Orders' : tabId;
         }
 
-        // ================= CUSTOMER LOGIC =================
+        // ================= CUSTOMER VIEW =================
         function setupCustomerView() {
             switchTab('Profile'); 
-            document.getElementById('profileName').innerText = dbUserData.RealName || userProfile.displayName;
+            document.getElementById('profileName').innerText = dbUserData.RealName;
             document.getElementById('profileId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
-            
-            // ใช้ getTierIcon เพื่อแสดงรูปมงกุฎ/ดาว ตามระดับ
             document.getElementById('profileTier').innerHTML = getTierIcon(dbUserData.Tier);
             document.getElementById('profilePicLg').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
-            
             fetchCustomerOrders();
         }
 
-        function fetchCustomerOrders() {
-            callBackend('get_my_orders', { userId: userProfile.userId }, (res) => {
-                globalOrders = res.orders;
-                renderCustomerOrders(globalOrders);
-            });
+        function getStepIndex(status) {
+            if(['Pending Customer Confirmation', 'Order Confirmation'].includes(status)) return 1;
+            if(['Work Order Review Stage', 'Sampling Stage', 'PP Rejected'].includes(status)) return 2;
+            if(['Pre-Production Approved', 'Bulk Production (50%)', 'Correction Needed'].includes(status)) return 3;
+            if(['Quality Control Passed'].includes(status)) return 4;
+            if(['Shipped'].includes(status)) return 5;
+            return 1;
         }
 
-        function getStepIndex(status) {
-            const flow = ['Order Received', 'Preparation', 'In Production', 'Quality Check', 'Delivered'];
-            return flow.indexOf(status) + 1;
+        // ฟังก์ชันช่วยสร้างปุ่มกดดูเอกสารแนบ (ใช้ร่วมกันทั้งฝั่ง Customer และ Staff)
+        function renderAttachments(o) {
+            let attachHtml = '';
+            if (o.woUrl !== '-' || o.sampleImage !== '-' || o.shipImage !== '-') {
+                attachHtml += `<div class="attachment-zone">`;
+                if(o.woUrl !== '-') attachHtml += `<button class="btn-attach" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ใบสั่งงาน (WO)</button>`;
+                if(o.sampleImage && o.sampleImage !== '-') attachHtml += `<button class="btn-attach" onclick="window.open('${o.sampleImage}', '_blank')"><i class="fas fa-image"></i> รูปตัวอย่าง</button>`;
+                if(o.shipImage && o.shipImage !== '-') attachHtml += `<button class="btn-attach" onclick="window.open('${o.shipImage}', '_blank')"><i class="fas fa-box"></i> รูปจัดส่ง</button>`;
+                attachHtml += `</div>`;
+            }
+            return attachHtml;
         }
 
         function renderCustomerOrders(orders) {
             const container = document.getElementById('orderListContainer');
-            if (orders.length === 0) { container.innerHTML = '<div class="order-card text-center text-muted">No transactions found.</div>'; return; }
+            if (orders.length === 0) { container.innerHTML = '<div class="order-card text-center" style="color:#aaa;">ไม่มีรายการสั่งผลิต</div>'; return; }
 
             let html = '';
             orders.forEach(o => {
                 const currentStep = getStepIndex(o.status);
                 let statusColor = 'var(--text-main)';
-                if(o.status === 'Order Received' || o.status === 'Delivered') statusColor = 'var(--accent-green)';
-                if(o.status === 'Preparation' || o.status === 'In Production') statusColor = '#FFC805';
-                if(o.status === 'Quality Check') statusColor = '#00B9F2';
+                if(o.status === 'Shipped') statusColor = 'var(--accent-green)';
+                if(o.status === 'PP Rejected') statusColor = 'var(--accent-red)';
 
-                const steps = [
-                    { name: 'Order<br>Received', date: o.dateReceived },
-                    { name: 'Preparation', date: o.datePrep },
-                    { name: 'In<br>Production', date: o.dateProd },
-                    { name: 'Quality<br>Check', date: o.dateQC },
-                    { name: 'Delivered', date: o.dateDelivered }
-                ];
-
+                const steps = [{name:'Order'},{name:'Prep'},{name:'Prod'},{name:'QC'},{name:'Ship'}];
                 let stepperHtml = '<div class="stepper-wrapper">';
                 steps.forEach((s, idx) => {
                     const stepNum = idx + 1;
                     let stateClass = stepNum < currentStep ? 'completed' : (stepNum === currentStep ? 'active' : '');
-                    stepperHtml += `<div class="stepper-item ${stateClass}"><div class="step-counter"></div><div class="step-name">${s.name}</div><div class="step-date">${s.date !== '-' ? s.date : ''}</div></div>`;
+                    stepperHtml += `<div class="stepper-item ${stateClass}"><div class="step-counter"></div><div class="step-name">${s.name}</div></div>`;
                 });
                 stepperHtml += '</div>';
 
+                // เอกสารและรูปภาพที่แนบ (ดูได้ตลอดเวลา)
+                let attachments = renderAttachments(o);
+
                 let actionHtml = '';
-                // Action: Order Received (Confirm WO)
-                if (o.status === 'Order Received' || o.status === 'Pending Customer Confirmation') {
-                    actionHtml = `<div style="margin-top: 20px; text-align:center;"><div style="font-size:11px; color:#FFC805; margin-bottom:12px;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
-                    ${o.woUrl !== '-' ? `<button class="btn btn-outline" style="margin-bottom:10px; font-size:13px; padding:12px;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
-                    <button class="btn btn-green" style="font-size:13px; padding:12px;" onclick="confirmWOAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button></div>`;
+                if (o.status === 'Pending Customer Confirmation') {
+                    actionHtml = `<div style="text-align:center; margin-top:15px;"><button class="btn btn-green" onclick="confirmWOAction('${o.orderNo}')">ยืนยันออเดอร์ (Confirm)</button></div>`;
+                } else if (o.status === 'Sampling Stage') {
+                    actionHtml = `<div style="text-align:center; margin-top:15px;"><button class="btn btn-green" style="margin-bottom:10px;" onclick="approveAction('${o.orderNo}')">อนุมัติผลิต</button><button class="btn btn-reject" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ</button></div>`;
+                } else if (o.status === 'PP Rejected') {
+                    actionHtml = `<div style="text-align:center; color:var(--accent-red); margin-top:10px;">โรงงานกำลังแก้ไขแบบ</div>`;
                 }
 
-                // Action: Preparation (Approve Sample)
-                if (o.status === 'Preparation' && o.sampleImage && o.sampleImage !== '-') {
-                    actionHtml = `<div style="margin-top: 20px; text-align:center;"><div style="font-size:11px; color:#FFC805; margin-bottom:12px;">ตัวอย่างถูกจัดส่งแล้ว กรุณาตรวจสอบและคอนเฟิร์ม<br>The sample has been shipped. Please review and confirm.</div>
-                    <button class="btn btn-green" style="margin-bottom:10px; font-size:13px; padding:12px;" onclick="approveAction('${o.orderNo}')"><i class="fas fa-check-circle"></i> อนุมัติผลิต / Approve Production</button>
-                    <button class="btn btn-reject" style="font-size:13px; padding:12px;" onclick="openRejectModal('${o.orderNo}')">ไม่อนุมัติ / Not Approved</button></div>`;
-                }
-
-                // Revision History
+                // ประวัติการแก้แบบ
                 let revHtml = '';
                 if (o.revCount > 0 && o.revHistory.length > 0) {
-                    let itemsHtml = ''; let imagesHtml = '';
+                    let itemsHtml = '';
                     o.revHistory.forEach(r => {
-                        itemsHtml += `<div class="revision-item">• Revision ${r.round} (Not Approved) : ${r.rejectReason}</div>`;
-                        if(r.fixDetail) itemsHtml += `<div class="revision-item" style="color:var(--accent-green);">• Revised : ${r.fixDetail}</div>`;
+                        itemsHtml += `<div class="revision-item">• ครั้งที่ ${r.round} (ไม่อนุมัติ) : ${r.rejectReason}</div>`;
+                        if(r.fixDetail) itemsHtml += `<div class="revision-item" style="color:var(--accent-green);">• แก้ไขแล้ว : ${r.fixDetail}</div>`;
                     });
-                    if(o.sampleImage && o.sampleImage !== '-') {
-                         imagesHtml = `<div class="revision-images"><img src="${o.sampleImage}" class="rev-img-box" onclick="window.open('${o.sampleImage}')"></div>`;
-                    }
-                    revHtml = `<div class="revision-box"><div class="revision-title"><i class="fas fa-arrow-right"></i> Revision History (${o.revCount} time)</div>${itemsHtml}<hr style="border-top:1px dashed #444; margin:8px 0;">${imagesHtml}</div>`;
+                    revHtml = `<div class="revision-box"><div class="revision-title"><i class="fas fa-history"></i> ประวัติการแก้แบบ (${o.revCount} ครั้ง)</div>${itemsHtml}</div>`;
                 }
 
                 html += `
                     <div class="order-card">
                         <div class="flex-between" style="margin-bottom: 12px;">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <i class="fas fa-tshirt" style="font-size:24px; color:#DDD;"></i>
-                                <div><div style="font-size:16px; font-weight:700;">${o.orderNo}</div><div style="font-size:11px; color:var(--text-muted); font-weight:500;">${o.dateReceived}</div></div>
-                            </div>
+                            <div style="font-size:16px; font-weight:700;">${o.orderNo}</div>
                             <div style="color:${statusColor}; font-size:14px; font-weight:700;">${o.status}</div>
                         </div>
-                        <div style="background:#333; border-radius:16px; padding:16px; display:flex; justify-content:space-between; margin-top:15px;">
-                            <div>
-                                <div style="color:var(--text-pink); font-size:16px; font-weight:700; margin-bottom:10px;">${o.style} <span style="color:var(--text-muted); font-size:13px; font-weight:400;">(${o.qty} pcs)</span></div>
-                                <div style="font-size:12px; color:var(--text-main); font-weight:500;">Estimated Delivery:</div><div style="font-size:16px; font-weight:600;">${o.delivery}</div>
-                            </div>
-                            ${o.woUrl !== '-' ? `<div style="text-align:center;"><img src="https://via.placeholder.com/70x85?text=WO" style="width:60px; height:75px; border-radius:8px; object-fit:cover; cursor:pointer; border:1px solid #555;" onclick="window.open('${o.woUrl}','_blank')"><div style="font-size:8px; margin-top:4px; color:#aaa;">ดูใบสั่งงาน</div></div>` : ''}
+                        <div style="background:#333; border-radius:16px; padding:16px;">
+                            <div style="color:var(--text-pink); font-size:16px; font-weight:700;">${o.style} <span style="color:#aaa; font-weight:400; font-size:13px;">(${o.qty} pcs)</span></div>
+                            <div style="font-size:12px; color:#aaa; margin-top:5px;">Est. Delivery: <span style="color:#fff;">${o.delivery}</span></div>
                         </div>
                         ${stepperHtml}
+                        ${attachments}
                         ${revHtml}
                         ${actionHtml}
-                        ${o.status === 'Delivered' ? `<div style="text-align:center; color:var(--accent-green); font-size:13px; margin-top:20px; font-weight:700;">Thank you for using AWESOME.SCREEN</div>` : ''}
-                    </div>
-                `;
+                    </div>`;
             });
             container.innerHTML = html;
         }
 
-        function filterOrders() {
-            const txt = document.getElementById('searchInput').value.toLowerCase();
-            if (!txt) { renderCustomerOrders(globalOrders); return; }
-            const filtered = globalOrders.filter(o => o.orderNo.toLowerCase().includes(txt) || o.style.toLowerCase().includes(txt));
-            renderCustomerOrders(filtered);
+        function fetchCustomerOrders() { 
+            callBackend('get_my_orders', { userId: userProfile.userId }, (res) => { 
+                globalOrders = res.orders; 
+                renderCustomerOrders(globalOrders); 
+            }); 
         }
-
-        // ================= EDIT PROFILE (Full View) =================
+        
         function openEditProfile() {
-            document.getElementById('epHeaderName').innerText = dbUserData.RealName || userProfile.displayName;
-            document.getElementById('epHeaderId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
-            
-            // แสดง Icon ตาม Tier
-            document.getElementById('epTier').innerHTML = getTierIcon(dbUserData.Tier);
-            document.getElementById('epPic').src = userProfile.pictureUrl || 'https://lh3.googleusercontent.com/d/1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo';
-
-            // ดึงข้อมูลเก่ามาใส่ฟอร์ม (ถ้ามี)
             document.getElementById('epName').value = dbUserData.RealName || '';
             document.getElementById('epBrand').value = dbUserData.BrandName || '';
             document.getElementById('epPhone').value = dbUserData.Phone || '';
             document.getElementById('epEmail').value = dbUserData.Email || '';
-            
-            document.getElementById('epShipName').value = dbUserData.ShipName || '';
-            document.getElementById('epShipPhone').value = dbUserData.ShipPhone || '';
             document.getElementById('epShipAddress').value = dbUserData.ShipAddress || '';
-            document.getElementById('epShipCity').value = dbUserData.ShipCity || '';
-            document.getElementById('epShipProv').value = dbUserData.ShipProvince || '';
-            document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
             
-            // นำพิกัดมาแสดงถ้ามี
             if (dbUserData.ShipLocation) {
                 document.getElementById('epLocation').value = dbUserData.ShipLocation;
-                // อัปเดตแผนที่
-                const coords = dbUserData.ShipLocation.split(',');
-                if (coords.length === 2) {
-                    currentLat = coords[0];
-                    currentLng = coords[1];
-                    updateMap(currentLat, currentLng);
+                const c = dbUserData.ShipLocation.split(','); 
+                if(c.length===2) { 
+                    currentLat=c[0]; currentLng=c[1]; 
+                    updateMap(currentLat, currentLng); 
                 }
             }
-            
-            document.getElementById('viewApp').classList.add('hidden');
-            document.getElementById('viewEditProfile').classList.add('show');
+            document.getElementById('viewApp').classList.add('hidden'); 
+            document.getElementById('viewEditProfile').classList.add('show'); 
             window.scrollTo(0,0);
         }
-
+        
         function closeEditProfile() { 
             document.getElementById('viewEditProfile').classList.remove('show'); 
-            document.getElementById('viewApp').classList.remove('hidden');
+            document.getElementById('viewApp').classList.remove('hidden'); 
         }
-
+        
         function saveProfile() {
-            const payload = {
+            const payload = { 
                 userId: userProfile.userId, 
-                realName: document.getElementById('epName').value,
+                realName: document.getElementById('epName').value, 
                 brandName: document.getElementById('epBrand').value, 
-                phone: document.getElementById('epPhone').value,
+                phone: document.getElementById('epPhone').value, 
                 email: document.getElementById('epEmail').value, 
-                shipName: document.getElementById('epShipName').value,
                 shipAddress: document.getElementById('epShipAddress').value, 
-                shipCity: document.getElementById('epShipCity').value,
-                shipProvince: document.getElementById('epShipProv').value, 
-                shipZip: document.getElementById('epShipZip').value,
-                shipPhone: document.getElementById('epShipPhone').value,
-                shipLocation: document.getElementById('epLocation').value // พิกัด GPS 
+                shipLocation: document.getElementById('epLocation').value 
             };
-            callBackend('update_profile', payload, (res) => {
-                if(res.status === 'success') { alert("Profile Updated!"); closeEditProfile(); checkUser(); }
+            callBackend('update_profile', payload, (res) => { 
+                if(res.status === 'success') { alert("Saved!"); closeEditProfile(); checkUser(); } 
             });
         }
 
-        // ================= CUSTOMER ACTIONS =================
+        // --- Actions Customer ---
         function confirmWOAction(no) { callBackend('update_status', { orderNo: no, actionType: 'CUST_CONFIRM_WO' }, () => fetchCustomerOrders()); }
         function approveAction(no) { callBackend('update_status', { orderNo: no, actionType: 'PP_APPROVE' }, () => fetchCustomerOrders()); }
         function openRejectModal(no) { document.getElementById('rejOrderNo').value = no; document.getElementById('rejReason').value = ''; document.getElementById('modalReject').classList.add('show'); }
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-        function confirmReject() {
-            const no = document.getElementById('rejOrderNo').value; const r = document.getElementById('rejReason').value;
-            if(!r) return alert("ระบุสาเหตุ");
-            callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); });
+        function confirmReject() { 
+            const no = document.getElementById('rejOrderNo').value; const r = document.getElementById('rejReason').value; 
+            if(!r) return; 
+            callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); }); 
         }
 
-        // ================= STAFF ACTIONS & LOGIC =================
-        function fetchStaffData() {
-            callBackend('get_all_orders', {}, (res) => {
-                globalOrders = res.orders;
-                document.getElementById('staffStatusFilter').value = "ACTIVE"; 
-                filterStaffList();
-            });
+        // ================= STAFF VIEW =================
+        function fetchStaffData() { 
+            callBackend('get_all_orders', {}, (res) => { 
+                globalOrders = res.orders; 
+                filterStaffList(); 
+            }); 
         }
 
         function fetchOptions() { 
@@ -871,113 +694,146 @@ Sleeves are too short..." style="background:#444; color:#FFF;"></textarea>
                 res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`); 
             }); 
         }
-
+        
         function createOrder() { 
-            let woImg = preloadedImages['wo-new_wo'] || null;
-            const payload = {
-                adminName: dbUserData.RealName, phone: document.getElementById('ordPhone').value, batch: document.getElementById('ordBatch').value,
-                style: document.getElementById('ordStyle').value, qty: document.getElementById('ordQty').value, fabric: document.getElementById('ordFabric').value,
-                deliveryDate: document.getElementById('ordDate').value, detail: document.getElementById('ordDetail').value, woImage: woImg
+            const payload = { 
+                adminName: dbUserData.RealName, 
+                phone: document.getElementById('ordPhone').value, 
+                batch: document.getElementById('ordBatch').value, 
+                style: document.getElementById('ordStyle').value, 
+                qty: document.getElementById('ordQty').value, 
+                fabric: document.getElementById('ordFabric').value, 
+                deliveryDate: document.getElementById('ordDate').value, 
+                detail: document.getElementById('ordDetail').value, 
+                address: '-', 
+                woImage: preloadedImages['wo-new_wo'] || null 
             };
-            if(!payload.phone || !payload.batch) return alert("กรุณากรอก เบอร์โทรลูกค้า และ Batch ให้ครบถ้วน"); 
+            if(!payload.phone) return alert("ระบุเบอร์โทร"); 
             callBackend('create_order', payload, (res) => { 
-                if(res.status === 'success') { alert("เปิดออเดอร์เรียบร้อย"); location.reload(); } 
-                else { alert("Error: " + res.message); }
+                if(res.status === 'success') { alert("สำเร็จ"); location.reload(); } 
             }); 
         }
 
         function filterStaffList() {
-            const statusFilter = document.getElementById('staffStatusFilter').value;
-            const list = document.getElementById('staffTaskList');
+            const filter = document.getElementById('staffStatusFilter').value;
             let filtered = globalOrders;
+            if(filter === 'ACTIVE') filtered = filtered.filter(o => o.status !== 'Shipped');
+            else if(filter !== 'ALL') filtered = filtered.filter(o => o.status === filter);
             
-            if (statusFilter === 'ACTIVE') { filtered = filtered.filter(o => o.status !== 'Delivered'); } 
-            else if (statusFilter !== 'ALL') { filtered = filtered.filter(o => o.status.includes(statusFilter)); }
-
-            if (filtered.length === 0) { list.innerHTML = '<div class="order-card text-center" style="color:#666;">ไม่พบรายการงาน</div>'; return; }
+            const list = document.getElementById('staffTaskList');
+            if(filtered.length === 0) { list.innerHTML = '<div class="order-card text-center" style="color:#aaa;">ไม่มีงาน</div>'; return; }
 
             let html = ''; const role = dbUserData.Role;
             filtered.forEach(o => {
                 let btns = '';
-                // Staff Action Buttons
-                if (['Admin', 'Production Manager'].includes(role) && o.status === 'Order Received') {
-                    btns += `<button class="btn btn-outline" style="border:1px solid var(--accent-blue); color:var(--accent-blue); padding:12px; font-size:13px;" onclick="updateStatus('${o.orderNo}', 'CUST_CONFIRM_WO')">ยืนยันรับงาน (แทนลูกค้า)</button>`;
+                
+                // เอกสารแนบสำหรับ Staff
+                let attachments = renderAttachments(o);
+                
+                // --- Logic การกดปุ่มของ Staff ---
+                if (['Admin', 'Production Manager'].includes(role)) {
+                    if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
+                    if (o.status === 'Pre-Production Approved') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')">แจ้งผลิตเสร็จ 50%</button>`;
+                    if (o.status === 'Correction Needed') btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px;">ตีกลับ: ${o.feedback}</div><button class="btn btn-green" style="margin-top:5px;" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้เสร็จแล้ว ส่ง QC ใหม่</button>`;
                 }
-                if (['Admin', 'Merchandiser'].includes(role) && o.status === 'Preparation') {
-                    if(o.ppFeedback && o.ppFeedback !== '-') {
-                         btns += `<div style="padding:10px; border:1px solid var(--accent-red); border-radius:12px; margin-top:10px;"><div style="color:var(--accent-red); font-size:12px; margin-bottom:5px;">⚠ ลูกค้าตีกลับแบบ: ${o.ppFeedback}</div><button class="btn btn-green" style="padding:10px; font-size:13px;" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้แบบเสร็จสิ้น</button></div>`;
-                    } else {
-                        btns += `<div style="background:#333; padding:15px; border-radius:12px; margin-top:8px;"><label class="input-label" style="margin-top:0;">ส่งตัวอย่าง:</label><select id="del-s-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px; background:#444; color:#FFF; padding:10px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><label class="input-label">แนบสลิป:</label><input type="file" id="img-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="padding:8px; font-size:12px; background:#444; color:#FFF;"><div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:15px; font-size:13px; padding:12px;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่าง</button></div>`;
+
+                // *Feature: ให้ Sales Admin ส่งตัวอย่างได้เหมือน Merchandiser*
+                if (['Admin', 'Merchandiser', 'Sales Admin'].includes(role)) {
+                    if (o.status === 'Work Order Review Stage') {
+                        btns += `
+                        <div style="background:#333; padding:15px; border-radius:12px; margin-top:15px;">
+                            <label class="input-label" style="margin-top:0;">จัดส่งตัวอย่าง (PP Sample)</label>
+                            <select id="del-s-${o.orderNo}" class="dark-input" onchange="toggleDelivery('${o.orderNo}', this.value, 's')" style="margin-bottom:8px; padding:10px;"><option value="Parcel">ส่งพัสดุ (J&T)</option><option value="Messenger">แมสเซ็นเจอร์</option></select>
+                            <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" class="dark-input" placeholder="Tracking No" style="margin-bottom:8px; padding:10px;"></div>
+                            <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" class="dark-input" placeholder="เบอร์แมสเซ็นเจอร์" style="margin-bottom:8px; padding:10px;"></div>
+                            <label class="input-label">แนบรูปพัสดุ/ตัวอย่าง</label>
+                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
+                            <button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:15px;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่าง</button>
+                        </div>`;
+                    }
+                    if (o.status === 'PP Rejected') {
+                         btns += `<div style="color:var(--accent-red); margin-top:10px; font-size:12px;">ลูกค้าไม่อนุมัติ: ${o.ppFeedback}</div><button class="btn btn-outline" style="border-color:#FF9800; color:#FF9800; margin-top:5px;" onclick="openFixPP('${o.orderNo}')">บันทึกการแก้ไขแบบ</button>`;
                     }
                 }
-                if (['Admin', 'Quality Control'].includes(role) && o.status === 'In Production') {
-                    if(o.feedback && o.feedback !== '-') {
-                        btns += `<div style="color:#FFC805; font-size:12px; text-align:center; padding:10px;">รอ PM แก้ไขงาน</div>`;
-                    } else {
-                        btns += `<div class="flex-row"><button class="btn btn-green" style="flex:2; font-size:13px; padding:12px;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')">ผ่าน QC</button><button class="btn btn-reject" style="flex:1; font-size:13px; padding:12px;" onclick="openFeedback('${o.orderNo}')">ตีกลับ PM</button></div>`;
+
+                if (['Admin', 'Quality Control'].includes(role)) {
+                    if (o.status === 'Bulk Production (50%)') {
+                        btns += `<div class="flex-row" style="margin-top:15px;"><button class="btn btn-green" style="flex:1;" onclick="updateStatus('${o.orderNo}', 'QC_PASS')">ผ่าน QC</button><button class="btn btn-reject" style="flex:1;" onclick="openFeedback('${o.orderNo}')">ตีกลับ PM</button></div>`;
                     }
                 }
-                if (['Admin', 'Production Manager'].includes(role) && o.status === 'In Production' && o.feedback && o.feedback !== '-') {
-                    btns += `<button class="btn btn-green" style="font-size:13px; padding:12px;" onclick="updateStatus('${o.orderNo}', 'SUBMIT_FIX')">แก้ไขงานเสร็จ (ส่ง QC ใหม่)</button>`;
-                }
-                if (['Admin', 'Sales Admin'].includes(role) && o.status === 'Quality Check') {
-                    btns += `<div style="background:#333; padding:15px; border-radius:12px; margin-top:8px;"><label class="input-label" style="margin-top:0;">จัดส่งสินค้า:</label><select id="del-ship-${o.orderNo}" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px; background:#444; color:#FFF; padding:10px;"><option value="Parcel">ส่งพัสดุ</option><option value="Messenger">แมสเซ็นเจอร์</option></select><div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" placeholder="Tracking No" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" placeholder="เบอร์แมส" style="margin-bottom:5px; background:#444; color:#FFF; padding:10px;"></div><label class="input-label">แนบสลิปจัดส่ง:</label><input type="file" id="img-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="padding:8px; font-size:12px; background:#444; color:#FFF;"><div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div><button class="btn btn-green" id="btn-ship-${o.orderNo}" style="margin-top:15px; font-size:13px; padding:12px;" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งลูกค้า</button></div>`;
+
+                if (['Admin', 'Sales Admin'].includes(role)) {
+                    if (o.status === 'Quality Control Passed') {
+                        btns += `
+                        <div style="background:#333; padding:15px; border-radius:12px; margin-top:15px;">
+                            <label class="input-label" style="margin-top:0;">จัดส่งสินค้าจริง</label>
+                            <select id="del-ship-${o.orderNo}" class="dark-input" onchange="toggleDelivery('${o.orderNo}', this.value, 'ship')" style="margin-bottom:8px; padding:10px;"><option value="Parcel">ส่งพัสดุ (J&T)</option><option value="Messenger">แมสเซ็นเจอร์</option></select>
+                            <div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" class="dark-input" placeholder="Tracking No" style="margin-bottom:8px; padding:10px;"></div>
+                            <div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" class="dark-input" placeholder="เบอร์แมสเซ็นเจอร์" style="margin-bottom:8px; padding:10px;"></div>
+                            <label class="input-label">แนบรูปลัง/สลิป</label>
+                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
+                            <button class="btn btn-green" id="btn-ship-${o.orderNo}" style="margin-top:15px;" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งสินค้า</button>
+                        </div>`;
+                    }
                 }
 
                 html += `
                 <div class="order-card">
-                    <div class="flex-between" style="border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom:10px;">
-                        <div><strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong><div style="font-size:10px; color:var(--text-muted);">Sales: ${o.salesOwner}</div></div>
+                    <div class="flex-between" style="border-bottom: 1px solid #444; padding-bottom: 12px; margin-bottom:12px;">
+                        <strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong>
                         <div style="color:var(--accent-green); font-size:12px; font-weight:bold;">${o.status}</div>
                     </div>
-                    <div style="font-size: 13px; color: #ddd; background: #111; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-green); margin-bottom:10px;">
-                        <div>👤 <b>${o.custName}</b> <span style="font-size:11px; margin-left:5px;">${o.tier}</span></div>
-                        <div style="color:var(--text-muted); font-size:11px;">Brand: ${o.custBrand}</div>
-                        <div style="margin-top:5px;"><a href="tel:${o.custPhone}" style="color:var(--accent-green); text-decoration:none;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                    <div style="font-size:13px; color:#ccc;">
+                        <div style="margin-bottom:5px;">👤 <b style="color:#FFF;">${o.custName}</b> <a href="tel:${o.custPhone}" style="color:var(--accent-green); margin-left:8px;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                        <div style="margin-bottom:5px;">Style: <span style="color:#FFF;">${o.style}</span> (${o.qty} pcs)</div>
+                        <div style="margin-bottom:5px;">Batch: <span style="color:#FFF;">${o.batch}</span></div>
+                        <div>Est Delivery: <span style="color:#FFF;">${o.delivery}</span></div>
                     </div>
-                    <div style="font-size:13px; color:#ccc; display:flex; justify-content:space-between; line-height:1.6; margin-bottom:10px;">
-                        <div>Style: <span style="color:#fff;">${o.style}</span><br>Qty: <span style="color:#fff;">${o.qty} pcs</span><br>Batch: <span style="color:#fff;">${o.batch || '-'}</span></div>
-                        <div style="text-align:right;">Est: <span style="color:#fff;">${o.delivery}</span><br><span style="font-size:10px; color:#666;">Upd: ${o.updatedDate}</span>${o.woUrl !== '-' ? `<br><a href="${o.woUrl}" target="_blank" style="color:var(--accent-blue); font-size:11px; text-decoration:none;"><i class="fas fa-file-pdf"></i> WO PDF</a>` : ''}</div>
-                    </div>
+                    ${attachments}
                     ${btns}
                 </div>`;
             });
             list.innerHTML = html;
         }
 
-        function toggleDelivery(no, method, type) {
-            document.getElementById(`box-track-${type}-${no}`).style.display = method === 'Messenger' ? 'none' : 'block';
-            document.getElementById(`box-phone-${type}-${no}`).style.display = method === 'Messenger' ? 'block' : 'none';
+        // --- Actions Staff ---
+        function toggleDelivery(no, method, type) { 
+            document.getElementById(`box-track-${type}-${no}`).style.display = method === 'Messenger' ? 'none' : 'block'; 
+            document.getElementById(`box-phone-${type}-${no}`).style.display = method === 'Messenger' ? 'block' : 'none'; 
         }
-
         function updateStatus(no, action) { 
-            if(!confirm('ยืนยันการทำรายการ?')) return; 
-            callBackend('update_status', { orderNo: no, actionType: action, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { alert('บันทึกสำเร็จ'); fetchStaffData(); } }); 
+            if(!confirm('ยืนยันทำรายการ?')) return; 
+            callBackend('update_status', { orderNo: no, actionType: action, staffName: dbUserData.RealName }, () => fetchStaffData()); 
         }
-
         function openFeedback(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('modalFeedback').classList.add('show'); }
         function openFixPP(no) { document.getElementById('fixPPOrderNo').value = no; document.getElementById('modalFixPP').classList.add('show'); }
         function confirmRollback() { 
-            const no = document.getElementById('fbOrderNo').value; const reason = document.getElementById('fbReason').value;
+            const no = document.getElementById('fbOrderNo').value; const reason = document.getElementById('fbReason').value; 
             if(!reason) return alert("ระบุสาเหตุ"); 
-            callBackend('update_status', { orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { closeModal('modalFeedback'); fetchStaffData(); } }); 
+            callBackend('update_status', { orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: dbUserData.RealName }, () => { closeModal('modalFeedback'); fetchStaffData(); }); 
         }
         function confirmFixPP() { 
-            const no = document.getElementById('fixPPOrderNo').value; const detail = document.getElementById('fixPPDetail').value;
+            const no = document.getElementById('fixPPOrderNo').value; const detail = document.getElementById('fixPPDetail').value; 
             if(!detail) return alert("ระบุรายละเอียดการแก้ไข"); 
-            callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { closeModal('modalFixPP'); fetchStaffData(); } }); 
+            callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: dbUserData.RealName }, () => { closeModal('modalFixPP'); fetchStaffData(); }); 
         }
 
         async function sendSample(no) { 
-            const method = document.getElementById(`del-s-${no}`).value; const track = document.getElementById(`track-s-${no}`).value; const phone = document.getElementById(`phone-s-${no}`).value; 
-            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
-            callBackend('update_status', { orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: method, tracking: track, messengerPhone: phone, image: preloadedImages[`s-${no}`] || null, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { alert("แจ้งส่งเรียบร้อย"); fetchStaffData(); } }); 
+            const m = document.getElementById(`del-s-${no}`).value; 
+            const t = document.getElementById(`track-s-${no}`).value; 
+            const p = document.getElementById(`phone-s-${no}`).value; 
+            if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); 
+            if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
+            callBackend('update_status', { orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`s-${no}`] || null, staffName: dbUserData.RealName }, () => fetchStaffData()); 
         }
 
         async function shipOrder(no) { 
-            const method = document.getElementById(`del-ship-${no}`).value; const track = document.getElementById(`track-ship-${no}`).value; const phone = document.getElementById(`phone-ship-${no}`).value; 
-            if(method === 'Parcel' && !track) return alert("ระบุ Tracking"); if(method === 'Messenger' && !phone) return alert("ระบุเบอร์แมส"); 
-            callBackend('update_status', { orderNo: no, actionType: 'SHIP', deliveryMethod: method, tracking: track, messengerPhone: phone, image: preloadedImages[`ship-${no}`] || null, staffName: dbUserData.RealName }, (res) => { if(res.status === 'success') { alert("บันทึกจัดส่งสำเร็จ"); fetchStaffData(); } }); 
+            const m = document.getElementById(`del-ship-${no}`).value; 
+            const t = document.getElementById(`track-ship-${no}`).value; 
+            const p = document.getElementById(`phone-ship-${no}`).value; 
+            if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); 
+            if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
+            callBackend('update_status', { orderNo: no, actionType: 'SHIP', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`ship-${no}`] || null, staffName: dbUserData.RealName }, () => fetchStaffData()); 
         }
     </script>
 </body>
