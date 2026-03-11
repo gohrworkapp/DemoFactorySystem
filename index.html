@@ -114,7 +114,7 @@
         .btn-pink { background: var(--accent-red); color: #FFF; }
 
         /* --- Orders Card & Stepper --- */
-        .order-card { background: #2A2A2A; border-radius: 20px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .order-card { background: #2A2A2A; border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         
         .stepper-wrapper { display: flex; justify-content: space-between; margin: 25px 0 10px 0; position: relative; }
         .step-col { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
@@ -138,6 +138,13 @@
         .checkbox-label { font-size: 12px; color: #FFF; font-weight: 600; }
         
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+
+        /* Animation */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .expand-anim { animation: fadeInDown 0.3s ease-out forwards; }
     </style>
 </head>
 <body>
@@ -492,6 +499,7 @@
         let currentLat = null; 
         let currentLng = null;
         let isStaff = false;
+        let expandedOrderNo = null; // ตัวแปรสำหรับเช็คการขยายการ์ด
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -525,24 +533,44 @@
             return '<i class="fas fa-user"></i> ' + (tier || 'Regular');
         }
 
+        // แปลงภาพ Drive URL ให้โชว์เป็น Thumbnail โดยตรง
+        function getSafeImageUrl(url) {
+            if (!url || url === '-') return 'https://via.placeholder.com/150x150?text=No+Image';
+            const match = url.match(/id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return url;
+        }
+
+        // อัปเดต GetBase64 ไม่ให้พังเมื่ออัปโหลด PDF
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader(); 
                 reader.readAsDataURL(file);
                 reader.onload = (e) => {
-                    const img = new Image(); 
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas'); 
-                        const MAX_WIDTH = 800; 
-                        const scale = MAX_WIDTH / img.width; 
-                        canvas.width = MAX_WIDTH; 
-                        canvas.height = img.height * scale;
-                        const ctx = canvas.getContext('2d'); 
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.7)); 
-                    };
+                    // ถ้ารูปภาพ ให้ย่อขนาด
+                    if (file.type.startsWith('image/')) {
+                        const img = new Image(); 
+                        img.src = e.target.result;
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas'); 
+                            const MAX_WIDTH = 800; 
+                            let scale = 1;
+                            if (img.width > MAX_WIDTH) scale = MAX_WIDTH / img.width; 
+                            canvas.width = img.width * scale; 
+                            canvas.height = img.height * scale;
+                            const ctx = canvas.getContext('2d'); 
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            resolve(canvas.toDataURL('image/jpeg', 0.7)); 
+                        };
+                        img.onerror = () => resolve(e.target.result); // Fallback
+                    } else {
+                        // ถ้าเป็น PDF ปล่อยผ่าน
+                        resolve(e.target.result);
+                    }
                 };
+                reader.onerror = (error) => reject(error);
             });
         }
 
@@ -690,9 +718,9 @@
             const display = getDisplayStatus(status);
             if(display === 'Delivered') return 'var(--accent-green)';
             if(['PP Rejected', 'Correction Needed'].includes(status)) return 'var(--accent-red)';
-            if(display === 'In Production') return '#B388FF'; // สีม่วงอ่อน
-            if(display === 'Preparation' || display === 'Order Received') return '#FFB300'; // สีเหลืองส้ม
-            if(display === 'Quality Check') return '#4FC3F7'; // สีฟ้า
+            if(display === 'In Production') return '#B388FF'; 
+            if(display === 'Preparation' || display === 'Order Received') return '#FFB300'; 
+            if(display === 'Quality Check') return '#4FC3F7'; 
             return 'var(--text-main)';
         }
 
@@ -709,12 +737,18 @@
             document.getElementById('bannerDate').innerText = latestOrder.delivery;
 
             const banner = document.getElementById('statusBanner');
-            banner.className = 'status-banner'; // reset
+            banner.className = 'status-banner'; 
             const step = getStepIndex(latestOrder.status);
             if(step === 1 || step === 2) banner.classList.add('bg-banner-prep'); 
             if(step === 3) banner.classList.add('bg-banner-prod');
             if(step === 4) banner.classList.add('bg-banner-qc');
             if(step === 5) banner.classList.add('bg-banner-deliv');
+        }
+
+        // เปิด/ปิด การ์ดออเดอร์
+        function toggleOrder(orderNo) {
+            expandedOrderNo = (expandedOrderNo === orderNo) ? null : orderNo;
+            renderCustomerOrders(globalOrders);
         }
 
         function renderCustomerOrders(orders) {
@@ -729,9 +763,16 @@
             let activeOrder = null;
             let html = '';
 
+            // ถ้าไม่มีการ์ดไหนเปิดอยู่ ให้เปิดใบแรกไว้เลย
+            if (!expandedOrderNo && orders.length > 0) {
+                activeOrder = orders.find(o => getStepIndex(o.status) < 5) || orders[0];
+                expandedOrderNo = activeOrder.orderNo;
+            }
+
             orders.forEach(o => {
                 const step = getStepIndex(o.status);
                 const displayStatus = getDisplayStatus(o.status);
+                const isExpanded = expandedOrderNo === o.orderNo;
                 
                 if(step <= 2) cPrep++;
                 else if(step <= 4) cProd++;
@@ -766,15 +807,15 @@
                 });
                 stepperHtml += '</div>';
 
-                let thumbUrl = 'https://via.placeholder.com/150x150?text=No+Image';
+                let origThumbUrl = null;
                 let hasImage = false;
-                if (o.shipImage && o.shipImage !== '-') { thumbUrl = o.shipImage; hasImage = true; }
-                else if (o.sampleImage && o.sampleImage !== '-') { thumbUrl = o.sampleImage; hasImage = true; }
-                else if (o.woUrl && o.woUrl !== '-') { thumbUrl = o.woUrl; hasImage = true; }
+                if (o.shipImage && o.shipImage !== '-') { origThumbUrl = o.shipImage; hasImage = true; }
+                else if (o.sampleImage && o.sampleImage !== '-') { origThumbUrl = o.sampleImage; hasImage = true; }
+                else if (o.woUrl && o.woUrl !== '-') { origThumbUrl = o.woUrl; hasImage = true; }
+
+                let displayThumbUrl = getSafeImageUrl(origThumbUrl);
 
                 let actionHtml = '';
-                
-                // 1. Pending Confirm Action (WO)
                 if (o.status === 'Pending Customer Confirmation') {
                     actionHtml = `
                     <div style="margin-top:15px; border-top:1px dashed #555; padding-top:15px;">
@@ -809,7 +850,6 @@
                     </div>`;
                 } 
                 
-                // 2. Sampling Stage / Reject actions
                 let revHtml = '';
                 if (o.status === 'Sampling Stage' || o.status === 'PP Rejected' || o.status === 'Shipped') {
                     
@@ -826,13 +866,13 @@
                         historyItems += `<div style="border-top: 1px dashed #777; margin: 10px 0;"></div>`;
                     }
 
-                    // สร้างกล่องใส่รูปภาพ Sample
                     let imageGalleryHtml = '';
                     if (o.sampleImage && o.sampleImage !== '-') {
+                        let dsImg = getSafeImageUrl(o.sampleImage);
                         imageGalleryHtml = `
                         <div class="flex-row" style="overflow-x: auto; padding-bottom: 5px;">
                             <div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #FFF; overflow: hidden; border: 1px solid #555;">
-                                <img src="${o.sampleImage}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${o.sampleImage}', '_blank')">
+                                <img src="${dsImg}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${o.sampleImage}', '_blank')">
                             </div>
                             <div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #555; display:flex; justify-content:center; align-items:center; color:#888;"><i class="fas fa-cloud"></i></div>
                             <div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #555; display:flex; justify-content:center; align-items:center; color:#888;"><i class="fas fa-cloud"></i></div>
@@ -859,13 +899,13 @@
                             <div style="text-align:center; color:var(--accent-red); font-size:13px; font-weight:700; margin-top:10px;">โรงงานกำลังดำเนินการแก้ไขตัวแบบ</div>
                         </div>`;
                     } else if (o.status === 'Shipped') {
-                         // 3. Delivered state box
                          let shipGallery = '';
                          if (o.shipImage && o.shipImage !== '-') {
+                             let shipThumb = getSafeImageUrl(o.shipImage);
                              shipGallery = `
                              <div class="flex-row" style="overflow-x: auto; margin-bottom: 15px;">
                                  <div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #FFF; overflow: hidden; border: 1px solid #555;">
-                                     <img src="${o.shipImage}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${o.shipImage}', '_blank')">
+                                     <img src="${shipThumb}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${o.shipImage}', '_blank')">
                                  </div>
                                  <div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #555; display:flex; justify-content:center; align-items:center; color:#888;"><i class="fas fa-cloud"></i></div>
                                  <div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #555; display:flex; justify-content:center; align-items:center; color:#888;"><i class="fas fa-cloud"></i></div>
@@ -880,39 +920,52 @@
                     }
                 }
 
+                // Header HTML (แสดงตลอดเวลา)
+                let headerHtml = `
+                <div class="flex-between" style="cursor: pointer; ${isExpanded ? 'margin-bottom: 15px;' : ''}" onclick="toggleOrder('${o.orderNo}')">
+                    <div class="flex-row" style="align-items: center;">
+                        <div style="width: 40px; height: 40px; background: #444; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #FFF;">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:16px; font-weight:800; color:#FFF;">${o.orderNo}</div>
+                            <div style="font-size:11px; color:#888;">${o.startDate !== '-' ? o.startDate : o.updatedDate}</div>
+                        </div>
+                    </div>
+                    <div style="color:${statusColor}; font-size:13px; font-weight:700;">${displayStatus}</div>
+                </div>
+                `;
+
+                // Body HTML (แสดงเฉพาะตัวที่เปิด Expand)
+                let bodyHtml = '';
+                if (isExpanded) {
+                    bodyHtml = `
+                    <div class="expand-anim" style="margin-top: 15px;">
+                        <div style="background:#383838; border-radius:16px; padding:15px; display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
+                            <div>
+                                <div style="color:var(--accent-red); font-size:18px; font-weight:800;">${o.style} <span style="font-size:14px; font-weight:500; color:#ccc;">(${o.qty} pcs)</span></div>
+                                <div style="font-size:11px; color:#aaa; margin-top:8px;">Estimated Delivery:<br><span style="font-size:15px; color:#fff; font-weight:600;">${o.delivery}</span></div>
+                            </div>
+                            ${hasImage ? `
+                            <div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
+                                <img src="${displayThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')">
+                            </div>` : ''}
+                        </div>
+                        ${stepperHtml}
+                        ${actionHtml}
+                        ${revHtml}
+                    </div>
+                    `;
+                }
+
                 html += `
                 <div class="order-card">
-                    <div class="flex-between" style="margin-bottom: 15px;">
-                        <div class="flex-row" style="align-items: center;">
-                            <div style="width: 40px; height: 40px; background: #555; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #FFF;">
-                                <i class="fas fa-tshirt"></i>
-                            </div>
-                            <div>
-                                <div style="font-size:16px; font-weight:800; color:#FFF;">${o.orderNo}</div>
-                                <div style="font-size:11px; color:#888;">${o.startDate !== '-' ? o.startDate : o.updatedDate}</div>
-                            </div>
-                        </div>
-                        <div style="color:${statusColor}; font-size:13px; font-weight:700;">${displayStatus}</div>
-                    </div>
-
-                    <div style="background:#383838; border-radius:16px; padding:15px; display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
-                        <div>
-                            <div style="color:var(--accent-red); font-size:18px; font-weight:800;">${o.style} <span style="font-size:14px; font-weight:500; color:#ccc;">(${o.qty} pcs)</span></div>
-                            <div style="font-size:11px; color:#aaa; margin-top:8px;">Estimated Delivery:<br><span style="font-size:15px; color:#fff; font-weight:600;">${o.delivery}</span></div>
-                        </div>
-                        ${hasImage ? `
-                        <div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
-                            <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${thumbUrl}', '_blank')">
-                        </div>` : ''}
-                    </div>
-
-                    ${stepperHtml}
-                    ${actionHtml}
-                    ${revHtml}
+                    ${headerHtml}
+                    ${bodyHtml}
                 </div>`;
             });
-            container.innerHTML = html;
 
+            container.innerHTML = html;
             updateCustomerBanner(activeOrder || orders[0]);
 
             document.getElementById('statConfirmed').innerText = cPrep;
@@ -1077,7 +1130,10 @@
             let html = ''; const role = dbUserData.Role;
             filtered.forEach(o => {
                 let btns = '';
-                let thumbUrl = o.woUrl !== '-' ? o.woUrl : 'https://via.placeholder.com/150';
+                
+                let origThumbUrl = null;
+                if (o.woUrl && o.woUrl !== '-') origThumbUrl = o.woUrl;
+                let displayThumbUrl = getSafeImageUrl(origThumbUrl);
                 
                 if (['Admin', 'Production Manager'].includes(role)) {
                     if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
@@ -1130,11 +1186,16 @@
                         <strong style="color:var(--text-main); font-size:16px;">${o.orderNo}</strong>
                         <div style="color:var(--accent-green); font-size:12px; font-weight:bold;">${o.status}</div>
                     </div>
-                    <div style="font-size:13px; color:#ccc;">
-                        <div style="margin-bottom:5px;">👤 <b style="color:#FFF;">${o.custName}</b> <a href="tel:${o.custPhone}" style="color:var(--accent-green); margin-left:8px;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
-                        <div style="margin-bottom:5px;">Style: <span style="color:#FFF;">${o.style}</span> (${o.qty} pcs)</div>
-                        <div style="margin-bottom:5px;">Batch: <span style="color:#FFF;">${o.batch}</span></div>
-                        <div>Est Delivery: <span style="color:#FFF;">${o.delivery}</span></div>
+                    <div class="flex-row" style="align-items:flex-start;">
+                        <div style="flex:1; font-size:13px; color:#ccc;">
+                            <div style="margin-bottom:5px;">👤 <b style="color:#FFF;">${o.custName}</b> <a href="tel:${o.custPhone}" style="color:var(--accent-green); margin-left:8px;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                            <div style="margin-bottom:5px;">Style: <span style="color:#FFF;">${o.style}</span> (${o.qty} pcs)</div>
+                            <div style="margin-bottom:5px;">Batch: <span style="color:#FFF;">${o.batch}</span></div>
+                            <div>Est Delivery: <span style="color:#FFF;">${o.delivery}</span></div>
+                        </div>
+                        ${origThumbUrl ? `<div style="width: 60px; height: 60px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
+                            <img src="${displayThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')">
+                        </div>` : ''}
                     </div>
                     ${btns}
                 </div>`;
