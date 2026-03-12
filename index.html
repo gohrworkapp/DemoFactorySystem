@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AWESOME.SCREEN</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -517,7 +517,8 @@
             if (!url || url === '-') return null;
             const match = url.match(/id=([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
-                return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                // ใช้ Thumbnail API ของ Google Drive เพื่อดึงภาพพรีวิว (รองรับทั้ง JPG และ PDF)
+                return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400-h400`;
             }
             return url;
         }
@@ -699,11 +700,11 @@
         
         function getStatusColor(status) {
             const display = getDisplayStatus(status);
-            if(display === 'Order Received') return '#AEEA00'; // Light Greenish
-            if(display === 'Preparation') return '#FFCA28';    // Yellow/Orange
-            if(display === 'In Production') return '#B388FF';  // Purple
-            if(display === 'Quality Check') return '#4FC3F7';  // Light Blue
-            if(display === 'Delivered') return '#00E676';      // Green
+            if(display === 'Order Received') return '#AEEA00'; 
+            if(display === 'Preparation') return '#FFCA28';    
+            if(display === 'In Production') return '#B388FF';  
+            if(display === 'Quality Check') return '#4FC3F7';  
+            if(display === 'Delivered') return '#00E676';      
             if(['PP Rejected', 'Correction Needed'].includes(status)) return 'var(--accent-red)';
             return 'var(--text-main)';
         }
@@ -728,7 +729,7 @@
 
         function toggleOrderCollapse(orderNo) {
             expandedOrderNo = (expandedOrderNo === orderNo) ? null : orderNo;
-            filterOrders(); // ใช้ filterOrders แทน render ตรงๆ เพื่อคงสถานะ Filter ไว้
+            filterOrders(); 
         }
         
         function filterOrders() {
@@ -821,7 +822,7 @@
 
                     let origThumbUrl = null;
                     if (o.shipImage && o.shipImage !== '-') origThumbUrl = o.shipImage;
-                    else if (o.sampleImage && o.sampleImage !== '-') origThumbUrl = o.sampleImage.split(',')[0]; // เอารูปแรกมาเป็นปก
+                    else if (o.sampleImage && o.sampleImage !== '-') origThumbUrl = o.sampleImage.split(',')[0]; 
                     else if (o.woUrl && o.woUrl !== '-') origThumbUrl = o.woUrl;
                     let displayThumbUrl = getSafeImageUrl(origThumbUrl);
 
@@ -842,7 +843,7 @@
                             ${o.woUrl !== '-' ? `<button class="btn" style="background:#444; color:#FFF; border-radius:8px; margin-bottom:10px; font-weight:500;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
                             <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; border-radius:8px; font-weight:700;" onclick="confirmWOAction('${o.orderNo}')"><i class="far fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button>
                             
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; font-family: 'Noto Sans Thai', sans-serif;">
                                 <div style="text-align:center; margin-bottom: 15px;">
                                     <div style="font-size: 20px; font-weight: 800; color: var(--accent-red); line-height: 1.1;">กรุณาอ่านก่อนคอนเฟิร์ม</div>
                                     <div style="font-size: 20px; font-weight: 800; color: var(--accent-red); margin-bottom: 5px;">Please Read Carefully</div>
@@ -1126,6 +1127,11 @@
         }
         
         function createOrder() { 
+            const woInput = document.getElementById('ordWoImage');
+            if (woInput.files.length > 0 && !preloadedImages['wo-new_wo']) {
+                return alert("กรุณารอระบบอัปโหลดไฟล์ใบสั่งงานสักครู่ แล้วกดบันทึกอีกครั้งครับ");
+            }
+            
             let woImg = preloadedImages['wo-new_wo'] || null;
             const payload = { 
                 adminName: dbUserData.RealName, phone: document.getElementById('ordPhone').value, batch: document.getElementById('ordBatch').value, 
