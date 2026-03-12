@@ -95,7 +95,7 @@
 
         /* --- Global Footer --- */
         .global-footer { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-        .global-footer img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        .global-footer img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background-color: #FFF; }
         .global-footer div { font-size: 11px; font-weight: 500; color: #FFF; }
 
         /* --- Inputs & Elements --- */
@@ -130,7 +130,7 @@
         .chevron.up { transform: rotate(180deg); }
 
         /* Scroll Box for Terms */
-        .scroll-box { max-height: 280px; overflow-y: auto; padding-right: 8px; margin-bottom: 15px; }
+        .scroll-box { max-height: 300px; overflow-y: auto; padding-right: 8px; margin-bottom: 15px; }
         .scroll-box::-webkit-scrollbar { width: 5px; }
         .scroll-box::-webkit-scrollbar-track { background: #2A2A2A; border-radius: 5px; }
         .scroll-box::-webkit-scrollbar-thumb { background: #555; border-radius: 5px; }
@@ -165,7 +165,7 @@
 
     <div id="viewRegister" class="content-area hidden" style="padding-top: 60px;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://drive.google.com/uc?export=view&id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
+            <img id="logoRegister" src="" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
         </div>
         <h3 style="text-align: center; font-size:28px;">Create new<br>Account</h3>
         <div style="text-align: center; font-size:13px; color:var(--text-muted); margin-bottom: 40px; font-weight:500;">Already Registered? Log in here.</div>
@@ -351,7 +351,7 @@
         </div>
 
         <div class="global-footer">
-            <img src="https://drive.google.com/uc?export=view&id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo">
+            <img id="logoFooter" src="" alt="Logo">
             <div>Powered by AWESOME.SCREEN CO., LTD.</div>
         </div>
     </div> 
@@ -493,6 +493,8 @@
         // ================= CONFIGURATION =================
         const GAS_API = 'https://script.google.com/macros/s/AKfycbwBTmnIOvlxfhKHQ0bHNMPwZ7GCGh3juU28UGBzY7knvdqC3_BCsoOmULEhhdb4a4diyA/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
+        // ใช้ Thumbnail API แบบตายตัวเพื่อให้แสดงผลเป็นวงกลมได้ไม่ติด Error CORS
+        const BRAND_LOGO = 'https://drive.google.com/thumbnail?id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo&sz=w200';
         // =================================================
 
         let userProfile = {};
@@ -578,6 +580,9 @@
         // ================= CORE SYSTEM =================
         async function main() {
             try { 
+                if(document.getElementById('logoRegister')) document.getElementById('logoRegister').src = BRAND_LOGO;
+                if(document.getElementById('logoFooter')) document.getElementById('logoFooter').src = BRAND_LOGO;
+
                 await liff.init({ liffId: LIFF_ID }); 
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 userProfile = await liff.getProfile(); 
@@ -849,7 +854,10 @@
                         <div style="margin-top:15px; border-top:1px dashed #555; padding-top:15px;">
                             <div style="text-align:center; font-size:11px; color:var(--accent-yellow); margin-bottom:15px; font-weight:600;">กรุณาตรวจสอบใบสั่งงานและคอนเฟิร์มออเดอร์<br>Please review the production order and confirm your order</div>
                             ${o.woUrl !== '-' ? `<button class="btn" style="background:#444; color:#FFF; border-radius:8px; margin-bottom:10px; font-weight:500;" onclick="window.open('${o.woUrl}', '_blank')"><i class="fas fa-file-pdf"></i> ดูใบสั่งงาน (Work Order)</button>` : ''}
-                            <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; border-radius:8px; font-weight:700;" onclick="confirmWOAction('${o.orderNo}')"><i class="far fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)</button>
+                            
+                            <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; border-radius:8px; font-weight:700; white-space: nowrap; font-size: 13px;" onclick="confirmWOAction('${o.orderNo}')">
+                                <i class="far fa-check-circle"></i> ยืนยันออเดอร์ถูกต้อง (Order Confirmed)
+                            </button>
                             
                             <div style="margin-top: 25px; font-family: 'Noto Sans Thai', sans-serif;">
                                 <div style="text-align:center; margin-bottom: 15px;">
@@ -989,10 +997,10 @@
 
                             let actionButtonsHtml = `
                             <div class="flex-row">
-                                <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; flex:1.2; font-size:12px; border-radius:12px; font-weight:700;" onclick="approveAction('${o.orderNo}')">
-                                    <i class="far fa-check-circle" style="margin-right:4px;"></i> อนุมัติผลิต / Approve Production
+                                <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; flex:1; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="approveAction('${o.orderNo}')">
+                                    <i class="far fa-check-circle"></i> อนุมัติผลิต / Approve Production
                                 </button>
-                                <button class="btn" style="background:#222; border:1px solid var(--accent-red); color:var(--accent-red); flex:0.8; font-size:12px; border-radius:12px; font-weight:700;" onclick="openRejectModal('${o.orderNo}')">
+                                <button class="btn" style="background:#222; border:1px solid var(--accent-red); color:var(--accent-red); flex:1; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="openRejectModal('${o.orderNo}')">
                                     ไม่อนุมัติ / Not Approved
                                 </button>
                             </div>`;
@@ -1173,7 +1181,7 @@
         function createOrder() { 
             const woInput = document.getElementById('ordWoImage');
             if (woInput.files.length > 0 && !preloadedImages['wo-new_wo']) {
-                return alert("กรุณารอระบบอัปโหลดไฟล์ใบสั่งงานสักครู่ แล้วกดบันทึกอีกครั้งครับ");
+                return alert("ระบบกำลังอัปโหลดไฟล์ใบสั่งงาน กรุณารอสักครู่แล้วกดบันทึกอีกครั้งครับ");
             }
             
             let woImg = preloadedImages['wo-new_wo'] || null;
@@ -1222,7 +1230,7 @@
                             <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" class="dark-input" placeholder="Tracking No" style="margin-bottom:8px; padding:10px;"></div>
                             <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" class="dark-input" placeholder="เบอร์แมสเซ็นเจอร์" style="margin-bottom:8px; padding:10px;"></div>
                             <label class="input-label">แนบรูปพัสดุ/ตัวอย่าง</label>
-                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="background:#444; color:#FFF; font-size:11px; padding:8px;" multiple>
+                            <input type="file" id="file-s-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 's')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
                             <div id="status-s-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
                             <button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:15px;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่าง</button>
                         </div>`;
@@ -1247,7 +1255,7 @@
                             <div id="box-track-ship-${o.orderNo}"><input type="text" id="track-ship-${o.orderNo}" class="dark-input" placeholder="Tracking No" style="margin-bottom:8px; padding:10px;"></div>
                             <div id="box-phone-ship-${o.orderNo}" style="display:none;"><input type="tel" id="phone-ship-${o.orderNo}" class="dark-input" placeholder="เบอร์แมสเซ็นเจอร์" style="margin-bottom:8px; padding:10px;"></div>
                             <label class="input-label">แนบรูปลัง/สลิป</label>
-                            <input type="file" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
+                            <input type="file" id="file-ship-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'ship')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
                             <div id="status-ship-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
                             <button class="btn btn-green" id="btn-ship-${o.orderNo}" style="margin-top:15px;" onclick="shipOrder('${o.orderNo}')">ยืนยันจัดส่งสินค้า</button>
                         </div>`;
@@ -1305,12 +1313,24 @@
         async function sendSample(no) { 
             const m = document.getElementById(`del-s-${no}`).value; const t = document.getElementById(`track-s-${no}`).value; const p = document.getElementById(`phone-s-${no}`).value; 
             if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
+            
+            const fileInput = document.getElementById(`file-s-${no}`);
+            if (fileInput && fileInput.files.length > 0 && !preloadedImages[`s-${no}`]) {
+                return alert("กำลังอัปโหลดรูปภาพ กรุณารอสักครู่แล้วกดแจ้งส่งอีกครั้งครับ");
+            }
+
             callBackend('update_status', { orderNo: no, actionType: 'SEND_SAMPLE', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`s-${no}`] || null, staffName: dbUserData.RealName }, () => fetchStaffData()); 
         }
 
         async function shipOrder(no) { 
             const m = document.getElementById(`del-ship-${no}`).value; const t = document.getElementById(`track-ship-${no}`).value; const p = document.getElementById(`phone-ship-${no}`).value; 
             if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
+            
+            const fileInput = document.getElementById(`file-ship-${no}`);
+            if (fileInput && fileInput.files.length > 0 && !preloadedImages[`ship-${no}`]) {
+                return alert("กำลังอัปโหลดรูปภาพ กรุณารอสักครู่แล้วกดยืนยันจัดส่งอีกครั้งครับ");
+            }
+
             callBackend('update_status', { orderNo: no, actionType: 'SHIP', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`ship-${no}`] || null, staffName: dbUserData.RealName }, () => fetchStaffData()); 
         }
     </script>
