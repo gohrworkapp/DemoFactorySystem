@@ -94,9 +94,9 @@
         .stat-label { font-size: 11px; font-weight: 600; color: #FFF; }
 
         /* --- Global Footer --- */
-        .global-footer { padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: auto; }
-        .global-footer img { width: 20px; height: 20px; border-radius: 50%; }
-        .global-footer div { font-size: 9px; font-weight: 500; color: #FFF; }
+        .global-footer { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .global-footer img { width: 30px; height: 30px; border-radius: 4px; object-fit: contain; }
+        .global-footer div { font-size: 11px; font-weight: 500; color: #FFF; }
 
         /* --- Inputs & Elements --- */
         .input-label { font-size: 10px; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; margin-top: 15px; font-weight: 600; }
@@ -158,7 +158,7 @@
 
     <div id="viewRegister" class="content-area hidden" style="padding-top: 60px;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img id="logoRegister" src="" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
+            <img src="https://drive.google.com/uc?export=view&id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
         </div>
         <h3 style="text-align: center; font-size:28px;">Create new<br>Account</h3>
         <div style="text-align: center; font-size:13px; color:var(--text-muted); margin-bottom: 40px; font-weight:500;">Already Registered? Log in here.</div>
@@ -344,7 +344,7 @@
         </div>
 
         <div class="global-footer">
-            <img id="logoFooter" src="" alt="Logo">
+            <img src="https://drive.google.com/uc?export=view&id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo" alt="Logo">
             <div>Powered by AWESOME.SCREEN CO., LTD.</div>
         </div>
     </div> 
@@ -486,8 +486,6 @@
         // ================= CONFIGURATION =================
         const GAS_API = 'https://script.google.com/macros/s/AKfycbwBTmnIOvlxfhKHQ0bHNMPwZ7GCGh3juU28UGBzY7knvdqC3_BCsoOmULEhhdb4a4diyA/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
-        // แปะลิงก์โลโก้จาก Google Drive (เอามาจากปุ่ม Copy Link ของ Drive)
-        const BRAND_LOGO = 'https://drive.google.com/file/d/15gcpO8lEmYFuRzTziGHNePnzrJA40U4U/view?usp=drive_link';
         // =================================================
 
         let userProfile = {};
@@ -515,12 +513,11 @@
             return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}.${pad(d.getMinutes())}`;
         }
 
+        // ฟังก์ชันดึงภาพพรีวิวเฉพาะ WO หรือภาพอัปโหลด (ไม่เกี่ยวกับโลโก้เว็บ)
         function getSafeImageUrl(url) {
             if (!url || url === '-') return null;
-            // ดักจับลิงก์ Drive ทั้งรูปแบบเก่า (?id=...) และรูปแบบใหม่ (/d/...)
             const match = url.match(/(?:id=|d\/)([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
-                // ใช้ Google Thumbnail API (ทำงานคล้าย googleusercontent แต่ข้อดีคือรองรับการแปลงหน้าปก PDF เป็นภาพด้วย)
                 return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
             }
             return url;
@@ -575,11 +572,6 @@
         // ================= CORE SYSTEM =================
         async function main() {
             try { 
-                // นำลิงก์โลโก้ที่แปลงแล้วไปใส่ในจุดที่กำหนด
-                const safeLogoUrl = getSafeImageUrl(BRAND_LOGO) || 'https://via.placeholder.com/100';
-                if(document.getElementById('logoRegister')) document.getElementById('logoRegister').src = safeLogoUrl;
-                if(document.getElementById('logoFooter')) document.getElementById('logoFooter').src = safeLogoUrl;
-
                 await liff.init({ liffId: LIFF_ID }); 
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 userProfile = await liff.getProfile(); 
@@ -840,7 +832,9 @@
                             <div style="color:var(--accent-red); font-size:18px; font-weight:800;">${o.style} <span style="font-size:14px; font-weight:500; color:#ccc;">(${o.qty} pcs)</span></div>
                             <div style="font-size:11px; color:#aaa; margin-top:8px;">Estimated Delivery:<br><span style="font-size:15px; color:#fff; font-weight:600;">${o.delivery}</span></div>
                         </div>
-                        ${origThumbUrl ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;"><img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')"></div>` : ''}
+                        ${origThumbUrl ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
+                            <img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=คลิกเพื่อดูไฟล์';">
+                        </div>` : ''}
                     </div>`;
 
                     let actionHtml = '';
@@ -859,37 +853,39 @@
                                 </div>
                                 
                                 <div style="border: 1px solid #555; border-radius: 12px; padding: 15px; margin-bottom: 10px;">
-                                    <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">สำหรับการทำตัวอย่างสินค้า</div>
-                                    <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD;">
-                                        <li>สามารถแก้ไขตัวอย่างได้ 1 ครั้งเท่านั้น หลังจากยืนยันแล้ว การทำตัวอย่างจะใช้เวลาประมาณ 5-10 วัน ขึ้นอยู่กับรายละเอียดของงาน</li>
+                                    <div style="font-size: 12px; font-weight: 700; color: #FFF; margin-bottom: 5px;">เงื่อนไขการแก้ไขตัวอย่าง</div>
+                                    <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD; margin-bottom: 15px;">
+                                        <li>ออเดอร์ 100 ตัวขึ้นไป สามารถแก้ตัวอย่างได้ 3 ครั้ง (สูงสุด 3 ตัวอย่าง)</li>
+                                        <li>ออเดอร์ 50 ตัวขึ้นไป สามารถแก้ตัวอย่างได้ 1 ครั้ง (สูงสุด 1 ตัวอย่าง)</li>
                                         <li>ขนาดการตัดเย็บและแพทเทิร์นอาจมีค่าความคลาดเคลื่อนประมาณ 0.5-2 นิ้ว</li>
                                     </ul>
-                                    <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-top: 10px; margin-bottom: 5px;">For Sample Development</div>
+
+                                    <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">For Custom Production Orders</div>
+                                    <div style="font-size: 11px; color: #DDD;">What can be adjusted?</div>
+                                    <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD; margin-bottom: 15px;">
+                                        <li>Sewing details such as collar, neckline, or brand label</li>
+                                        <li>Adjusting the screen printing position</li>
+                                        <li>Adjusting the garment size (increasing size may incur additional costs)</li>
+                                    </ul>
+
+                                    <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">Notes</div>
+                                    <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD; margin-bottom: 15px;">
+                                        <li>Changing the garment style, fabric, printing technique, or print size may require additional setup or block fees.</li>
+                                        <li>Sample production will take approximately 5-10 days after confirmation, depending on the order details.</li>
+                                    </ul>
+
+                                    <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">Sample revision policy:</div>
                                     <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD;">
-                                        <li>Only one sample revision is allowed. After confirmation, sample production will take approximately 5-10 days, depending on the order details.</li>
+                                        <li>Orders of 100 pieces or more: Up to 3 sample revisions (maximum 3 samples)</li>
+                                        <li>Orders of 50 pieces or more: 1 sample revision (maximum 1 sample)</li>
                                         <li>Sewing and pattern measurements may have a tolerance of approximately 0.5-2 inches.</li>
-                                    </ul>
-                                </div>
-                                
-                                <div style="border: 1px solid #555; border-radius: 12px; padding: 15px; margin-bottom: 10px;">
-                                    <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">สำหรับออเดอร์ผลิตแบบสั่งทำ</div>
-                                    <div style="font-size: 11px; color: #DDD;">สามารถปรับแก้ดะไรได้บ้าง ?</div>
-                                    <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD; margin-bottom: 10px;">
-                                        <li>วิธีการเย็บ / ปกเสื้อ / คอเสื้อ / ป้ายแบรนด์</li>
-                                        <li>การปรับตำแหน่งสกรีน</li>
-                                        <li>การปรับขนาด (การเพิ่มขนาดอาจมีค่าใช้จ่ายเพิ่มเติม)</li>
-                                    </ul>
-                                    <div style="font-size: 11px; font-weight: 700; color: #FFF;">หมายเหตุ</div>
-                                    <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD;">
-                                        <li>การเปลี่ยน รูปแบบเสื้อ ผ้า เทคนิคพิมพ์ หรือขนาดงานพิมพ์ จะมีค่าใช้จ่ายสำหรับการตั้งค่าการผลิตหรือการทำบล็อกเพิ่มเติม</li>
-                                        <li>การทำตัวอย่างหลังจากยืนยันแล้วจะใช้เวลาประมาณ 5-10 วัน ขึ้นอยู่กับรายละเอียดของงาน</li>
                                     </ul>
                                 </div>
 
                                 <div style="border: 1px solid #555; border-radius: 12px; padding: 15px; margin-bottom: 10px;">
                                     <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">สำหรับสินค้าสำเร็จรูป (ไม่มีขั้นต่ำ)</div>
                                     <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD;">
-                                        <li>สำหรับสินค้าสำเร็จรูป จะไม่มีการทำตัวอย่างก่อนผลิต โดยการผลิตจะเริ่มหลังจากยืนยันออเดอร์และใช้เวลาประมาณ 5-10 วัน</li>
+                                        <li>สำหรับสินค้าสำเร็จรูป <u>จะไม่มีการทำตัวอย่างก่อนผลิต</u> โดยการผลิตจะเริ่มหลังจากยืนยันออเดอร์และใช้เวลาประมาณ 5-10 วัน</li>
                                         <li>ออเดอร์ที่ไม่มีขั้นต่ำ ไม่สามารถล็อกจำนวนสินค้าไว้ล่วงหน้าได้ เนื่องจากปริมาณการผลิตอาจมีการเปลี่ยนแปลง</li>
                                         <li>เมื่อยืนยันออเดอร์แล้ว ไม่สามารถยกเลิกหรือขอคืนเงินได้ ยกเว้นกรณีที่สินค้า ชำรุดหรือมีตำหนิ</li>
                                     </ul>
@@ -920,14 +916,13 @@
                                 imageUrls = o.sampleImage.split(',').map(u => u.trim());
                             }
 
-                            // กริด 5 รูปภาพ
                             let gridHtml = '<div class="flex-row" style="gap: 8px; margin-bottom: 20px;">';
                             for (let i = 0; i < 5; i++) {
                                 if (i < imageUrls.length && imageUrls[i]) {
                                     let thumbUrl = getSafeImageUrl(imageUrls[i]) || imageUrls[i];
                                     gridHtml += `
                                     <div style="flex:1; aspect-ratio:1; border-radius:12px; background:#FFF; overflow:hidden; position:relative; border:1px solid #555;">
-                                        <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${imageUrls[i]}', '_blank')">
+                                        <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${imageUrls[i]}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=Img';">
                                         ${i === 0 ? `<div style="position:absolute; bottom:4px; left:4px; color:#555; font-size:10px;"><i class="fas fa-expand-arrows-alt"></i></div>` : ''}
                                     </div>`;
                                 } else {
@@ -983,7 +978,7 @@
                              let shipGallery = '';
                              if (o.shipImage && o.shipImage !== '-') {
                                  let shipThumb = getSafeImageUrl(o.shipImage) || o.shipImage;
-                                 shipGallery = `<div class="flex-row" style="overflow-x: auto; margin-bottom: 15px;"><div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #FFF; overflow: hidden; border: 1px solid #555;"><img src="${shipThumb}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${o.shipImage}', '_blank')"></div></div>`;
+                                 shipGallery = `<div class="flex-row" style="overflow-x: auto; margin-bottom: 15px;"><div style="width: 60px; height: 60px; border-radius: 8px; flex-shrink: 0; background: #FFF; overflow: hidden; border: 1px solid #555;"><img src="${shipThumb}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${o.shipImage}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=Img';"></div></div>`;
                              }
                              revHtml = `<div style="border: 1px solid var(--accent-green); border-radius: 12px; padding: 15px; margin-top: 15px; background: rgba(0, 230, 118, 0.05);"><div style="color: var(--accent-green); font-size: 12px; font-weight: 600; margin-bottom: 10px;"><i class="fas fa-arrow-right"></i> Delivered</div>${shipGallery}<div style="text-align:center; color:var(--accent-green); font-size:14px; font-weight:800;">Thank you for using AWESOME.SCREEN</div></div>`;
                         }
@@ -1007,7 +1002,7 @@
         function fetchCustomerOrders() { 
             callBackend('get_my_orders', { userId: userProfile.userId }, (res) => { 
                 globalOrders = res.orders; 
-                filterOrders(); // ใช้ filterOrders แทน render ทันที
+                filterOrders(); 
             }); 
         }
 
@@ -1235,7 +1230,7 @@
                             <div>Est Delivery: <span style="color:#FFF;">${o.delivery}</span></div>
                         </div>
                         ${origThumbUrl ? `<div style="width: 60px; height: 60px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
-                            <img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')">
+                            <img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=คลิกเพื่อดูไฟล์';">
                         </div>` : ''}
                     </div>
                     ${btns}
