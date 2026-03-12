@@ -158,7 +158,7 @@
 
     <div id="viewRegister" class="content-area hidden" style="padding-top: 60px;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://via.placeholder.com/100" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
+            <img id="logoRegister" src="" alt="Logo" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover;">
         </div>
         <h3 style="text-align: center; font-size:28px;">Create new<br>Account</h3>
         <div style="text-align: center; font-size:13px; color:var(--text-muted); margin-bottom: 40px; font-weight:500;">Already Registered? Log in here.</div>
@@ -344,7 +344,7 @@
         </div>
 
         <div class="global-footer">
-            <img src="https://via.placeholder.com/100" alt="Logo">
+            <img id="logoFooter" src="" alt="Logo">
             <div>Powered by AWESOME.SCREEN CO., LTD.</div>
         </div>
     </div> 
@@ -486,6 +486,8 @@
         // ================= CONFIGURATION =================
         const GAS_API = 'https://script.google.com/macros/s/AKfycbwBTmnIOvlxfhKHQ0bHNMPwZ7GCGh3juU28UGBzY7knvdqC3_BCsoOmULEhhdb4a4diyA/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
+        // แปะลิงก์โลโก้จาก Google Drive (เอามาจากปุ่ม Copy Link ของ Drive)
+        const BRAND_LOGO = 'https://drive.google.com/file/d/15gcpO8lEmYFuRzTziGHNePnzrJA40U4U/view?usp=drive_link';
         // =================================================
 
         let userProfile = {};
@@ -515,10 +517,11 @@
 
         function getSafeImageUrl(url) {
             if (!url || url === '-') return null;
-            const match = url.match(/id=([a-zA-Z0-9_-]+)/);
+            // ดักจับลิงก์ Drive ทั้งรูปแบบเก่า (?id=...) และรูปแบบใหม่ (/d/...)
+            const match = url.match(/(?:id=|d\/)([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
-                // ใช้ Thumbnail API ของ Google Drive เพื่อดึงภาพพรีวิว (รองรับทั้ง JPG และ PDF)
-                return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400-h400`;
+                // ใช้ Google Thumbnail API (ทำงานคล้าย googleusercontent แต่ข้อดีคือรองรับการแปลงหน้าปก PDF เป็นภาพด้วย)
+                return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
             }
             return url;
         }
@@ -572,6 +575,11 @@
         // ================= CORE SYSTEM =================
         async function main() {
             try { 
+                // นำลิงก์โลโก้ที่แปลงแล้วไปใส่ในจุดที่กำหนด
+                const safeLogoUrl = getSafeImageUrl(BRAND_LOGO) || 'https://via.placeholder.com/100';
+                if(document.getElementById('logoRegister')) document.getElementById('logoRegister').src = safeLogoUrl;
+                if(document.getElementById('logoFooter')) document.getElementById('logoFooter').src = safeLogoUrl;
+
                 await liff.init({ liffId: LIFF_ID }); 
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 userProfile = await liff.getProfile(); 
