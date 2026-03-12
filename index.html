@@ -60,12 +60,15 @@
         .avatar-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
         .tier-badge { background: transparent; color: #FFF; font-size: 12px; font-weight: 700; margin-top: 5px; }
 
-        /* --- Status Banner (Customer Only) --- */
-        .status-banner { margin: 20px 30px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .bg-banner-prep { background: linear-gradient(135deg, #FFD54F, #FF8A65); color: #000; }
-        .bg-banner-prod { background: linear-gradient(135deg, #B388FF, #18FFFF); color: #000; }
-        .bg-banner-qc { background: linear-gradient(135deg, #81D4FA, #0052D4); color: #FFF; }
-        .bg-banner-deliv { background: linear-gradient(135deg, #69F0AE, #18FFFF); color: #000; }
+        /* --- Status Banner (Customer Only) --- ปรับแก้การไล่สีตามบรีฟ และบังคับให้ฟอนต์เป็นสีขาวทั้งหมด */
+        .status-banner { margin: 20px 30px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #FFFFFF !important; }
+        .status-banner div, .status-banner span { color: #FFFFFF !important; }
+        
+        .bg-banner-received { background: linear-gradient(135deg, #00E676, #FFD54F); } /* เขียวไปเหลือง */
+        .bg-banner-prep { background: linear-gradient(135deg, #FFD54F, #FF8A65); } /* เหลืองไปส้ม */
+        .bg-banner-prod { background: linear-gradient(135deg, #B388FF, #00B9F2); } /* ม่วงไปฟ้า */
+        .bg-banner-qc { background: linear-gradient(135deg, #00B9F2, #0052D4); } /* ฟ้าไปน้ำเงิน */
+        .bg-banner-deliv { background: linear-gradient(135deg, #00B9F2, #00E676); } /* ฟ้าไปเขียว */
         
         /* --- Nav Squares (Customer) --- */
         .nav-squares { display: flex; justify-content: space-between; padding: 0 30px; margin-bottom: 20px; gap: 15px; }
@@ -226,10 +229,10 @@
 
         <div id="customerElements" class="hidden">
             <div id="statusBanner" class="status-banner bg-banner-prep hidden">
-                <div style="font-weight: 700; font-size: 16px; margin-bottom: 5px; color: inherit;">Your Order Process Now</div>
-                <div style="font-size: 38px; font-weight: 800; line-height: 1.1; color: inherit;" id="bannerStatusText">Preparation</div>
-                <div style="font-size: 13px; font-weight: 600; margin-top: 5px; color: inherit;" id="bannerOrderNo">ORD-2026-000</div>
-                <div style="font-size: 12px; font-weight: 600; margin-top: 20px; color: inherit;">Estimated Delivery:<br><span style="font-size:18px;" id="bannerDate">00/00/0000</span></div>
+                <div style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">Your Order Process Now</div>
+                <div style="font-size: 38px; font-weight: 800; line-height: 1.1;" id="bannerStatusText">Preparation</div>
+                <div style="font-size: 13px; font-weight: 600; margin-top: 5px;" id="bannerOrderNo">ORD-2026-000</div>
+                <div style="font-size: 12px; font-weight: 600; margin-top: 20px;">Estimated Delivery:<br><span style="font-size:18px;" id="bannerDate">00/00/0000</span></div>
             </div>
 
             <div class="nav-squares">
@@ -493,7 +496,7 @@
         // ================= CONFIGURATION =================
         const GAS_API = 'https://script.google.com/macros/s/AKfycbwBTmnIOvlxfhKHQ0bHNMPwZ7GCGh3juU28UGBzY7knvdqC3_BCsoOmULEhhdb4a4diyA/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
-        // ใช้ Thumbnail API แบบตายตัวเพื่อให้แสดงผลเป็นวงกลมได้ไม่ติด Error CORS
+        // ใช้ Thumbnail API เพื่อหลีกเลี่ยงปัญหา CORS และรับประกันการโหลดภาพ
         const BRAND_LOGO = 'https://drive.google.com/thumbnail?id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo&sz=w200';
         // =================================================
 
@@ -580,6 +583,7 @@
         // ================= CORE SYSTEM =================
         async function main() {
             try { 
+                // นำตัวแปรโลโก้ไปใส่ในจุดที่กำหนด (หน้า Login และ Footer)
                 if(document.getElementById('logoRegister')) document.getElementById('logoRegister').src = BRAND_LOGO;
                 if(document.getElementById('logoFooter')) document.getElementById('logoFooter').src = BRAND_LOGO;
 
@@ -721,21 +725,23 @@
         }
 
         function updateCustomerBanner(latestOrder) {
-            if(!latestOrder) { document.getElementById('statusBanner').classList.add('hidden'); return; }
-            document.getElementById('statusBanner').classList.remove('hidden');
+            const banner = document.getElementById('statusBanner');
+            if(!latestOrder) { banner.classList.add('hidden'); return; }
+            banner.classList.remove('hidden');
             
             const displayStatus = getDisplayStatus(latestOrder.status);
             document.getElementById('bannerStatusText').innerText = displayStatus;
             document.getElementById('bannerOrderNo').innerText = latestOrder.orderNo;
             document.getElementById('bannerDate').innerText = latestOrder.delivery;
 
-            const banner = document.getElementById('statusBanner');
-            banner.className = 'status-banner'; 
+            banner.className = 'status-banner'; // Reset
             const step = getStepIndex(latestOrder.status);
-            if(step === 1 || step === 2) banner.classList.add('bg-banner-prep'); 
-            if(step === 3) banner.classList.add('bg-banner-prod');
-            if(step === 4) banner.classList.add('bg-banner-qc');
-            if(step === 5) banner.classList.add('bg-banner-deliv');
+            
+            if(step === 1) banner.classList.add('bg-banner-received');
+            else if(step === 2) banner.classList.add('bg-banner-prep');
+            else if(step === 3) banner.classList.add('bg-banner-prod');
+            else if(step === 4) banner.classList.add('bg-banner-qc');
+            else if(step === 5) banner.classList.add('bg-banner-deliv');
         }
 
         function toggleOrderCollapse(orderNo) {
