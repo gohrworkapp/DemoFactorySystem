@@ -302,7 +302,7 @@
         <div id="tabProfile" class="content-area hidden">
             <div style="background:#5E5E5E; border-radius: 12px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer;" onclick="openEditProfile()">
                 <div style="background: #7A7A7A; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);"><i class="fas fa-pen"></i></div>
-                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile (แก้ไขข้อมูลส่วนตัว)</div>
+                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile</div>
             </div>
             <h4 style="margin: 10px 0 15px 5px; color:var(--text-main); font-size:16px;">General Settings</h4>
             <div style="background:#222; border:1px solid #333; border-radius: 12px; margin-bottom: 20px; overflow:hidden;">
@@ -633,7 +633,6 @@
                     
                     if (staffRoles.includes(role)) {
                         isStaff = true;
-                        // บังคับเปลี่ยน Tier ให้พนักงานเป็น Staff เสมอ
                         document.getElementById('headerTier').innerHTML = '<i class="fas fa-user-shield"></i> Staff';
                         
                         document.getElementById('sidebarRole').innerText = role; 
@@ -642,7 +641,6 @@
                         document.getElementById('sidebarMenuCustomer').classList.add('hidden');
                         document.getElementById('staffElements').classList.remove('hidden');
                         
-                        // ซ่อนปุ่ม Create Order หากไม่ใช่ตำแหน่งที่กำหนด
                         const canCreate = ['Sales Admin', 'Sales Coordinators', 'Admin'].includes(role);
                         if (canCreate) {
                             document.getElementById('navBtnCreate').style.display = 'flex';
@@ -658,7 +656,6 @@
                     } else { 
                         isStaff = false;
                         
-                        // Tier สำหรับ Customer ปกติ
                         let tierIcon = '<i class="fas fa-user"></i> Regular';
                         if (dbUserData.Tier === 'VVIP') tierIcon = '<i class="fas fa-crown"></i> VVIP';
                         if (dbUserData.Tier === 'VIP') tierIcon = '<i class="fas fa-star"></i> VIP';
@@ -858,7 +855,7 @@
                     });
                     stepperHtml += '</div>';
 
-                    // แสดงภาพ Work Order ที่มุมขวาบนเสมอ (หากมี)
+                    // แสดงภาพ Work Order (เอา Blue Box และคำว่า WO ออกตามบรีฟ)
                     let woDisplayUrl = getSafeImageUrl(o.woUrl) || o.woUrl;
                     let hasWo = o.woUrl && o.woUrl !== '-';
 
@@ -868,8 +865,7 @@
                             <div style="color:var(--accent-red); font-size:18px; font-weight:800;">${o.style} <span style="font-size:14px; font-weight:500; color:#ccc;">(${o.qty} pcs)</span></div>
                             <div style="font-size:11px; color:#aaa; margin-top:8px;">Estimated Delivery:<br><span style="font-size:15px; color:#fff; font-weight:600;">${o.delivery}</span></div>
                         </div>
-                        ${hasWo ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #00B9F2; flex-shrink:0; position:relative;">
-                            <div style="position:absolute; top:0; left:0; background:#00B9F2; color:#000; font-size:9px; padding:2px 5px; font-weight:bold; border-bottom-right-radius:4px;">WO</div>
+                        ${hasWo ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
                             <img src="${woDisplayUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${o.woUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=WO';">
                         </div>` : ''}
                     </div>`;
@@ -991,7 +987,6 @@
                                 imageUrls = o.sampleImage.split(',').map(u => u.trim());
                             }
                             
-                            // ตัดเอามาแสดงเฉพาะ 5 รูปภาพล่าสุด เพื่อให้แสดงจากซ้ายไปขวา
                             let latestSamples = imageUrls.slice(-5);
 
                             let gridHtml = '<div class="flex-row" style="gap: 8px; margin-bottom: 20px;">';
@@ -1244,6 +1239,88 @@
                 let origThumbUrl = o.woUrl !== '-' ? o.woUrl : null;
                 let displayThumbUrl = getSafeImageUrl(origThumbUrl);
                 
+                // --- ส่วนประวัติและภาพ Sample (Staff History & Samples) ---
+                let staffHistoryHtml = '';
+                let hasHistoryOrImages = false;
+
+                // 1. Grid ภาพ Sample 5 รูปล่าสุด
+                let imageUrls = [];
+                if (o.sampleImage && o.sampleImage !== '-') {
+                    imageUrls = o.sampleImage.split(',').map(u => u.trim());
+                }
+                if (imageUrls.length > 0) {
+                    hasHistoryOrImages = true;
+                    let latestSamples = imageUrls.slice(-5);
+                    let gridHtml = '<div style="margin-bottom: 15px;"><div style="font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 8px;">ภาพตัวอย่าง 5 รูปล่าสุด (Sample Images)</div><div class="flex-row" style="gap: 8px;">';
+                    for (let i = 0; i < 5; i++) {
+                        if (i < latestSamples.length && latestSamples[i]) {
+                            let thumbUrl = getSafeImageUrl(latestSamples[i]) || latestSamples[i];
+                            gridHtml += `
+                            <div style="flex:1; aspect-ratio:1; border-radius:8px; background:#FFF; overflow:hidden; position:relative; border:1px solid #555;">
+                                <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${latestSamples[i]}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=Img';">
+                            </div>`;
+                        } else {
+                            gridHtml += `
+                            <div style="flex:1; aspect-ratio:1; border-radius:8px; overflow:hidden; border:1px solid #444; background: #222; display:flex; justify-content:center; align-items:center;">
+                                <i class="fas fa-image" style="color:#444; font-size:16px;"></i>
+                            </div>`;
+                        }
+                    }
+                    gridHtml += '</div></div>';
+                    staffHistoryHtml += gridHtml;
+                }
+
+                // 2. ประวัติการอัปเดตสถานะงาน (ใครทำ อะไร เมื่อไหร่)
+                if (o.actionLogs && o.actionLogs.length > 0) {
+                    hasHistoryOrImages = true;
+                    let logContent = '<div style="font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 8px;">ประวัติการอัปเดตสถานะ (Status Logs)</div>';
+                    o.actionLogs.forEach(log => {
+                        let lDate = formatDateTimeWithTime(log.date);
+                        logContent += `<div style="font-size: 11px; color: #ccc; margin-bottom: 4px; display: flex; align-items: flex-start; gap: 5px;">
+                            <div style="color:var(--accent-blue); width: 10px;">•</div>
+                            <div><b>${log.status}</b> <span style="color:#888;">by ${log.by}</span><br><span style="font-size:10px; color:#777;">${lDate}</span></div>
+                        </div>`;
+                    });
+                    staffHistoryHtml += `<div style="margin-bottom: 15px;">${logContent}</div>`;
+                }
+
+                // 3. ประวัติการตีกลับและแก้ไขแบบ (Revision History)
+                if (o.revCount > 0 && o.revHistory.length > 0) {
+                    hasHistoryOrImages = true;
+                    let revContent = '<div style="font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 8px; border-top: 1px dashed #555; padding-top:15px;">ประวัติการตีกลับและแก้ไข (Revision History)</div>';
+                    o.revHistory.forEach(r => {
+                        let rDate = formatDateTimeWithTime(r.rejectDate);
+                        revContent += `<div style="background: rgba(255, 77, 109, 0.1); border-left: 3px solid var(--accent-red); padding: 8px 10px; margin-bottom: 8px; border-radius: 4px;">
+                            <div style="font-size: 11px; color: #ccc;"><b>ลูกค้าไม่อนุมัติ (Rev.${r.round})</b> • ${rDate}</div>
+                            <div style="font-size: 12px; color: #FFF; margin-top: 2px;">เหตุผล: ${r.rejectReason}</div>`;
+                        if (r.fixDetail) {
+                            let fDate = formatDateTimeWithTime(r.fixDate);
+                            revContent += `<div style="margin-top: 8px; border-top: 1px dashed #555; padding-top: 6px;">
+                                <div style="font-size: 11px; color: #ccc;"><b>แก้ไขโดย: ${r.fixBy}</b> • ${fDate}</div>
+                                <div style="font-size: 12px; color: var(--accent-green); margin-top: 2px;">รายละเอียด: ${r.fixDetail}</div>
+                            </div>`;
+                        }
+                        revContent += `</div>`;
+                    });
+                    staffHistoryHtml += revContent;
+                }
+
+                let collapsibleHistory = '';
+                if (hasHistoryOrImages) {
+                    collapsibleHistory = `
+                    <div style="margin-top: 15px; border: 1px solid #444; border-radius: 12px; overflow: hidden; margin-bottom: 10px;">
+                        <div onclick="const content = this.nextElementSibling; content.classList.toggle('hidden'); const icon = this.querySelector('i.fa-chevron-down, i.fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); icon.classList.toggle('fa-chevron-up');" style="padding: 10px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #333;">
+                            <span style="font-size: 12px; font-weight: bold; color: #FFF;"><i class="fas fa-history" style="margin-right: 5px; color: var(--accent-yellow);"></i> ดูภาพ Sample & ประวัติการทำรายการ</span>
+                            <i class="fas fa-chevron-down" style="color: #888; transition: 0.3s;"></i>
+                        </div>
+                        <div class="hidden" style="padding: 15px; background: #2A2A2A;">
+                            ${staffHistoryHtml}
+                        </div>
+                    </div>`;
+                }
+                
+                // --- สิ้นสุดการสร้าง Staff History ---
+
                 if (['Admin', 'Production Manager', 'Sales Coordinators'].includes(role)) {
                     if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
                     if (o.status === 'Pre-Production Approved') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'UPDATE_50')">แจ้งผลิตเสร็จ 50%</button>`;
@@ -1309,15 +1386,16 @@
                     <div class="flex-row" style="align-items:flex-start;">
                         <div style="flex:1; font-size:13px; color:#ccc;">
                             <div style="margin-bottom:5px;">👤 <b style="color:#FFF;">${o.custName}</b> <span style="background:#444; color:var(--accent-yellow); font-size:10px; padding:2px 6px; border-radius:4px; margin-left:5px;">${o.tier}</span> <a href="tel:${o.custPhone}" style="color:var(--accent-green); margin-left:8px;"><i class="fas fa-phone"></i> ${o.custPhone}</a></div>
+                            <div style="margin-bottom:5px;">Sales Owner: <span style="color:#FFF;">${o.salesOwner}</span></div>
                             <div style="margin-bottom:5px;">Style: <span style="color:#FFF;">${o.style}</span> (${o.qty} pcs)</div>
                             <div style="margin-bottom:5px;">Batch: <span style="color:#FFF;">${o.batch}</span></div>
                             <div>Est Delivery: <span style="color:#FFF;">${o.delivery}</span></div>
                         </div>
-                        ${origThumbUrl ? `<div style="width: 60px; height: 60px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #00B9F2; flex-shrink:0; position:relative;">
-                            <div style="position:absolute; top:0; left:0; background:#00B9F2; color:#000; font-size:9px; padding:2px 5px; font-weight:bold; border-bottom-right-radius:4px;">WO</div>
+                        ${origThumbUrl ? `<div style="width: 60px; height: 60px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
                             <img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=WO';">
                         </div>` : ''}
                     </div>
+                    ${collapsibleHistory}
                     ${btns}
                 </div>`;
             });
