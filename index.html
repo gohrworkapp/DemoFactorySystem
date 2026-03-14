@@ -302,7 +302,7 @@
         <div id="tabProfile" class="content-area hidden">
             <div style="background:#5E5E5E; border-radius: 12px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer;" onclick="openEditProfile()">
                 <div style="background: #7A7A7A; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);"><i class="fas fa-pen"></i></div>
-                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile</div>
+                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile (แก้ไขข้อมูลส่วนตัว)</div>
             </div>
             <h4 style="margin: 10px 0 15px 5px; color:var(--text-main); font-size:16px;">General Settings</h4>
             <div style="background:#222; border:1px solid #333; border-radius: 12px; margin-bottom: 20px; overflow:hidden;">
@@ -441,8 +441,7 @@
             <input type="text" id="epLocation" placeholder="พิกัด GPS แมสเซ็นเจอร์" readonly class="ep-input" style="text-align:center; font-weight:500;">
             
             <div style="height: 150px; border-radius: 12px; margin-bottom: 20px; overflow: hidden; background:#333; border:1px solid #777;" id="mapDisplay">
-                 <iframe src="" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>
-            </div>
+                 </div>
             
             <div class="flex-row">
                 <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:12px;" onclick="getLocation()"><i class="fas fa-map-marker-alt"></i> My Location</button>
@@ -502,7 +501,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbz5letAATh-GX2DbG0is8cdXCsFT2GNp4JKg6sAaIsyBR6MYNHNLbheMiYkCZ5-qZ2c5w/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbxD7kubrSaZuXPap8skZ8FWzP7WTBZRzDhMPHIUjh_GTkiWQwQBSqqzkv6kxWFiB3RJeg/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         const BRAND_LOGO = 'https://drive.google.com/thumbnail?id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo&sz=w200';
         // =================================================
@@ -855,7 +854,6 @@
                     });
                     stepperHtml += '</div>';
 
-                    // แสดงภาพ Work Order (เอา Blue Box และคำว่า WO ออกตามบรีฟ)
                     let woDisplayUrl = getSafeImageUrl(o.woUrl) || o.woUrl;
                     let hasWo = o.woUrl && o.woUrl !== '-';
 
@@ -1112,10 +1110,15 @@
                 document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
                 document.getElementById('epShipCountry').value = dbUserData.ShipCountry || 'Thailand';
 
+                // --- แก้ไขการแสดงผลแผนที่ (Google Maps Embed) ---
                 if (dbUserData.ShipLocation && typeof dbUserData.ShipLocation === 'string') {
                     document.getElementById('epLocation').value = dbUserData.ShipLocation;
                     const c = dbUserData.ShipLocation.split(','); 
-                    if(c.length === 2) document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=$${c[0]},${c[1]}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
+                    if(c.length === 2) {
+                        document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=${c[0].trim()},${c[1].trim()}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
+                    }
+                } else {
+                    document.getElementById('mapDisplay').innerHTML = '';
                 }
 
                 document.getElementById('cbSameAsBill').checked = false; toggleShippingForm();
@@ -1166,9 +1169,14 @@
                     (pos) => {
                         let lat = pos.coords.latitude; let lng = pos.coords.longitude;
                         document.getElementById('epLocation').value = `${lat},${lng}`;
-                        document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=$${lat},${lng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
+                        
+                        // --- แก้ไขการแสดงผลแผนที่ (Google Maps Embed) ---
+                        document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
                     },
-                    () => { alert("กรุณาอนุญาตให้เข้าถึง Location"); document.getElementById('epLocation').value = ""; },
+                    () => { 
+                        alert("กรุณาอนุญาตให้ระบบเข้าถึง Location (GPS) ในการตั้งค่าเบราว์เซอร์หรือแอป LINE ของคุณ"); 
+                        document.getElementById('epLocation').value = ""; 
+                    },
                     { enableHighAccuracy: true }
                 );
             } else { alert("อุปกรณ์ไม่รองรับ GPS"); }
@@ -1176,8 +1184,11 @@
 
         function openMap() {
             let loc = document.getElementById('epLocation').value;
-            if (loc && loc !== "กำลังค้นหา...") { window.open(`https://maps.google.com/maps?q=$${loc}`, '_blank'); } 
-            else { alert("กรุณากด My Location ก่อน"); }
+            if (loc && loc !== "กำลังค้นหา...") { 
+                // --- แก้ไขการลิงก์แผนที่ ---
+                window.open(`https://maps.google.com/maps?q=${loc}`, '_blank'); 
+            } 
+            else { alert("กรุณากด 'My Location' เพื่อหาพิกัดก่อนครับ"); }
         }
 
         // ================= ACTIONS & MODALS =================
