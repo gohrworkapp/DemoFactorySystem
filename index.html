@@ -61,7 +61,9 @@
         .tier-badge { background: transparent; color: #FFF; font-size: 12px; font-weight: 700; margin-top: 5px; }
 
         /* --- Status Banner --- */
-        .status-banner { margin: 20px 30px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .status-banner { margin: 20px 30px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #FFFFFF !important; }
+        .status-banner div, .status-banner span { color: #FFFFFF !important; }
+        
         .bg-banner-received { background: linear-gradient(135deg, #00E676, #FFD54F); } 
         .bg-banner-prep { background: linear-gradient(135deg, #FFD54F, #FF8A65); } 
         .bg-banner-prod { background: linear-gradient(135deg, #B388FF, #00B9F2); } 
@@ -500,7 +502,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbwBTmnIOvlxfhKHQ0bHNMPwZ7GCGh3juU28UGBzY7knvdqC3_BCsoOmULEhhdb4a4diyA/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbyRq-UDm-cWNK6naZ1_hr6nhGJXcfj7OZgsN57MYCG99fOUzGa1y-nWvRgJDqhUTBukAA/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         const BRAND_LOGO = 'https://drive.google.com/thumbnail?id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo&sz=w200';
         // =================================================
@@ -566,7 +568,6 @@
             });
         }
 
-        // ประมวลผลภาพเดียว (สำหรับภาพ WO หรือ Package)
         async function processImage(input, orderNo, type) {
             let statusId = `status-${type}-${orderNo}`; 
             const status = document.getElementById(statusId);
@@ -577,36 +578,6 @@
                 try {
                     preloadedImages[key] = await getBase64(input.files[0]); 
                     if(status) { status.style.color = 'var(--accent-green)'; status.innerHTML = 'ไฟล์พร้อมส่ง'; }
-                } catch (e) { 
-                    if(status) { status.style.color = 'var(--accent-red)'; status.innerHTML = 'Error'; } 
-                }
-            } else { 
-                if(status) status.style.display = 'none'; 
-                delete preloadedImages[key]; 
-            }
-        }
-
-        // ประมวลผลหลายภาพ (สำหรับส่งภาพ 5 แบบเสื้อ)
-        async function processMultipleImages(input, orderNo, type) {
-            let statusId = `status-${type}-${orderNo}`; 
-            const status = document.getElementById(statusId);
-            const key = `${type}-${orderNo}`;
-            preloadedImages[key] = []; // Reset Array
-
-            if (input.files.length > 0) {
-                if (input.files.length > 5) {
-                    alert("อัปโหลดได้สูงสุด 5 ภาพครับ");
-                    input.value = '';
-                    return;
-                }
-                if(status) { status.style.display = 'block'; status.style.color = '#FFC805'; status.innerHTML = 'กำลังประมวลผล...'; }
-                try {
-                    let promises = [];
-                    for(let i=0; i<input.files.length; i++) {
-                        promises.push(getBase64(input.files[i]));
-                    }
-                    preloadedImages[key] = await Promise.all(promises);
-                    if(status) { status.style.color = 'var(--accent-green)'; status.innerHTML = `พร้อมส่ง ${preloadedImages[key].length} ภาพ`; }
                 } catch (e) { 
                     if(status) { status.style.color = 'var(--accent-red)'; status.innerHTML = 'Error'; } 
                 }
@@ -630,21 +601,30 @@
         }
         main();
 
+        // อัปเกรดระบบ CallBackend เพื่อดักจับ Error ที่เป็นหน้าต่างขาว
         function callBackend(action, data, callback) {
             document.getElementById('loader').classList.remove('hidden');
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: action, data: data }) })
-            .then(r => r.json())
+            .then(async r => {
+                const text = await r.text(); 
+                try {
+                    const json = JSON.parse(text);
+                    return json;
+                } catch(e) {
+                    throw new Error("Invalid response from server");
+                }
+            })
             .then(res => { 
                 document.getElementById('loader').classList.add('hidden'); 
                 if(callback) callback(res); 
             })
             .catch(e => { 
                 document.getElementById('loader').classList.add('hidden'); 
-                alert("Error connecting to server"); 
+                console.error(e);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง หรือติดต่อผู้ดูแลระบบ"); 
             });
         }
 
-        // ตรวจสอบ Role ของ Staff ให้แสดงคำว่า Staff เสมอ
         function getTierIcon(tier, role) {
             if (['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser', 'Sales Coordinators'].includes(role)) {
                 return '<i class="fas fa-user-shield"></i> Staff';
@@ -656,14 +636,14 @@
 
         function checkUser() {
             callBackend('get_user', { userId: userProfile.userId }, (res) => {
-                if (res.found) {
+                if (res && res.found) {
                     dbUserData = res.data;
                     document.getElementById('viewApp').classList.remove('hidden');
                     
                     document.getElementById('headerName').innerText = dbUserData.RealName;
                     document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand';
                     document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
-                    document.getElementById('headerTier').innerHTML = getTierIcon(dbUserData.Tier, dbUserData.Role); // อัปเดต Tier
+                    document.getElementById('headerTier').innerHTML = getTierIcon(dbUserData.Tier, dbUserData.Role); 
                     
                     document.getElementById('sidebarPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
                     document.getElementById('sidebarName').innerText = dbUserData.RealName;
@@ -680,7 +660,6 @@
                         document.getElementById('sidebarMenuCustomer').classList.add('hidden');
                         document.getElementById('staffElements').classList.remove('hidden');
                         
-                        // ซ่อน/แสดง ปุ่ม Create Order ตามสิทธิ์
                         if(isSalesStaff) {
                             document.getElementById('menuCreateOrder').classList.remove('hidden');
                             document.getElementById('navBtnCreate').classList.remove('hidden');
@@ -716,7 +695,7 @@
                 email: document.getElementById('regEmail').value 
             };
             if(!payload.realName || !payload.phone) return alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
-            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); });
+            callBackend('register', payload, (res) => { if(res && res.status === 'success') location.reload(); });
         }
 
         function toggleSidebar() { 
@@ -888,9 +867,11 @@
                     });
                     stepperHtml += '</div>';
 
-                    // ดึงภาพ WO มาโชว์มุมขวาบนเสมอ (ถ้ามี)
-                    let origWoUrl = o.woUrl !== '-' ? o.woUrl : null;
-                    let displayWoUrl = getSafeImageUrl(origWoUrl);
+                    let origThumbUrl = null;
+                    if (o.shipImage && o.shipImage !== '-') origThumbUrl = o.shipImage;
+                    else if (o.sampleImage && o.sampleImage !== '-') origThumbUrl = o.sampleImage.split(',')[0]; 
+                    else if (o.woUrl && o.woUrl !== '-') origThumbUrl = o.woUrl;
+                    let displayThumbUrl = getSafeImageUrl(origThumbUrl);
 
                     let detailBox = `
                     <div style="background:#383838; border-radius:16px; padding:15px; display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
@@ -898,8 +879,8 @@
                             <div style="color:var(--accent-red); font-size:18px; font-weight:800;">${o.style} <span style="font-size:14px; font-weight:500; color:#ccc;">(${o.qty} pcs)</span></div>
                             <div style="font-size:11px; color:#aaa; margin-top:8px;">Estimated Delivery:<br><span style="font-size:15px; color:#fff; font-weight:600;">${o.delivery}</span></div>
                         </div>
-                        ${origWoUrl ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
-                            <img src="${displayWoUrl || origWoUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origWoUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=WO';">
+                        ${origThumbUrl ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
+                            <img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=คลิกเพื่อดูไฟล์';">
                         </div>` : ''}
                     </div>`;
 
@@ -1020,6 +1001,7 @@
                                 imageUrls = o.sampleImage.split(',').map(u => u.trim());
                             }
 
+                            // กริด 5 รูปภาพ โดยดึงจาก Array ที่แยกมาจากลูกน้ำ
                             let gridHtml = '<div class="flex-row" style="gap: 8px; margin-bottom: 20px;">';
                             for (let i = 0; i < 5; i++) {
                                 if (i < imageUrls.length && imageUrls[i]) {
@@ -1052,10 +1034,10 @@
 
                             let actionButtonsHtml = `
                             <div class="flex-row">
-                                <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; flex:1.2; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="approveAction('${o.orderNo}')">
-                                    <i class="far fa-check-circle" style="margin-right:4px;"></i> อนุมัติผลิต / Approve Production
+                                <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; flex:1; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="approveAction('${o.orderNo}')">
+                                    <i class="far fa-check-circle"></i> อนุมัติผลิต / Approve Production
                                 </button>
-                                <button class="btn" style="background:#222; border:1px solid var(--accent-red); color:var(--accent-red); flex:0.8; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="openRejectModal('${o.orderNo}')">
+                                <button class="btn" style="background:#222; border:1px solid var(--accent-red); color:var(--accent-red); flex:1; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="openRejectModal('${o.orderNo}')">
                                     ไม่อนุมัติ / Not Approved
                                 </button>
                             </div>`;
@@ -1095,6 +1077,15 @@
                 html += cardHtml;
             });
             container.innerHTML = html;
+        }
+
+        function fetchCustomerOrders() { 
+            callBackend('get_my_orders', { userId: userProfile.userId }, (res) => { 
+                if(res && res.orders) {
+                    globalOrders = res.orders; 
+                    filterOrders(); 
+                }
+            }); 
         }
 
         // ================= EDIT PROFILE FOR CUSTOMER =================
@@ -1171,8 +1162,8 @@
             if(!payload.realName || !payload.phone) return alert("กรุณากรอก NAME และ PHONE ให้ครบถ้วน");
 
             callBackend('update_profile', payload, (res) => { 
-                if(res.status === 'success') { alert("บันทึกข้อมูลเรียบร้อยแล้ว!"); closeEditProfile(); checkUser(); } 
-                else { alert("Error: " + res.message); }
+                if(res && res.status === 'success') { alert("บันทึกข้อมูลเรียบร้อยแล้ว!"); closeEditProfile(); checkUser(); } 
+                else { alert("Error: " + (res ? res.message : "Unknown Error")); }
             });
         }
 
@@ -1218,6 +1209,40 @@
             }); 
         }
         
+        // แก้ไขปุ่ม Create Order ให้มีตัวดักจับการกรอกข้อมูลและรูปภาพ
+        function createOrder() { 
+            try {
+                const woInput = document.getElementById('ordWoImage');
+                if (woInput.files.length > 0 && !preloadedImages['wo-new_wo']) {
+                    return alert("ระบบกำลังอัปโหลดไฟล์ใบสั่งงาน กรุณารอสักครู่แล้วกดบันทึกอีกครั้งครับ");
+                }
+                
+                let woImg = preloadedImages['wo-new_wo'] || null;
+                const payload = { 
+                    adminName: dbUserData.RealName, 
+                    phone: document.getElementById('ordPhone').value, 
+                    batch: document.getElementById('ordBatch').value, 
+                    style: document.getElementById('ordStyle').value, 
+                    qty: document.getElementById('ordQty').value, 
+                    fabric: document.getElementById('ordFabric').value, 
+                    deliveryDate: document.getElementById('ordDate').value, 
+                    detail: document.getElementById('ordDetail').value, 
+                    address: '-', 
+                    woImage: woImg 
+                };
+
+                if(!payload.phone || !payload.batch || !payload.style || !payload.fabric || !payload.qty) {
+                    return alert("กรุณาระบุข้อมูลให้ครบถ้วน (เบอร์โทร, Batch, ทรงเสื้อ, จำนวน, ชนิดผ้า)");
+                }
+                
+                callBackend('create_order', payload, (res) => { 
+                    if(res && res.status === 'success') { alert("สร้างออเดอร์เรียบร้อย"); location.reload(); } else { alert("Error: " + (res ? res.message : "Unknown Error")); }
+                }); 
+            } catch(e) {
+                alert("เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาตรวจสอบอินเทอร์เน็ต: " + e.message);
+            }
+        }
+
         function filterStaffList() {
             const search = document.getElementById('staffSearch').value.toLowerCase();
             const filter = document.getElementById('staffStatusFilter').value;
@@ -1233,7 +1258,6 @@
 
             let html = ''; const role = dbUserData.Role;
             
-            // จัดการสิทธิ์การมองเห็นปุ่มต่างๆ ของแต่ละตำแหน่ง (Sales Coordinators ทำได้ทุกอย่าง)
             const canManageWO = ['Admin', 'Production Manager', 'Sales Coordinators'].includes(role);
             const canSendSample = ['Admin', 'Merchandiser', 'Sales Admin', 'Sales Coordinators'].includes(role);
             const canQC = ['Admin', 'Quality Control', 'Sales Coordinators'].includes(role);
@@ -1252,7 +1276,7 @@
 
                 if (canSendSample) {
                     if (o.status === 'Work Order Review Stage') {
-                        // เพิ่มการรับภาพ 2 ชุด (ภาพพัสดุ 1 ภาพ + ภาพแบบเสื้อ 5 ภาพ)
+                        // ปรับการอัปโหลด Sample เป็น 1 รูป
                         btns += `
                         <div style="background:#333; padding:15px; border-radius:12px; margin-top:15px;">
                             <label class="input-label" style="margin-top:0;">จัดส่งตัวอย่าง (PP Sample)</label>
@@ -1264,8 +1288,8 @@
                             <input type="file" id="file-pkg-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'pkg')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
                             <div id="status-pkg-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
 
-                            <label class="input-label" style="color:var(--accent-yellow);">2. ภาพถ่ายแบบเสื้อ Sample (สูงสุด 5 ภาพ) *บังคับ</label>
-                            <input type="file" id="file-sam-${o.orderNo}" accept="image/*" multiple onchange="processMultipleImages(this, '${o.orderNo}', 'sam')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
+                            <label class="input-label" style="color:var(--accent-yellow);">2. ภาพถ่ายแบบเสื้อ Sample (1 ภาพ) *บังคับ</label>
+                            <input type="file" id="file-sam-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'sam')" style="background:#444; color:#FFF; font-size:11px; padding:8px;">
                             <div id="status-sam-${o.orderNo}" style="font-size:12px; margin-top:5px; display:none;"></div>
 
                             <button class="btn btn-outline" id="btn-s-${o.orderNo}" style="margin-top:15px;" onclick="sendSample('${o.orderNo}')">แจ้งส่งตัวอย่าง</button>
@@ -1349,7 +1373,7 @@
             callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: dbUserData.RealName }, () => { closeModal('modalFixPP'); fetchStaffData(); }); 
         }
 
-        // อัปเดตฟังก์ชันส่งรูปตอนทำ Sample
+        // อัปเดตฟังก์ชันส่งรูป Sample แบบใหม่ (รับภาพเดี่ยว 2 ช่อง)
         async function sendSample(no) { 
             const m = document.getElementById(`del-s-${no}`).value; 
             const t = document.getElementById(`track-s-${no}`).value; 
@@ -1359,10 +1383,13 @@
             if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
             
             const pkgBase64 = preloadedImages[`pkg-${no}`] || null;
-            const samBase64Array = preloadedImages[`sam-${no}`] || [];
+            const samBase64 = preloadedImages[`sam-${no}`] || null;
 
-            // ระบบป้องกันการกดส่งโดยไม่ใส่ภาพ หรือกำลังโหลด
-            if (samBase64Array.length === 0) return alert("โปรดแนบภาพถ่ายแบบเสื้อ Sample (สูงสุด 5 ภาพ) อย่างน้อย 1 ภาพครับ");
+            // ระบบป้องกันการกดส่งโดยไม่ใส่ภาพ หรือภาพกำลังโหลด
+            const fileSamInput = document.getElementById(`file-sam-${no}`);
+            if (fileSamInput && fileSamInput.files.length > 0 && !samBase64) return alert("กำลังอัปโหลดรูปภาพ Sample กรุณารอสักครู่แล้วกดส่งใหม่");
+            
+            if (!samBase64) return alert("โปรดแนบภาพถ่ายแบบเสื้อ Sample (1 ภาพ) เพื่อส่งให้ลูกค้าด้วยครับ");
             if (m === 'Parcel' && !pkgBase64) return alert("โปรดแนบภาพถ่ายกล่องพัสดุด้วยครับ");
 
             callBackend('update_status', { 
@@ -1372,7 +1399,7 @@
                 tracking: t, 
                 messengerPhone: p, 
                 packageImage: pkgBase64,
-                sampleImages: samBase64Array,
+                sampleImage: samBase64, // ส่งไปภาพเดียว แต่หลังบ้านจะจัดการต่อเข้ากับภาพเดิม
                 staffName: dbUserData.RealName 
             }, () => fetchStaffData()); 
         }
