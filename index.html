@@ -61,9 +61,7 @@
         .tier-badge { background: transparent; color: #FFF; font-size: 12px; font-weight: 700; margin-top: 5px; }
 
         /* --- Status Banner --- */
-        .status-banner { margin: 20px 30px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #FFFFFF !important; }
-        .status-banner div, .status-banner span { color: #FFFFFF !important; }
-        
+        .status-banner { margin: 20px 30px; padding: 25px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s; }
         .bg-banner-received { background: linear-gradient(135deg, #00E676, #FFD54F); } 
         .bg-banner-prep { background: linear-gradient(135deg, #FFD54F, #FF8A65); } 
         .bg-banner-prod { background: linear-gradient(135deg, #B388FF, #00B9F2); } 
@@ -301,7 +299,7 @@
         <div id="tabProfile" class="content-area hidden">
             <div style="background:#5E5E5E; border-radius: 12px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer;" onclick="openEditProfile()">
                 <div style="background: #7A7A7A; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);"><i class="fas fa-pen"></i></div>
-                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile</div>
+                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile (แก้ไขข้อมูลส่วนตัว)</div>
             </div>
             <h4 style="margin: 10px 0 15px 5px; color:var(--text-main); font-size:16px;">General Settings</h4>
             <div style="background:#222; border:1px solid #333; border-radius: 12px; margin-bottom: 20px; overflow:hidden;">
@@ -601,7 +599,7 @@
         }
         main();
 
-        // อัปเกรดระบบ CallBackend เพื่อดักจับ Error ที่เป็นหน้าต่างขาว
+        // อัปเกรดระบบ CallBackend เพื่อดักจับ Error ที่เป็นหน้าต่างขาวของลูกค้า
         function callBackend(action, data, callback) {
             document.getElementById('loader').classList.remove('hidden');
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: action, data: data }) })
@@ -764,7 +762,8 @@
             document.getElementById('bannerOrderNo').innerText = latestOrder.orderNo;
             document.getElementById('bannerDate').innerText = latestOrder.delivery;
 
-            banner.className = 'status-banner'; 
+            // แก้ไขปัญหาแบนเนอร์หายด้วยการ Remove คลาสสีก่อนหน้าอย่างเดียว
+            banner.classList.remove('bg-banner-received', 'bg-banner-prep', 'bg-banner-prod', 'bg-banner-qc', 'bg-banner-deliv');
             const step = getStepIndex(latestOrder.status);
             
             if(step === 1) banner.classList.add('bg-banner-received');
@@ -867,11 +866,9 @@
                     });
                     stepperHtml += '</div>';
 
-                    let origThumbUrl = null;
-                    if (o.shipImage && o.shipImage !== '-') origThumbUrl = o.shipImage;
-                    else if (o.sampleImage && o.sampleImage !== '-') origThumbUrl = o.sampleImage.split(',')[0]; 
-                    else if (o.woUrl && o.woUrl !== '-') origThumbUrl = o.woUrl;
-                    let displayThumbUrl = getSafeImageUrl(origThumbUrl);
+                    // บังคับให้กรอบขวาบนของลูกค้า ดึงเฉพาะภาพ WO (คอลัมน์ AA) มาโชว์เสมอ ไม่ให้ดึงรูปพัสดุมาทับ
+                    let origWoUrl = o.woUrl !== '-' ? o.woUrl : null;
+                    let displayWoUrl = getSafeImageUrl(origWoUrl);
 
                     let detailBox = `
                     <div style="background:#383838; border-radius:16px; padding:15px; display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
@@ -879,8 +876,8 @@
                             <div style="color:var(--accent-red); font-size:18px; font-weight:800;">${o.style} <span style="font-size:14px; font-weight:500; color:#ccc;">(${o.qty} pcs)</span></div>
                             <div style="font-size:11px; color:#aaa; margin-top:8px;">Estimated Delivery:<br><span style="font-size:15px; color:#fff; font-weight:600;">${o.delivery}</span></div>
                         </div>
-                        ${origThumbUrl ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
-                            <img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=คลิกเพื่อดูไฟล์';">
+                        ${origWoUrl ? `<div style="width: 75px; height: 75px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
+                            <img src="${displayWoUrl || origWoUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origWoUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=WO';">
                         </div>` : ''}
                     </div>`;
 
@@ -997,11 +994,12 @@
 
                         if (o.status === 'Sampling Stage') {
                             let imageUrls = [];
+                            // ดึงลิงก์รูปแบบเสื้อจากคอลัมน์ Y มาแยก
                             if (o.sampleImage && o.sampleImage !== '-') {
                                 imageUrls = o.sampleImage.split(',').map(u => u.trim());
                             }
 
-                            // กริด 5 รูปภาพ โดยดึงจาก Array ที่แยกมาจากลูกน้ำ
+                            // หยอดลิงก์ลงกริด 5 ช่อง
                             let gridHtml = '<div class="flex-row" style="gap: 8px; margin-bottom: 20px;">';
                             for (let i = 0; i < 5; i++) {
                                 if (i < imageUrls.length && imageUrls[i]) {
@@ -1034,10 +1032,10 @@
 
                             let actionButtonsHtml = `
                             <div class="flex-row">
-                                <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; flex:1; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="approveAction('${o.orderNo}')">
-                                    <i class="far fa-check-circle"></i> อนุมัติผลิต / Approve Production
+                                <button class="btn" style="background:linear-gradient(90deg, #00B9F2, #00E676); color:#FFF; flex:1.2; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="approveAction('${o.orderNo}')">
+                                    <i class="far fa-check-circle" style="margin-right:4px;"></i> อนุมัติผลิต / Approve Production
                                 </button>
-                                <button class="btn" style="background:#222; border:1px solid var(--accent-red); color:var(--accent-red); flex:1; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="openRejectModal('${o.orderNo}')">
+                                <button class="btn" style="background:#222; border:1px solid var(--accent-red); color:var(--accent-red); flex:0.8; font-size:11px; border-radius:12px; font-weight:700; white-space:nowrap; padding: 12px 5px;" onclick="openRejectModal('${o.orderNo}')">
                                     ไม่อนุมัติ / Not Approved
                                 </button>
                             </div>`;
@@ -1090,7 +1088,6 @@
 
         // ================= EDIT PROFILE FOR CUSTOMER =================
         function toggleShippingForm() {
-            // ไม่ซ่อนฟอร์มพิกัดแล้ว ให้แสดงเห็นตลอดตามที่ร้องขอ
         }
 
         function openEditProfile() {
@@ -1195,7 +1192,7 @@
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
         function confirmReject() { 
             const no = document.getElementById('rejOrderNo').value; const r = document.getElementById('rejReason').value; 
-            if(!r) return; 
+            if(!r) return alert("ระบุสาเหตุ"); 
             callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); }); 
         }
 
@@ -1209,7 +1206,6 @@
             }); 
         }
         
-        // แก้ไขปุ่ม Create Order ให้มีตัวดักจับการกรอกข้อมูลและรูปภาพ
         function createOrder() { 
             try {
                 const woInput = document.getElementById('ordWoImage');
@@ -1239,7 +1235,7 @@
                     if(res && res.status === 'success') { alert("สร้างออเดอร์เรียบร้อย"); location.reload(); } else { alert("Error: " + (res ? res.message : "Unknown Error")); }
                 }); 
             } catch(e) {
-                alert("เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาตรวจสอบอินเทอร์เน็ต: " + e.message);
+                alert("เกิดข้อผิดพลาดในการสร้างออเดอร์: " + e.message);
             }
         }
 
@@ -1265,8 +1261,9 @@
 
             filtered.forEach(o => {
                 let btns = '';
-                let origThumbUrl = o.woUrl !== '-' ? o.woUrl : null;
-                let displayThumbUrl = getSafeImageUrl(origThumbUrl);
+                // บังคับให้หน้าพนักงาน มุมขวาบนดึงเฉพาะรูป WO มาโชว์เสมอ
+                let origWoUrl = o.woUrl !== '-' ? o.woUrl : null;
+                let displayWoUrl = getSafeImageUrl(origWoUrl);
                 
                 if (canManageWO) {
                     if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
@@ -1276,7 +1273,6 @@
 
                 if (canSendSample) {
                     if (o.status === 'Work Order Review Stage') {
-                        // ปรับการอัปโหลด Sample เป็น 1 รูป
                         btns += `
                         <div style="background:#333; padding:15px; border-radius:12px; margin-top:15px;">
                             <label class="input-label" style="margin-top:0;">จัดส่งตัวอย่าง (PP Sample)</label>
@@ -1342,8 +1338,8 @@
                             <div style="margin-bottom:5px;">Batch: <span style="color:#FFF;">${o.batch}</span></div>
                             <div>Est Delivery: <span style="color:#FFF;">${o.delivery}</span></div>
                         </div>
-                        ${origThumbUrl ? `<div style="width: 60px; height: 60px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
-                            <img src="${displayThumbUrl || origThumbUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origThumbUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=คลิกเพื่อดูไฟล์';">
+                        ${origWoUrl ? `<div style="width: 60px; height: 60px; border-radius: 8px; overflow:hidden; background:#222; border: 1px solid #555; flex-shrink:0;">
+                            <img src="${displayWoUrl || origWoUrl}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${origWoUrl}', '_blank')" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/222222/FFFFFF?text=WO';">
                         </div>` : ''}
                     </div>
                     ${btns}
@@ -1373,47 +1369,53 @@
             callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: dbUserData.RealName }, () => { closeModal('modalFixPP'); fetchStaffData(); }); 
         }
 
-        // อัปเดตฟังก์ชันส่งรูป Sample แบบใหม่ (รับภาพเดี่ยว 2 ช่อง)
         async function sendSample(no) { 
-            const m = document.getElementById(`del-s-${no}`).value; 
-            const t = document.getElementById(`track-s-${no}`).value; 
-            const p = document.getElementById(`phone-s-${no}`).value; 
-            
-            if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); 
-            if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
-            
-            const pkgBase64 = preloadedImages[`pkg-${no}`] || null;
-            const samBase64 = preloadedImages[`sam-${no}`] || null;
+            try {
+                const m = document.getElementById(`del-s-${no}`).value; 
+                const t = document.getElementById(`track-s-${no}`).value; 
+                const p = document.getElementById(`phone-s-${no}`).value; 
+                
+                if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); 
+                if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
+                
+                const pkgBase64 = preloadedImages[`pkg-${no}`] || null;
+                const samBase64 = preloadedImages[`sam-${no}`] || null;
 
-            // ระบบป้องกันการกดส่งโดยไม่ใส่ภาพ หรือภาพกำลังโหลด
-            const fileSamInput = document.getElementById(`file-sam-${no}`);
-            if (fileSamInput && fileSamInput.files.length > 0 && !samBase64) return alert("กำลังอัปโหลดรูปภาพ Sample กรุณารอสักครู่แล้วกดส่งใหม่");
-            
-            if (!samBase64) return alert("โปรดแนบภาพถ่ายแบบเสื้อ Sample (1 ภาพ) เพื่อส่งให้ลูกค้าด้วยครับ");
-            if (m === 'Parcel' && !pkgBase64) return alert("โปรดแนบภาพถ่ายกล่องพัสดุด้วยครับ");
+                const fileSamInput = document.getElementById(`file-sam-${no}`);
+                if (fileSamInput && fileSamInput.files.length > 0 && !samBase64) return alert("กำลังอัปโหลดรูปภาพ Sample กรุณารอสักครู่แล้วกดส่งใหม่");
+                
+                if (!samBase64) return alert("โปรดแนบภาพถ่ายแบบเสื้อ Sample (1 ภาพ) เพื่อส่งให้ลูกค้าด้วยครับ");
+                if (m === 'Parcel' && !pkgBase64) return alert("โปรดแนบภาพถ่ายกล่องพัสดุด้วยครับ");
 
-            callBackend('update_status', { 
-                orderNo: no, 
-                actionType: 'SEND_SAMPLE', 
-                deliveryMethod: m, 
-                tracking: t, 
-                messengerPhone: p, 
-                packageImage: pkgBase64,
-                sampleImage: samBase64, // ส่งไปภาพเดียว แต่หลังบ้านจะจัดการต่อเข้ากับภาพเดิม
-                staffName: dbUserData.RealName 
-            }, () => fetchStaffData()); 
+                callBackend('update_status', { 
+                    orderNo: no, 
+                    actionType: 'SEND_SAMPLE', 
+                    deliveryMethod: m, 
+                    tracking: t, 
+                    messengerPhone: p, 
+                    packageImage: pkgBase64,
+                    sampleImage: samBase64, 
+                    staffName: dbUserData.RealName 
+                }, () => fetchStaffData()); 
+            } catch(e) {
+                alert("เกิดข้อผิดพลาด: " + e.message);
+            }
         }
 
         async function shipOrder(no) { 
-            const m = document.getElementById(`del-ship-${no}`).value; const t = document.getElementById(`track-ship-${no}`).value; const p = document.getElementById(`phone-ship-${no}`).value; 
-            if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
-            
-            const fileInput = document.getElementById(`file-ship-${no}`);
-            if (fileInput && fileInput.files.length > 0 && !preloadedImages[`ship-${no}`]) {
-                return alert("กำลังอัปโหลดรูปภาพพัสดุ กรุณารอสักครู่แล้วกดยืนยันจัดส่งอีกครั้งครับ");
-            }
+            try {
+                const m = document.getElementById(`del-ship-${no}`).value; const t = document.getElementById(`track-ship-${no}`).value; const p = document.getElementById(`phone-ship-${no}`).value; 
+                if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
+                
+                const fileInput = document.getElementById(`file-ship-${no}`);
+                if (fileInput && fileInput.files.length > 0 && !preloadedImages[`ship-${no}`]) {
+                    return alert("กำลังอัปโหลดรูปภาพพัสดุ กรุณารอสักครู่แล้วกดยืนยันจัดส่งอีกครั้งครับ");
+                }
 
-            callBackend('update_status', { orderNo: no, actionType: 'SHIP', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`ship-${no}`] || null, staffName: dbUserData.RealName }, () => fetchStaffData()); 
+                callBackend('update_status', { orderNo: no, actionType: 'SHIP', deliveryMethod: m, tracking: t, messengerPhone: p, image: preloadedImages[`ship-${no}`] || null, staffName: dbUserData.RealName }, () => fetchStaffData()); 
+            } catch(e) {
+                alert("เกิดข้อผิดพลาด: " + e.message);
+            }
         }
     </script>
 </body>
