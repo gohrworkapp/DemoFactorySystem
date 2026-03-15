@@ -102,7 +102,7 @@
         /* --- Inputs & Elements --- */
         .input-label { font-size: 10px; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; margin-top: 15px; font-weight: 600; }
         input, select, textarea { width: 100%; padding: 14px 16px; background: var(--input-bg); border: none; border-radius: 20px; color: #FFF; font-family: 'Inter', 'Kanit', sans-serif; font-size: 14px; font-weight: 500; outline: none; box-sizing: border-box; }
-        input[type="date"] { box-sizing: border-box; width: 100%; }
+        input[type="date"] { box-sizing: border-box; width: 100%; display: block; max-width: 100%; }
         input::placeholder, textarea::placeholder { color: #DDD; font-weight: 400; }
         .dark-input { background: #333; color: #FFF; }
         .search-bar { flex: 1; background: #2A2A2A; border-radius: 16px; padding: 15px 20px; display: flex; align-items: center; border: 1px solid #444; }
@@ -143,8 +143,22 @@
         .full-view.show { display: block; }
         .modal-center { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1001; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-center.show { display: flex; }
-        .modal-box { width: 100%; max-width: 400px; background: #333; padding: 25px; border-radius: 20px; border: 1px solid #555; position: relative; }
+        .modal-box { width: 100%; max-width: 500px; background: #333; padding: 25px; border-radius: 20px; border: 1px solid #555; position: relative; }
         
+        /* Modal Scroll Content & Language Tabs */
+        .modal-content-scroll { max-height: 60vh; overflow-y: auto; padding-right: 10px; margin-bottom: 10px; font-size: 12px; color: #DDD; line-height: 1.6; text-align: left; }
+        .modal-content-scroll h4 { color: #FFF; font-size: 14px; margin-top: 15px; margin-bottom: 5px; }
+        .modal-content-scroll ul { padding-left: 20px; margin-top: 5px; margin-bottom: 10px; }
+        .modal-content-scroll li { margin-bottom: 5px; }
+        .lang-tabs { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; }
+        .btn-lang { flex: 1; padding: 10px; background: #222; border: 1px solid #555; color: #888; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; text-align: center; transition: 0.2s;}
+        .btn-lang.active { background: var(--accent-red); color: #FFF; border-color: var(--accent-red); }
+
+        /* Custom scrollbar for inner modals */
+        .modal-content-scroll::-webkit-scrollbar { width: 5px; }
+        .modal-content-scroll::-webkit-scrollbar-track { background: transparent; }
+        .modal-content-scroll::-webkit-scrollbar-thumb { background: #555; border-radius: 5px; }
+
         /* Checkbox & Profile Forms */
         .checkbox-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; cursor: pointer; }
         .checkbox-container input { display: none; }
@@ -302,19 +316,19 @@
         <div id="tabProfile" class="content-area hidden">
             <div style="background:#5E5E5E; border-radius: 12px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer;" onclick="openEditProfile()">
                 <div style="background: #7A7A7A; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-red);"><i class="fas fa-pen"></i></div>
-                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile (แก้ไขข้อมูลส่วนตัว)</div>
+                <div style="font-size: 16px; font-weight: bold; color: #FFF;">Edit Profile</div>
             </div>
             <h4 style="margin: 10px 0 15px 5px; color:var(--text-main); font-size:16px;">General Settings</h4>
             <div style="background:#222; border:1px solid #333; border-radius: 12px; margin-bottom: 20px; overflow:hidden;">
-                <div style="padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; cursor: pointer;">
+                <div style="padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; cursor: pointer;" onclick="openModal('modalAboutUs')">
                     <div style="background: var(--accent-red); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: #FFF;"><i class="fas fa-question"></i></div>
-                    <div style="color: #FFF; font-weight: 500; font-size:14px;">About</div>
+                    <div style="color: #FFF; font-weight: 500; font-size:14px;">About us</div>
                 </div>
-                <div style="padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; cursor: pointer;">
+                <div style="padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; cursor: pointer;" onclick="openModal('modalTerms')">
                     <div style="background: var(--accent-red); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: #FFF;"><i class="fas fa-exclamation"></i></div>
                     <div style="color: #FFF; font-weight: 500; font-size:14px;">Terms & Conditions</div>
                 </div>
-                <div style="padding: 15px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer;">
+                <div style="padding: 15px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer;" onclick="openModal('modalPrivacy')">
                     <div style="background: var(--accent-red); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; color: #FFF;"><i class="fas fa-lock"></i></div>
                     <div style="color: #FFF; font-weight: 500; font-size:14px;">Privacy Policy</div>
                 </div>
@@ -331,7 +345,10 @@
                     <div style="flex:1"><label class="input-label">จำนวน (Qty)</label><input type="number" id="ordQty" class="dark-input"></div>
                 </div>
                 <label class="input-label">ชนิดผ้า (Fabric)</label><select id="ordFabric" class="dark-input"></select>
-                <label class="input-label">วันที่ส่งมอบ (Est Delivery)</label><input type="date" id="ordDate" class="dark-input">
+                <label class="input-label">วันที่ส่งมอบ (Est Delivery)</label>
+                <div style="width: 100%; max-width: 100%; overflow: hidden;">
+                    <input type="date" id="ordDate" class="dark-input" style="width: 100%; max-width: 100%; box-sizing: border-box; display: block;">
+                </div>
                 <label class="input-label">รายละเอียด (Detail)</label><textarea id="ordDetail" rows="2" class="dark-input"></textarea>
                 <label class="input-label">ใบสั่งงาน (WO รูป/PDF)</label>
                 <input type="file" id="ordWoImage" accept="image/*,application/pdf" onchange="processImage(this, 'new_wo', 'wo')" class="dark-input" style="font-size:12px;">
@@ -498,6 +515,207 @@
             </div>
         </div>
     </div>
+
+    <div id="modalAboutUs" class="modal-center">
+        <div class="modal-box" style="padding: 25px;">
+            <div class="flex-between" style="margin-bottom: 15px;">
+                <h3 style="color:var(--accent-red); margin:0;">ABOUT US</h3>
+                <button style="background:none; border:none; color:#FFF; font-size:20px; cursor:pointer;" onclick="closeModal('modalAboutUs')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-content-scroll">
+                <p style="text-indent: 30px; margin-top: 0; text-align: justify;">Welcome to AWESOME.SCREEN, our go-to destination for premium t-shirt screen printing services. As a fully serviced screen printing company, we take immense pride in offering top-quality custom designs exclusively on 100% cotton t-shirts.</p>
+                <p style="text-indent: 30px; margin-bottom: 0; text-align: justify;">At Awesome.Screen, we understand the significance of a well-printed t-shirt in making a bold statement, be it for personal expression, promotional campaigns, or building a brand identity. With a blend of innovation, expertise, and a commitment to excellence, we are dedicated to transforming your t-shirt ideas into stunning wearable art.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalPrivacy" class="modal-center">
+        <div class="modal-box" style="padding: 20px;">
+            <div class="flex-between" style="margin-bottom: 15px;">
+                <h3 style="color:var(--accent-red); margin:0;">Privacy Policy</h3>
+                <button style="background:none; border:none; color:#FFF; font-size:20px; cursor:pointer;" onclick="closeModal('modalPrivacy')"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="lang-tabs">
+                <div id="btn-privacy-th" class="btn-lang active" onclick="switchLang('privacy', 'th')">ภาษาไทย</div>
+                <div id="btn-privacy-en" class="btn-lang" onclick="switchLang('privacy', 'en')">English</div>
+            </div>
+
+            <div class="modal-content-scroll" id="privacy-th">
+                <h4 style="text-align: center; color:#FFF; font-size: 16px; margin-top: 0;">นโยบายความเป็นส่วนตัว (Privacy Policy)</h4>
+                <div style="text-align: center; font-weight: bold; margin-bottom: 15px;">สำหรับบริการระบบติดตามสถานะสินค้า ของ บริษัท ออซั่มโด จำกัด บน LINE LIFF</div>
+                <p style="text-indent: 30px; margin-top:0;">นโยบายความเป็นส่วนตัวนี้จัดทำขึ้นเพื่อชี้แจงรายละเอียดการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของคุณ ในการเข้าใช้งานผ่านระบบ LINE LIFF ของเรา</p>
+
+                <h4>1. ข้อมูลที่เราเก็บรวบรวม</h4>
+                <p style="margin-bottom:0;">เมื่อคุณใช้งานผ่าน LINE LIFF เราอาจเก็บข้อมูลดังต่อไปนี้:</p>
+                <ul>
+                    <li><strong>ข้อมูลจาก LINE Profile:</strong> ได้แก่ ชื่อผู้ใช้งาน (Display Name), รูปโปรไฟล์ (Picture URL), สถานะ (Status Message) และ User ID (UID)</li>
+                    <li><strong>ข้อมูลที่คุณให้เพิ่มเติม:</strong> เช่น ระบุข้อมูลที่ขอ เช่น ชื่อ-นามสกุล, เบอร์โทรศัพท์, ที่อยู่, อีเมล</li>
+                    <li><strong>ข้อมูลทางเทคนิค:</strong> เช่น ข้อมูลอุปกรณ์, ระบบปฏิบัติการ และประวัติการใช้งานภายใน LIFF</li>
+                </ul>
+
+                <h4>2. วัตถุประสงค์ในการประมวลผลข้อมูล</h4>
+                <p style="margin-bottom:0;">เราจะนำข้อมูลของคุณไปใช้เพื่อวัตถุประสงค์ดังนี้:</p>
+                <ul>
+                    <li>เพื่อ ยืนยันตัวตนในการเข้าใช้งานระบบ</li>
+                    <li>เพื่อ ให้บริการรายงานสถานะการสั่งซื้อสินค้า และเข้าร่วมเป็นสมาชิกในชุมชนของเรา</li>
+                    <li>เพื่อ การสื่อสาร ให้ข้อมูลข่าวสาร หรือแจ้งเตือนสถานะต่างๆ ผ่าน LINE</li>
+                    <li>เพื่อ พัฒนาและปรับปรุงประสิทธิภาพการขาย และส่งสินค้าได้อย่างโปร่งใส</li>
+                </ul>
+
+                <h4>3. การรักษาความปลอดภัย</h4>
+                <p style="text-indent: 30px;">เรามีมาตรการรักษาความปลอดภัยที่เหมาะสมเพื่อป้องกันไม่ให้ข้อมูลส่วนบุคคลของคุณสูญหาย เข้าถึงโดยมิชอบ หรือถูกเปิดเผยโดยไม่ได้รับอนุญาต โดยเราจะเก็บรักษาข้อมูลไว้เป็นระยะเวลา 1 ปี และ หรือ ตลอดระยะเวลาที่เป็นสมาชิก</p>
+
+                <h4>4. สิทธิของเจ้าของข้อมูลส่วนบุคคล</h4>
+                <p style="margin-bottom:0;">ตามกฎหมาย PDPA คุณมีสิทธิในการ:</p>
+                <ul>
+                    <li>ขอเข้าถึงและขอรับสำเนาข้อมูลส่วนบุคคล</li>
+                    <li>ขอให้แก้ไขข้อมูลให้ถูกต้องและเป็นปัจจุบัน</li>
+                    <li>ขอให้ลบ หรือระงับการใช้ข้อมูลส่วนบุคคล</li>
+                    <li>ถอนความยินยอมในการเก็บรวบรวมข้อมูลได้ทุกเมื่อ (ผ่านการตั้งค่าใน LINE หรือติดต่อเราโดยตรง)</li>
+                </ul>
+
+                <h4>5. การติดต่อเรา</h4>
+                <p style="margin-bottom:0;">หากมีข้อสงสัยเกี่ยวกับนโยบายความเป็นส่วนตัวนี้ สามารถติดต่อได้ที่:</p>
+                <ul>
+                    <li><strong>ผู้ควบคุมข้อมูล:</strong> บริษัท ออซั่มโด จำกัด</li>
+                    <li><strong>ช่องทางติดต่อ:</strong>
+                        <ul style="margin-top: 5px;">
+                            <li>Tel.: +6665-919-0612 / +6665-938-7076</li>
+                            <li>E-mail: awesomedough@gmail.com</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-content-scroll" id="privacy-en" style="display: none;">
+                <h4 style="text-align: center; color:#FFF; font-size: 16px; margin-top: 0;">Privacy Policy</h4>
+                <div style="text-align: center; font-weight: bold; margin-bottom: 15px;">For Order Tracking System of Awesome Dough Co., Ltd. via LINE LIFF</div>
+                <p style="text-indent: 30px; margin-top:0;">This Privacy Policy is established to clarify the details regarding the collection, use, or disclosure of your personal data when accessing our services through the LINE LIFF platform.</p>
+
+                <h4>1. Data We Collect</h4>
+                <p style="margin-bottom:0;">When you use our services via LINE LIFF, we may collect the following information:</p>
+                <ul>
+                    <li><strong>LINE Profile Data:</strong> Including Display Name, Picture URL, Status Message, and User ID (UID).</li>
+                    <li><strong>Additional Information Provided by You:</strong> Such as Name-Surname, Phone Number, Shipping Address, and Email.</li>
+                    <li><strong>Technical Data:</strong> Including device information, operating system, and usage history within the LIFF application.</li>
+                </ul>
+
+                <h4>2. Purposes of Data Processing</h4>
+                <p style="margin-bottom:0;">We will use your information for the following purposes:</p>
+                <ul>
+                    <li>To verify your identity for system access.</li>
+                    <li>To provide order status reporting services and facilitate membership within our community.</li>
+                    <li>To communicate, provide news updates, or send status notifications via LINE.</li>
+                    <li>To develop and improve sales efficiency and ensure transparent product delivery.</li>
+                </ul>
+
+                <h4>3. Data Security</h4>
+                <p style="text-indent: 30px;">We implement appropriate security measures to prevent your personal data from being lost, accessed without authorization, or improperly disclosed. We will retain your data for a period of 1 year and/or for the entire duration of your membership.</p>
+
+                <h4>4. Rights of the Data Subject</h4>
+                <p style="margin-bottom:0;">In accordance with the Personal Data Protection Act (PDPA), you have the right to:</p>
+                <ul>
+                    <li>Request access to and obtain a copy of your personal data.</li>
+                    <li>Request to rectify your data to be accurate and up-to-date.</li>
+                    <li>Request the erasure or suspension of the use of your personal data.</li>
+                    <li>Withdraw your consent for data collection at any time (via LINE settings or by contacting us directly).</li>
+                </ul>
+
+                <h4>5. Contact Us</h4>
+                <p style="margin-bottom:0;">If you have any questions regarding this Privacy Policy, please contact:</p>
+                <ul>
+                    <li><strong>Data Controller:</strong> Awesome Dough Co., Ltd.</li>
+                    <li><strong>Contact Channels:</strong>
+                        <ul style="margin-top: 5px;">
+                            <li>Tel: +66 65-919-0612 / +66 65-938-7076</li>
+                            <li>Email: awesomedough@gmail.com</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalTerms" class="modal-center">
+        <div class="modal-box" style="padding: 20px;">
+            <div class="flex-between" style="margin-bottom: 15px;">
+                <h3 style="color:var(--accent-red); margin:0;">Terms & Conditions</h3>
+                <button style="background:none; border:none; color:#FFF; font-size:20px; cursor:pointer;" onclick="closeModal('modalTerms')"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="lang-tabs">
+                <div id="btn-terms-th" class="btn-lang active" onclick="switchLang('terms', 'th')">ภาษาไทย</div>
+                <div id="btn-terms-en" class="btn-lang" onclick="switchLang('terms', 'en')">English</div>
+            </div>
+
+            <div class="modal-content-scroll" id="terms-th">
+                <h4 style="text-align: center; color:#FFF; font-size: 16px; margin-top: 0;">ข้อกำหนด และเงื่อนไขการใช้บริการ (Terms & Conditions)</h4>
+                
+                <h4>1. การยอมรับเงื่อนไข</h4>
+                <p style="text-indent: 30px;">การที่คุณเข้าใช้งานผ่าน LINE LIFF นี้ ถือว่าคุณได้อ่าน เข้าใจ และตกลงที่จะผูกพันตามเงื่อนไขที่ระบุไว้ทั้งหมด หากไม่ตกลงกรุณาหยุดการใช้งานทันที</p>
+                
+                <h4>2. คุณสมบัติของผู้ใช้งาน</h4>
+                <p style="text-indent: 30px;">ผู้ใช้ต้องเชื่อมต่อผ่านบัญชี LINE ที่มีตัวตนจริง</p>
+                
+                <h4>3. หน้าที่ และความรับผิดชอบของผู้ใช้</h4>
+                <ul>
+                    <li>ผู้ใช้ตกลงที่จะให้ข้อมูลที่เป็นความจริง และเป็นปัจจุบัน</li>
+                    <li>ห้ามมิให้ผู้ใช้งานกระทำการใดๆ ที่เป็นการละเมิดสิทธิ์ของผู้อื่น หรือกระทำการที่ผิดกฎหมายผ่านระบบนี้</li>
+                    <li>ผู้ใช้ต้องรักษาความปลอดภัยของบัญชี LINE ของตนเอง หากมีการเข้าถึงโดยบุคคลอื่นเนื่องจากความประมาทของผู้ใช้ ทางเราจะไม่รับผิดชอบต่อความเสียหายที่เกิดขึ้น</li>
+                </ul>
+                
+                <h4>4. ขอบเขตการให้บริการและการปฏิเสธความรับผิดชอบ</h4>
+                <ul>
+                    <li>เราพยายามอย่างเต็มที่เพื่อให้ระบบเสถียร แต่ไม่รับรองว่าบริการจะไม่มีการขัดข้อง (Downtime) หรือข้อผิดพลาดทางเทคนิค</li>
+                    <li>เราไม่ต้องรับผิดชอบต่อความเสียหายใดๆ ที่เกิดจากการเชื่อมต่ออินเทอร์เน็ตของผู้ใช้ หรือความผิดพลาดที่เกิดจากตัวแพลตฟอร์ม LINE เอง</li>
+                </ul>
+                
+                <h4>5. การระงับการใช้งาน</h4>
+                <p style="text-indent: 30px;">เราขอสงวนสิทธิ์ในการระงับ หรือยกเลิกการเข้าถึงบริการของผู้ใช้โดยไม่ต้องแจ้งให้ทราบล่วงหน้า หากพบว่าผู้ใช้ละเมิดข้อกำหนด หรือมีการใช้งานในลักษณะที่สุ่มเสี่ยงต่อความปลอดภัยของระบบ</p>
+                
+                <h4>6. ทรัพย์สินทางปัญญา</h4>
+                <p style="text-indent: 30px;">เนื้อหา โลโก้ ข้อความ และซอฟต์แวร์ที่ปรากฏใน LINE LIFF นี้ เป็นลิขสิทธิ์ของ บริษัท ออซั่มโด จำกัด ห้ามมิให้ผู้ใดคัดลอก หรือนำไปใช้โดยไม่ได้รับอนุญาต</p>
+                
+                <h4>7. การเปลี่ยนแปลงเงื่อนไข</h4>
+                <p style="text-indent: 30px;">เราขอสงวนสิทธิ์ในการแก้ไขหรือเปลี่ยนแปลงข้อกำหนดเหล่านี้ได้ทุกเมื่อ โดยจะมีผลทันทีที่ประกาศผ่านระบบ</p>
+            </div>
+
+            <div class="modal-content-scroll" id="terms-en" style="display: none;">
+                <h4 style="text-align: center; color:#FFF; font-size: 16px; margin-top: 0;">Terms & Conditions</h4>
+                <div style="text-align: center; font-weight: bold; margin-bottom: 15px;">For Services via LINE LIFF by Awesome Dough Co., Ltd.</div>
+                
+                <h4>1. Acceptance of Terms</h4>
+                <p style="text-indent: 30px;">By accessing and using this LINE LIFF, you acknowledge that you have read, understood, and agree to be bound by all the terms and conditions specified herein. If you do not agree to these terms, please discontinue use of the service immediately.</p>
+                
+                <h4>2. User Eligibility</h4>
+                <p style="text-indent: 30px;">Users must connect through a verified and authentic LINE account.</p>
+                
+                <h4>3. User Duties and Responsibilities</h4>
+                <ul>
+                    <li>Users agree to provide information that is true, accurate, and up-to-date.</li>
+                    <li>Users are prohibited from engaging in any activities that infringe upon the rights of others or violate any laws through this system.</li>
+                    <li>Users are responsible for maintaining the security of their own LINE account. We shall not be held liable for any damages resulting from unauthorized access caused by the user’s negligence.</li>
+                </ul>
+                
+                <h4>4. Scope of Service and Disclaimer</h4>
+                <ul>
+                    <li>While we strive to maintain system stability, we do not guarantee that the service will be uninterrupted (Downtime) or free of technical errors.</li>
+                    <li>We are not responsible for any damages resulting from the user's internet connection or technical failures originating from the LINE platform itself.</li>
+                </ul>
+                
+                <h4>5. Suspension of Service</h4>
+                <p style="text-indent: 30px;">We reserve the right to suspend or terminate a user's access to the service without prior notice if it is found that the user has violated these terms or is using the system in a manner that compromises system security.</p>
+                
+                <h4>6. Intellectual Property</h4>
+                <p style="text-indent: 30px;">All content, logos, text, and software appearing on this LINE LIFF are the intellectual property of Awesome Dough Co., Ltd. Reproduction or unauthorized use of these materials is strictly prohibited.</p>
+                
+                <h4>7. Amendments to Terms</h4>
+                <p style="text-indent: 30px;">We reserve the right to amend or change these terms and conditions at any time. Such changes will take effect immediately upon being posted on the system.</p>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         // ================= CONFIGURATION =================
@@ -1110,7 +1328,6 @@
                 document.getElementById('epShipZip').value = dbUserData.ShipZip || '';
                 document.getElementById('epShipCountry').value = dbUserData.ShipCountry || 'Thailand';
 
-                // --- แก้ไขการแสดงผลแผนที่ (Google Maps Embed) ---
                 if (dbUserData.ShipLocation && typeof dbUserData.ShipLocation === 'string') {
                     document.getElementById('epLocation').value = dbUserData.ShipLocation;
                     const c = dbUserData.ShipLocation.split(','); 
@@ -1170,7 +1387,6 @@
                         let lat = pos.coords.latitude; let lng = pos.coords.longitude;
                         document.getElementById('epLocation').value = `${lat},${lng}`;
                         
-                        // --- แก้ไขการแสดงผลแผนที่ (Google Maps Embed) ---
                         document.getElementById('mapDisplay').innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
                     },
                     () => { 
@@ -1185,7 +1401,6 @@
         function openMap() {
             let loc = document.getElementById('epLocation').value;
             if (loc && loc !== "กำลังค้นหา...") { 
-                // --- แก้ไขการลิงก์แผนที่ ---
                 window.open(`https://maps.google.com/maps?q=${loc}`, '_blank'); 
             } 
             else { alert("กรุณากด 'My Location' เพื่อหาพิกัดก่อนครับ"); }
@@ -1196,11 +1411,29 @@
         function confirmWOAction(no) { callBackend('update_status', { orderNo: no, actionType: 'CUST_CONFIRM_WO' }, () => fetchCustomerOrders()); }
         function approveAction(no) { callBackend('update_status', { orderNo: no, actionType: 'PP_APPROVE' }, () => fetchCustomerOrders()); }
         function openRejectModal(no) { document.getElementById('rejOrderNo').value = no; document.getElementById('rejReason').value = ''; document.getElementById('modalReject').classList.add('show'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
         function confirmReject() { 
             const no = document.getElementById('rejOrderNo').value; const r = document.getElementById('rejReason').value; 
             if(!r) return; 
             callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); }); 
+        }
+
+        // --- New Modal Logic ---
+        function openModal(id) {
+            document.getElementById(id).classList.add('show');
+        }
+
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('show'); 
+        }
+
+        function switchLang(modalPrefix, lang) {
+            // ซ่อน/แสดงเนื้อหา
+            document.getElementById(modalPrefix + '-th').style.display = (lang === 'th') ? 'block' : 'none';
+            document.getElementById(modalPrefix + '-en').style.display = (lang === 'en') ? 'block' : 'none';
+            
+            // อัปเดตปุ่ม Active
+            document.getElementById('btn-' + modalPrefix + '-th').className = (lang === 'th') ? 'btn-lang active' : 'btn-lang';
+            document.getElementById('btn-' + modalPrefix + '-en').className = (lang === 'en') ? 'btn-lang active' : 'btn-lang';
         }
 
         // ================= STAFF SECTION =================
