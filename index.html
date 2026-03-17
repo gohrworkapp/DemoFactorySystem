@@ -444,7 +444,7 @@
 
             <label class="input-label" style="color:#FFF; margin-top:0;">NAME*</label>
             <input type="text" id="epName" class="ep-input">
-            <label class="input-label" style="color:#FFF;">BRAND NAME*</label>
+            <label class="input-label" style="color:#FFF;">BRAND NAME</label>
             <input type="text" id="epBrand" class="ep-input">
             <div class="flex-row">
                 <div style="flex:1;"><label class="input-label" style="color:#FFF;">PHONE NUMBER*</label><input type="tel" id="epPhone" class="ep-input"></div>
@@ -476,15 +476,15 @@
             </div>
             <label class="input-label" style="color:#FFF;">TAX ID</label>
             <input type="text" id="epBillTax" class="ep-input">
-            <label class="input-label" style="color:#FFF;">ADDRESS*</label>
+            <label class="input-label" style="color:#FFF;">ADDRESS</label>
             <input type="text" id="epBillAddress" class="ep-input">
             <div class="flex-row">
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">CITY / DISTRICT*</label><input type="text" id="epBillCity" class="ep-input"></div>
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PROVINCE / STATE*</label><input type="text" id="epBillProv" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">CITY / DISTRICT</label><input type="text" id="epBillCity" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PROVINCE / STATE</label><input type="text" id="epBillProv" class="ep-input"></div>
             </div>
             <div class="flex-row">
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">POSTAL CODE*</label><input type="text" id="epBillZip" class="ep-input"></div>
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">COUNTRY*</label><input type="text" id="epBillCountry" value="Thailand" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">POSTAL CODE</label><input type="text" id="epBillZip" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">COUNTRY</label><input type="text" id="epBillCountry" value="Thailand" class="ep-input"></div>
             </div>
 
             <div class="divider"></div>
@@ -521,8 +521,7 @@
             <label class="input-label" style="color:#FFF;">SHIPPING LOCATION (GPS / GOOGLE MAPS LINK)</label>
             <input type="text" id="epLocation" placeholder="วางพิกัด หรือ ลิงก์ Google Maps ที่นี่" class="ep-input" style="text-align:center; font-weight:500;">
             
-            <div style="height: 150px; border-radius: 12px; margin-bottom: 20px; overflow: hidden; background:#333; border:1px solid #777;" id="mapDisplay">
-                 </div>
+            <div style="height: 150px; border-radius: 12px; margin-bottom: 20px; overflow: hidden; background:#333; border:1px solid #777;" id="mapDisplay"></div>
             
             <div class="flex-row">
                 <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:12px;" onclick="getLocation()"><i class="fas fa-map-marker-alt"></i> My Location</button>
@@ -782,7 +781,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbyZjmAQvBYiIMGgl0pokW6XQe4Y6kbtecc2SZYeyvCUXmBZzqR6Ts3B6U7n7_5BsvPpyg/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbxhvXca3mzTKcs7CG3GsUBwL9JXheTbRdxZ3O6Ga0TJp_-phf8B0NFZ4puzUzdY6b1xug/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         const BRAND_LOGO = 'https://drive.google.com/thumbnail?id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo&sz=w200';
         // =================================================
@@ -1633,7 +1632,21 @@
 
         // ================= ACTIONS & MODALS =================
 
-        function confirmWOAction(no) { callBackend('update_status', { orderNo: no, actionType: 'CUST_CONFIRM_WO' }, () => fetchCustomerOrders()); }
+        function confirmWOAction(no) { 
+            if(!confirm('ยืนยันออเดอร์นี้ถูกต้อง และดำเนินการผลิตใช่หรือไม่?')) return;
+            document.getElementById('loader').classList.remove('hidden');
+            callBackend('update_status', { orderNo: no, actionType: 'CUST_CONFIRM_WO' }, (res) => { 
+                if(res.status === 'success') {
+                    setTimeout(() => {
+                        fetchCustomerOrders();
+                    }, 1000);
+                } else {
+                    document.getElementById('loader').classList.add('hidden');
+                    alert("เกิดข้อผิดพลาด: " + res.message);
+                }
+            }); 
+        }
+
         function approveAction(no) { callBackend('update_status', { orderNo: no, actionType: 'PP_APPROVE' }, () => fetchCustomerOrders()); }
         function openRejectModal(no) { document.getElementById('rejOrderNo').value = no; document.getElementById('rejReason').value = ''; document.getElementById('modalReject').classList.add('show'); }
         function confirmReject() { 
