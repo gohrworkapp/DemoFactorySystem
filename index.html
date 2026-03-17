@@ -227,13 +227,13 @@
         <h3 style="text-align: center; font-size:28px;">Create new<br>Account</h3>
         <div style="text-align: center; font-size:13px; color:var(--text-muted); margin-bottom: 40px; font-weight:500;">Already Registered? <span style="color: var(--accent-blue); font-weight: bold; cursor: pointer;" onclick="showAuthView('viewLogin')">Log in here.</span></div>
         
-        <label class="input-label">NAME</label>
+        <label class="input-label">NAME <span style="color:var(--accent-red);">*</span></label>
         <input type="text" id="regName" placeholder="Your full name">
         <label class="input-label">BRAND NAME</label>
         <input type="text" id="regBrand" placeholder="Your brand name">
-        <label class="input-label">PHONE NUMBER</label>
+        <label class="input-label">PHONE NUMBER <span style="color:var(--accent-red);">*</span></label>
         <input type="tel" id="regPhone" placeholder="08xxxxxxxx">
-        <label class="input-label">EMAIL ADDRESS</label>
+        <label class="input-label">EMAIL ADDRESS <span style="color:var(--accent-red);">*</span></label>
         <input type="email" id="regEmail" placeholder="your@email.com">
         
         <button class="btn btn-outline" style="margin-top: 40px;" onclick="register()">sign up</button>
@@ -444,25 +444,43 @@
 
             <label class="input-label" style="color:#FFF; margin-top:0;">NAME*</label>
             <input type="text" id="epName" class="ep-input">
-            <label class="input-label" style="color:#FFF;">BRAND NAME</label>
+            <label class="input-label" style="color:#FFF;">BRAND NAME*</label>
             <input type="text" id="epBrand" class="ep-input">
             <div class="flex-row">
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PHONE*</label><input type="tel" id="epPhone" class="ep-input"></div>
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">EMAIL</label><input type="email" id="epEmail" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PHONE NUMBER*</label><input type="tel" id="epPhone" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">EMAIL ADDRESS*</label><input type="email" id="epEmail" class="ep-input"></div>
+            </div>
+            <label class="input-label" style="color:#FFF;">ADDRESS*</label>
+            <input type="text" id="epAddress" class="ep-input">
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">CITY / DISTRICT*</label><input type="text" id="epCity" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PROVINCE / STATE*</label><input type="text" id="epProv" class="ep-input"></div>
+            </div>
+            <div class="flex-row">
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">POSTAL CODE*</label><input type="text" id="epZip" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">COUNTRY*</label><input type="text" id="epCountry" value="Thailand" class="ep-input"></div>
             </div>
 
             <div class="divider"></div>
 
             <div style="font-size: 13px; color: #FFF; font-weight: 600; margin-bottom: 10px;">BILLING ADDRESS (FOR TAX INVOICE)</div>
+            <label class="checkbox-container" style="margin-bottom: 15px;">
+                <input type="checkbox" id="cbBillSameAsProfile" onchange="autoFillBilling()">
+                <div class="checkmark" style="background:#FFF;"></div>
+                <span class="checkbox-label" style="font-weight:400;">Same as Profile Address</span>
+            </label>
+
             <div class="flex-row">
                 <div style="flex:1;"><label class="input-label" style="color:#FFF;">COMPANY NAME</label><input type="text" id="epBillCompany" class="ep-input"></div>
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">TAX ID</label><input type="text" id="epBillTax" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PHONE NUMBER</label><input type="tel" id="epBillPhone" class="ep-input"></div>
             </div>
+            <label class="input-label" style="color:#FFF;">TAX ID</label>
+            <input type="text" id="epBillTax" class="ep-input">
             <label class="input-label" style="color:#FFF;">ADDRESS*</label>
             <input type="text" id="epBillAddress" class="ep-input">
             <div class="flex-row">
                 <div style="flex:1;"><label class="input-label" style="color:#FFF;">CITY / DISTRICT*</label><input type="text" id="epBillCity" class="ep-input"></div>
-                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PROVINCE*</label><input type="text" id="epBillProv" class="ep-input"></div>
+                <div style="flex:1;"><label class="input-label" style="color:#FFF;">PROVINCE / STATE*</label><input type="text" id="epBillProv" class="ep-input"></div>
             </div>
             <div class="flex-row">
                 <div style="flex:1;"><label class="input-label" style="color:#FFF;">POSTAL CODE*</label><input type="text" id="epBillZip" class="ep-input"></div>
@@ -472,8 +490,13 @@
             <div class="divider"></div>
 
             <div style="font-size: 13px; color: #FFF; font-weight: 600; margin-bottom: 10px;">SHIPPING ADDRESS</div>
+            <label class="checkbox-container" style="margin-bottom: 5px;">
+                <input type="checkbox" id="cbShipSameAsProfile" onchange="autoFillShipping('profile')">
+                <div class="checkmark" style="background:#FFF;"></div>
+                <span class="checkbox-label" style="font-weight:400;">Same as Profile Address</span>
+            </label>
             <label class="checkbox-container" style="margin-bottom: 15px;">
-                <input type="checkbox" id="cbSameAsBill" onchange="toggleShippingForm()">
+                <input type="checkbox" id="cbShipSameAsBill" onchange="autoFillShipping('bill')">
                 <div class="checkmark" style="background:#FFF;"></div>
                 <span class="checkbox-label" style="font-weight:400;">Same as Billing Address</span>
             </label>
@@ -487,7 +510,7 @@
                 <input type="text" id="epShipAddress" class="ep-input">
                 <div class="flex-row">
                     <div style="flex:1;"><label class="input-label" style="color:#FFF;">CITY / DISTRICT</label><input type="text" id="epShipCity" class="ep-input"></div>
-                    <div style="flex:1;"><label class="input-label" style="color:#FFF;">PROVINCE</label><input type="text" id="epShipProv" class="ep-input"></div>
+                    <div style="flex:1;"><label class="input-label" style="color:#FFF;">PROVINCE / STATE</label><input type="text" id="epShipProv" class="ep-input"></div>
                 </div>
                 <div class="flex-row">
                     <div style="flex:1;"><label class="input-label" style="color:#FFF;">POSTAL CODE</label><input type="text" id="epShipZip" class="ep-input"></div>
@@ -495,8 +518,8 @@
                 </div>
             </div>
 
-            <label class="input-label" style="color:#FFF;">SHIPPING LOCATION</label>
-            <input type="text" id="epLocation" placeholder="พิกัด GPS แมสเซ็นเจอร์" readonly class="ep-input" style="text-align:center; font-weight:500;">
+            <label class="input-label" style="color:#FFF;">SHIPPING LOCATION (GPS / GOOGLE MAPS LINK)</label>
+            <input type="text" id="epLocation" placeholder="วางพิกัด หรือ ลิงก์ Google Maps ที่นี่" class="ep-input" style="text-align:center; font-weight:500;">
             
             <div style="height: 150px; border-radius: 12px; margin-bottom: 20px; overflow: hidden; background:#333; border:1px solid #777;" id="mapDisplay">
                  </div>
@@ -505,7 +528,6 @@
                 <button class="btn" style="background:#FFF; color:#000; flex:1; font-size:12px;" onclick="getLocation()"><i class="fas fa-map-marker-alt"></i> My Location</button>
                 <button class="btn" style="background:var(--accent-red); color:#FFF; flex:1.5; font-size:12px;" onclick="openMap()">Select Delivery Location</button>
             </div>
-            
         </div> 
         <div class="flex-row" style="margin-bottom:20px; padding: 0 20px;">
             <button class="btn" onclick="closeEditProfile()" style="background:#111; border:1px solid #444; flex:1;">Cancel</button>
@@ -760,7 +782,7 @@
 
     <script>
         // ================= CONFIGURATION =================
-        const GAS_API = 'https://script.google.com/macros/s/AKfycbz2PaSytw6HmQYZTB0YvESZFH0xwXIuVg0EA--MVW-rwLMreNKD6Qbph9YV-D4__PwfcQ/exec'; 
+        const GAS_API = 'https://script.google.com/macros/s/AKfycbyZjmAQvBYiIMGgl0pokW6XQe4Y6kbtecc2SZYeyvCUXmBZzqR6Ts3B6U7n7_5BsvPpyg/exec'; 
         const LIFF_ID = '2009142530-l2sIA52W';
         const BRAND_LOGO = 'https://drive.google.com/thumbnail?id=1tJ9EltX-5HMOXPfOuuK3kBPvQ9kMgLpo&sz=w200';
         // =================================================
@@ -845,6 +867,35 @@
             }
         }
 
+        async function processMultipleImages(input, orderNo, type) {
+            let statusId = `status-${type}-${orderNo}`;
+            const status = document.getElementById(statusId);
+            const key = `${type}-${orderNo}`;
+
+            if (input.files.length > 0) {
+                if (input.files.length > 10) {
+                    alert("อัปโหลดได้สูงสุด 10 รูปต่อครั้งครับ");
+                    input.value = "";
+                    return;
+                }
+                if(status) { status.style.display = 'block'; status.style.color = '#FFC805'; status.innerHTML = `กำลังประมวลผล ${input.files.length} รูป...`; }
+                try {
+                    let base64Array = [];
+                    for(let i = 0; i < input.files.length; i++) {
+                        let b64 = await getBase64(input.files[i]);
+                        base64Array.push(b64);
+                    }
+                    preloadedImages[key] = base64Array; 
+                    if(status) { status.style.color = 'var(--accent-green)'; status.innerHTML = `${input.files.length} ไฟล์พร้อมส่ง`; }
+                } catch (e) {
+                    if(status) { status.style.color = 'var(--accent-red)'; status.innerHTML = 'Error'; }
+                }
+            } else {
+                if(status) status.style.display = 'none';
+                delete preloadedImages[key];
+            }
+        }
+
         // ================= CORE SYSTEM =================
         async function main() {
             try { 
@@ -875,7 +926,6 @@
             });
         }
 
-        // --- เพิ่มฟังก์ชันจัดการหน้าต่างแรก (Welcome / Login / Register) ---
         function showAuthView(viewId) {
             document.getElementById('viewWelcome').classList.add('hidden');
             document.getElementById('viewLogin').classList.add('hidden');
@@ -937,13 +987,12 @@
                         setupCustomerView(); 
                     }
                 } else { 
-                    // ถ้าไม่พบ User ให้แสดงหน้าต่าง Welcome ให้เลือกทำรายการ
                     showAuthView('viewWelcome');
                 }
             });
         }
 
-        function register() {
+        function register() { 
             const payload = { 
                 userId: userProfile.userId, 
                 realName: document.getElementById('regName').value, 
@@ -951,8 +1000,8 @@
                 phone: document.getElementById('regPhone').value, 
                 email: document.getElementById('regEmail').value 
             };
-            if(!payload.realName || !payload.phone) return alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
-            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); });
+            if(!payload.realName || !payload.phone || !payload.email) return alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน (ชื่อ, เบอร์โทร, อีเมล)"); 
+            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); }); 
         }
 
         function processLogin() {
@@ -962,7 +1011,7 @@
             if(!name || !email) return alert("กรุณากรอก ชื่อ และ อีเมล ให้ครบถ้วน");
             
             const payload = {
-                userId: userProfile.userId, // ส่ง Line ID ล่าสุดไปบันทึกทับ
+                userId: userProfile.userId,
                 name: name,
                 email: email
             };
@@ -970,7 +1019,7 @@
             callBackend('login_user', payload, (res) => {
                 if(res.status === 'success') {
                     alert("เข้าสู่ระบบสำเร็จ!");
-                    location.reload(); // รีเฟรชหน้าเว็บเพื่อให้ระบบดึงข้อมูลและเข้าระบบใหม่
+                    location.reload(); 
                 } else {
                     alert(res.message);
                 }
@@ -1025,7 +1074,7 @@
         function getStatusColor(status) {
             const display = getDisplayStatus(status);
             if(display === 'Order Received') return '#AEEA00'; 
-            if(display === 'Preparation') return '#FFCA28';    
+            if(display === 'Preparation') return '#FFCA28';   
             if(display === 'In Production') return '#B388FF';  
             if(display === 'Quality Check') return '#4FC3F7';  
             if(display === 'Delivered') return '#00E676';      
@@ -1182,12 +1231,12 @@
                                     <div style="border: 1px solid #555; border-radius: 12px; padding: 15px; margin-bottom: 10px;">
                                         <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">สำหรับการทำตัวอย่างสินค้า</div>
                                         <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD; margin-bottom: 15px;">
-                                            <li>สามารถแก้ไขตัวอย่างได้ 1 ครั้งเท่านั้น หลังจากยืนยันแล้ว การทำตัวอย่างจะใช้เวลาประมาณ 5–10 วัน ขึ้นอยู่กับรายละเอียดของงาน</li>
+                                            <li>ออเดอร์ 50 ตัว สามารถแก้ตัวอย่างได้ 1 ครั้ง / ออเดอร์ 100 ตัว สามารถแก้ตัวอย่างได้ 3 ครั้ง<br><u>โดยหลังจากยืนยันแล้ว การทำตัวอย่างจะใช้เวลาประมาณ 5–10 วัน ขึ้นอยู่กับรายละเอียดของงาน</u></li>
                                             <li>ขนาดการตัดเย็บและแพทเทิร์นอาจมีค่าความคลาดเคลื่อนประมาณ 0.5–2 นิ้ว</li>
                                         </ul>
                                         <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">For Sample Development</div>
                                         <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD;">
-                                            <li>Only one sample revision is allowed. After confirmation, sample production will take approximately 5-10 days, depending on the order details.</li>
+                                            <li><u>For orders of 50 units, one sample revision is permitted. For orders of 100 units, up to three sample revisions are allowed. Once the design is confirmed, the sampling process takes approximately 5-10 days, depending on the complexity of the work.</u></li>
                                             <li>Sewing and pattern measurements may have a tolerance of approximately 0.5-2 inches.</li>
                                         </ul>
                                     </div>
@@ -1347,7 +1396,58 @@
                         }
                     }
 
-                    cardHtml += `<div class="card-body-collapse open" style="padding:0 20px 20px 20px; border-top:1px solid #333;">${detailBox}${stepperHtml}${actionHtml}${revHtml}</div>`;
+                    // --- แสดงประวัติและ Logs ของลูกค้า ---
+                    let custHistoryHtml = '';
+                    let hasHistory = false;
+
+                    if (o.actionLogs && o.actionLogs.length > 0) {
+                        hasHistory = true;
+                        let logContent = '<div style="font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 8px;">ประวัติการอัปเดตสถานะ (Status Logs)</div>';
+                        o.actionLogs.forEach(log => {
+                            let lDate = formatDateTimeWithTime(log.date);
+                            logContent += `<div style="font-size: 11px; color: #ccc; margin-bottom: 4px; display: flex; align-items: flex-start; gap: 5px;">
+                                <div style="color:var(--accent-blue); width: 10px;">•</div>
+                                <div><b>${log.status}</b><br><span style="font-size:10px; color:#777;">${lDate}</span></div>
+                            </div>`;
+                        });
+                        custHistoryHtml += `<div style="margin-bottom: 15px;">${logContent}</div>`;
+                    }
+
+                    if (o.revCount > 0 && o.revHistory.length > 0) {
+                        hasHistory = true;
+                        let revContent = '<div style="font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 8px; border-top: 1px dashed #555; padding-top:15px;">ประวัติการปรับแก้แบบ (Revision History)</div>';
+                        o.revHistory.forEach(r => {
+                            let rDate = formatDateTimeWithTime(r.rejectDate);
+                            revContent += `<div style="background: rgba(255, 77, 109, 0.1); border-left: 3px solid var(--accent-red); padding: 8px 10px; margin-bottom: 8px; border-radius: 4px;">
+                                <div style="font-size: 11px; color: #ccc;"><b>ไม่อนุมัติ (Rev.${r.round})</b> • ${rDate}</div>
+                                <div style="font-size: 12px; color: #FFF; margin-top: 2px;">เหตุผล: ${r.rejectReason}</div>`;
+                            if (r.fixDetail) {
+                                let fDate = formatDateTimeWithTime(r.fixDate);
+                                revContent += `<div style="margin-top: 8px; border-top: 1px dashed #555; padding-top: 6px;">
+                                    <div style="font-size: 11px; color: #ccc;"><b>แก้ไขเสร็จสิ้น</b> • ${fDate}</div>
+                                    <div style="font-size: 12px; color: var(--accent-green); margin-top: 2px;">รายละเอียด: ${r.fixDetail}</div>
+                                </div>`;
+                            }
+                            revContent += `</div>`;
+                        });
+                        custHistoryHtml += revContent;
+                    }
+
+                    let collapsibleCustHistory = '';
+                    if (hasHistory) {
+                        collapsibleCustHistory = `
+                        <div style="margin-top: 15px; border: 1px solid #444; border-radius: 12px; overflow: hidden; margin-bottom: 10px;">
+                            <div onclick="const content = this.nextElementSibling; content.classList.toggle('hidden'); const icon = this.querySelector('i.fa-chevron-down, i.fa-chevron-up'); icon.classList.toggle('fa-chevron-down'); icon.classList.toggle('fa-chevron-up');" style="padding: 10px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #333;">
+                                <span style="font-size: 12px; font-weight: bold; color: #FFF;"><i class="fas fa-history" style="margin-right: 5px; color: var(--accent-yellow);"></i> ดูประวัติสถานะ (Action History)</span>
+                                <i class="fas fa-chevron-down" style="color: #888; transition: 0.3s;"></i>
+                            </div>
+                            <div class="hidden" style="padding: 15px; background: #2A2A2A;">
+                                ${custHistoryHtml}
+                            </div>
+                        </div>`;
+                    }
+
+                    cardHtml += `<div class="card-body-collapse open" style="padding:0 20px 20px 20px; border-top:1px solid #333;">${detailBox}${stepperHtml}${actionHtml}${revHtml}${collapsibleCustHistory}</div>`;
                 }
 
                 cardHtml += `</div>`;
@@ -1369,10 +1469,39 @@
             }); 
         }
 
-        // ================= EDIT PROFILE FOR CUSTOMER =================
-        function toggleShippingForm() {
-            const isChecked = document.getElementById('cbSameAsBill').checked;
-            document.getElementById('shipAddressFields').style.display = isChecked ? 'none' : 'block';
+        // ================= EDIT PROFILE =================
+        function autoFillBilling() {
+            if (document.getElementById('cbBillSameAsProfile').checked) {
+                document.getElementById('epBillCompany').value = document.getElementById('epName').value;
+                document.getElementById('epBillPhone').value = document.getElementById('epPhone').value;
+                document.getElementById('epBillAddress').value = document.getElementById('epAddress').value;
+                document.getElementById('epBillCity').value = document.getElementById('epCity').value;
+                document.getElementById('epBillProv').value = document.getElementById('epProv').value;
+                document.getElementById('epBillZip').value = document.getElementById('epZip').value;
+                document.getElementById('epBillCountry').value = document.getElementById('epCountry').value;
+            }
+        }
+
+        function autoFillShipping(source) {
+            if (source === 'profile' && document.getElementById('cbShipSameAsProfile').checked) {
+                document.getElementById('cbShipSameAsBill').checked = false;
+                document.getElementById('epShipName').value = document.getElementById('epName').value;
+                document.getElementById('epShipPhone').value = document.getElementById('epPhone').value;
+                document.getElementById('epShipAddress').value = document.getElementById('epAddress').value;
+                document.getElementById('epShipCity').value = document.getElementById('epCity').value;
+                document.getElementById('epShipProv').value = document.getElementById('epProv').value;
+                document.getElementById('epShipZip').value = document.getElementById('epZip').value;
+                document.getElementById('epShipCountry').value = document.getElementById('epCountry').value;
+            } else if (source === 'bill' && document.getElementById('cbShipSameAsBill').checked) {
+                document.getElementById('cbShipSameAsProfile').checked = false;
+                document.getElementById('epShipName').value = document.getElementById('epBillCompany').value || document.getElementById('epName').value;
+                document.getElementById('epShipPhone').value = document.getElementById('epBillPhone').value;
+                document.getElementById('epShipAddress').value = document.getElementById('epBillAddress').value;
+                document.getElementById('epShipCity').value = document.getElementById('epBillCity').value;
+                document.getElementById('epShipProv').value = document.getElementById('epBillProv').value;
+                document.getElementById('epShipZip').value = document.getElementById('epBillZip').value;
+                document.getElementById('epShipCountry').value = document.getElementById('epBillCountry').value;
+            }
         }
 
         function openEditProfile() {
@@ -1385,8 +1514,15 @@
                 document.getElementById('epBrand').value = dbUserData.BrandName || '';
                 document.getElementById('epPhone').value = dbUserData.Phone || '';
                 document.getElementById('epEmail').value = dbUserData.Email || '';
+                
+                document.getElementById('epAddress').value = dbUserData.ProfileAddress || '';
+                document.getElementById('epCity').value = dbUserData.ProfileCity || '';
+                document.getElementById('epProv').value = dbUserData.ProfileProvince || '';
+                document.getElementById('epZip').value = dbUserData.ProfileZip || '';
+                document.getElementById('epCountry').value = dbUserData.ProfileCountry || 'Thailand';
 
                 document.getElementById('epBillCompany').value = dbUserData.BillCompany || '';
+                document.getElementById('epBillPhone').value = dbUserData.BillPhone || '';
                 document.getElementById('epBillTax').value = dbUserData.BillTaxId || '';
                 document.getElementById('epBillAddress').value = dbUserData.BillAddress || '';
                 document.getElementById('epBillCity').value = dbUserData.BillCity || '';
@@ -1412,7 +1548,10 @@
                     document.getElementById('mapDisplay').innerHTML = '';
                 }
 
-                document.getElementById('cbSameAsBill').checked = false; toggleShippingForm();
+                document.getElementById('cbBillSameAsProfile').checked = false;
+                document.getElementById('cbShipSameAsProfile').checked = false;
+                document.getElementById('cbShipSameAsBill').checked = false;
+
                 document.getElementById('viewApp').classList.add('hidden'); 
                 document.getElementById('viewEditProfile').classList.add('show'); 
                 window.scrollTo(0,0);
@@ -1425,27 +1564,39 @@
         }
 
         function saveProfile() {
-            const isSameAsBill = document.getElementById('cbSameAsBill').checked;
             const payload = { 
                 userId: userProfile.userId, 
-                realName: document.getElementById('epName').value, brandName: document.getElementById('epBrand').value, 
-                phone: document.getElementById('epPhone').value, email: document.getElementById('epEmail').value, 
+                realName: document.getElementById('epName').value, 
+                brandName: document.getElementById('epBrand').value, 
+                phone: document.getElementById('epPhone').value, 
+                email: document.getElementById('epEmail').value, 
+
+                address: document.getElementById('epAddress').value,
+                city: document.getElementById('epCity').value,
+                prov: document.getElementById('epProv').value,
+                zip: document.getElementById('epZip').value,
+                country: document.getElementById('epCountry').value,
                 
-                billCompany: document.getElementById('epBillCompany').value, billTaxId: document.getElementById('epBillTax').value,
-                billAddress: document.getElementById('epBillAddress').value, billCity: document.getElementById('epBillCity').value,
-                billProvince: document.getElementById('epBillProv').value, billZip: document.getElementById('epBillZip').value, billCountry: document.getElementById('epBillCountry').value,
+                billCompany: document.getElementById('epBillCompany').value, 
+                billPhone: document.getElementById('epBillPhone').value,
+                billTaxId: document.getElementById('epBillTax').value,
+                billAddress: document.getElementById('epBillAddress').value, 
+                billCity: document.getElementById('epBillCity').value,
+                billProvince: document.getElementById('epBillProv').value, 
+                billZip: document.getElementById('epBillZip').value, 
+                billCountry: document.getElementById('epBillCountry').value,
                 
-                shipName: isSameAsBill ? (document.getElementById('epBillCompany').value || document.getElementById('epName').value) : document.getElementById('epShipName').value,
-                shipPhone: isSameAsBill ? document.getElementById('epPhone').value : document.getElementById('epShipPhone').value,
-                shipAddress: isSameAsBill ? document.getElementById('epBillAddress').value : document.getElementById('epShipAddress').value,
-                shipCity: isSameAsBill ? document.getElementById('epBillCity').value : document.getElementById('epShipCity').value,
-                shipProvince: isSameAsBill ? document.getElementById('epBillProv').value : document.getElementById('epShipProv').value,
-                shipZip: isSameAsBill ? document.getElementById('epBillZip').value : document.getElementById('epShipZip').value,
-                shipCountry: isSameAsBill ? document.getElementById('epBillCountry').value : document.getElementById('epShipCountry').value,
+                shipName: document.getElementById('epShipName').value,
+                shipPhone: document.getElementById('epShipPhone').value,
+                shipAddress: document.getElementById('epShipAddress').value,
+                shipCity: document.getElementById('epShipCity').value,
+                shipProvince: document.getElementById('epShipProv').value,
+                shipZip: document.getElementById('epShipZip').value,
+                shipCountry: document.getElementById('epShipCountry').value,
                 shipLocation: document.getElementById('epLocation').value
             };
 
-            if(!payload.realName || !payload.phone) return alert("กรุณากรอก NAME และ PHONE ให้ครบถ้วน");
+            if(!payload.realName || !payload.phone || !payload.address || !payload.email) return alert("กรุณากรอก NAME, EMAIL, PHONE และ ADDRESS หลัก ให้ครบถ้วน");
 
             callBackend('update_profile', payload, (res) => { 
                 if(res.status === 'success') { alert("บันทึกข้อมูลเรียบร้อยแล้ว!"); closeEditProfile(); checkUser(); } 
@@ -1477,7 +1628,7 @@
             if (loc && loc !== "กำลังค้นหา...") { 
                 window.open(`https://maps.google.com/maps?q=${loc}`, '_blank'); 
             } 
-            else { alert("กรุณากด 'My Location' เพื่อหาพิกัดก่อนครับ"); }
+            else { alert("กรุณากด 'My Location' เพื่อหาพิกัดก่อนครับ หรือวางลิงก์ Google Maps"); }
         }
 
         // ================= ACTIONS & MODALS =================
@@ -1491,14 +1642,8 @@
             callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); }); 
         }
 
-        // --- New Modal Logic ---
-        function openModal(id) {
-            document.getElementById(id).classList.add('show');
-        }
-
-        function closeModal(id) { 
-            document.getElementById(id).classList.remove('show'); 
-        }
+        function openModal(id) { document.getElementById(id).classList.add('show'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
         function switchLang(modalPrefix, lang) {
             document.getElementById(modalPrefix + '-th').style.display = (lang === 'th') ? 'block' : 'none';
@@ -1555,11 +1700,9 @@
                 let origThumbUrl = o.woUrl !== '-' ? o.woUrl : null;
                 let displayThumbUrl = getSafeImageUrl(origThumbUrl);
                 
-                // --- ส่วนประวัติและภาพ Sample (Staff History & Samples) ---
                 let staffHistoryHtml = '';
                 let hasHistoryOrImages = false;
 
-                // 1. Grid ภาพ Sample 5 รูปล่าสุด
                 let imageUrls = [];
                 if (o.sampleImage && o.sampleImage !== '-') {
                     imageUrls = o.sampleImage.split(',').map(u => u.trim());
@@ -1586,7 +1729,6 @@
                     staffHistoryHtml += gridHtml;
                 }
 
-                // 2. ประวัติการอัปเดตสถานะงาน (ใครทำ อะไร เมื่อไหร่)
                 if (o.actionLogs && o.actionLogs.length > 0) {
                     hasHistoryOrImages = true;
                     let logContent = '<div style="font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 8px;">ประวัติการอัปเดตสถานะ (Status Logs)</div>';
@@ -1600,7 +1742,6 @@
                     staffHistoryHtml += `<div style="margin-bottom: 15px;">${logContent}</div>`;
                 }
 
-                // 3. ประวัติการตีกลับและแก้ไขแบบ (Revision History)
                 if (o.revCount > 0 && o.revHistory.length > 0) {
                     hasHistoryOrImages = true;
                     let revContent = '<div style="font-size: 12px; font-weight: 600; color: #FFF; margin-bottom: 8px; border-top: 1px dashed #555; padding-top:15px;">ประวัติการตีกลับและแก้ไข (Revision History)</div>';
@@ -1634,8 +1775,6 @@
                         </div>
                     </div>`;
                 }
-                
-                // --- สิ้นสุดการสร้าง Staff History ---
 
                 if (['Admin', 'Production Manager', 'Sales Coordinators', 'Sale Coordinator'].includes(role)) {
                     if (o.status === 'Order Confirmation') btns += `<button class="btn btn-outline" style="margin-top:10px; border-color:var(--accent-blue); color:var(--accent-blue);" onclick="updateStatus('${o.orderNo}', 'WO_APPROVE')">อนุมัติ Work Order</button>`;
@@ -1652,8 +1791,8 @@
                             <div id="box-track-s-${o.orderNo}"><input type="text" id="track-s-${o.orderNo}" class="dark-input" placeholder="Tracking No" style="margin-bottom:8px; padding:10px;"></div>
                             <div id="box-phone-s-${o.orderNo}" style="display:none;"><input type="tel" id="phone-s-${o.orderNo}" class="dark-input" placeholder="เบอร์แมสเซ็นเจอร์" style="margin-bottom:8px; padding:10px;"></div>
                             
-                            <label class="input-label">แนบรูปตัวอย่าง (Sample) <span style="color:#FF4D6D">*บังคับ</span></label>
-                            <input type="file" id="file-sample-${o.orderNo}" accept="image/*" onchange="processImage(this, '${o.orderNo}', 'sample')" style="background:#444; color:#FFF; font-size:11px; padding:8px; margin-bottom:10px;">
+                            <label class="input-label">แนบรูปตัวอย่าง (Sample) สูงสุด 10 รูป <span style="color:#FF4D6D">*บังคับ</span></label>
+                            <input type="file" id="file-sample-${o.orderNo}" accept="image/*" multiple onchange="processMultipleImages(this, '${o.orderNo}', 'sample')" style="background:#444; color:#FFF; font-size:11px; padding:8px; margin-bottom:10px;">
                             <div id="status-sample-${o.orderNo}" style="font-size:12px; margin-top:5px; margin-bottom:10px; display:none;"></div>
                             
                             <label class="input-label">แนบรูปพัสดุ (Parcel) <span style="color:#FF4D6D">*บังคับ</span></label>
@@ -1718,7 +1857,6 @@
             list.innerHTML = html;
         }
 
-        // --- Actions Staff ---
         function toggleDelivery(no, method, type) { 
             document.getElementById(`box-track-${type}-${no}`).style.display = method === 'Messenger' ? 'none' : 'block'; 
             document.getElementById(`box-phone-${type}-${no}`).style.display = method === 'Messenger' ? 'block' : 'none'; 
@@ -1744,13 +1882,12 @@
             const m = document.getElementById(`del-s-${no}`).value; const t = document.getElementById(`track-s-${no}`).value; const p = document.getElementById(`phone-s-${no}`).value; 
             if(m === 'Parcel' && !t) return alert("ระบุ Tracking"); if(m === 'Messenger' && !p) return alert("ระบุเบอร์แมส"); 
             
-            const fileSample = document.getElementById(`file-sample-${no}`);
             const fileParcel = document.getElementById(`file-parcel-${no}`);
             
-            if (fileSample.files.length === 0) return alert("บังคับแนบรูปตัวอย่าง (Sample) 1 ภาพครับ");
+            if (!preloadedImages[`sample-${no}`] || preloadedImages[`sample-${no}`].length === 0) return alert("บังคับแนบรูปตัวอย่าง (Sample) อย่างน้อย 1 ภาพครับ");
             if (fileParcel.files.length === 0) return alert("บังคับแนบรูปพัสดุ (Parcel) 1 ภาพครับ");
 
-            if (!preloadedImages[`sample-${no}`] || !preloadedImages[`parcel-${no}`]) {
+            if (!preloadedImages[`parcel-${no}`]) {
                 return alert("ระบบกำลังประมวลผลรูปภาพ กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
             }
 
@@ -1760,7 +1897,7 @@
                 deliveryMethod: m, 
                 tracking: t, 
                 messengerPhone: p, 
-                sampleImage: preloadedImages[`sample-${no}`], 
+                sampleImages: preloadedImages[`sample-${no}`], 
                 parcelImage: preloadedImages[`parcel-${no}`], 
                 staffName: dbUserData.RealName 
             }, () => fetchStaffData()); 
