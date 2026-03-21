@@ -174,6 +174,28 @@
         .divider { border-top: 1px dotted #999; margin: 25px 0; }
         
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+
+        /* --- Toast Notification (ซิงค์ข้อมูลหลังบ้าน) --- */
+        #syncToast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #FFF;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #syncToast.show { opacity: 1; }
     </style>
 </head>
 <body>
@@ -182,6 +204,8 @@
         <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--text-main)"></i>
         <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Loading AWESOME.SCREEN...</div>
     </div>
+    
+    <div id="syncToast"><i class="fas fa-sync fa-spin" style="color:var(--accent-green);"></i> กำลังอัปเดตข้อมูลล่าสุด...</div>
 
     <div id="viewWelcome" class="content-area hidden" style="justify-content: center; align-items: center; min-height: 100vh; padding: 30px;">
         <img id="logoWelcome" src="" alt="Logo" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 20px;">
@@ -912,11 +936,9 @@
         main();
 
         function callBackend(action, data, callback) {
-            document.getElementById('loader').classList.remove('hidden');
             fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: action, data: data }) })
             .then(r => r.json())
             .then(res => { 
-                document.getElementById('loader').classList.add('hidden'); 
                 if(callback) callback(res); 
             })
             .catch(e => { 
@@ -932,63 +954,105 @@
             document.getElementById(viewId).classList.remove('hidden');
         }
 
+        // ================= ระบบโหลดข้อมูลแบบรวดเร็ว (Cache & Background Sync) =================
         function checkUser() {
-            callBackend('get_user', { userId: userProfile.userId }, (res) => {
-                if (res.found) {
-                    dbUserData = res.data;
-                    document.getElementById('viewApp').classList.remove('hidden');
-                    
-                    document.getElementById('headerName').innerText = dbUserData.RealName;
-                    document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand';
-                    document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
-                    
-                    document.getElementById('sidebarPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
-                    document.getElementById('sidebarName').innerText = dbUserData.RealName;
-                    
-                    const role = dbUserData.Role;
-                    const staffRoles = ['Admin', 'Sales Admin', 'Production Manager', 'Quality Control', 'Merchandiser', 'Sales Coordinators', 'Sale Admin', 'Sale Coordinator'];
-                    
-                    if (staffRoles.includes(role)) {
-                        isStaff = true;
-                        document.getElementById('headerTier').innerHTML = '<i class="fas fa-user-shield"></i> Staff';
-                        
-                        document.getElementById('sidebarRole').innerText = role; 
-                        document.getElementById('headerId').classList.add('hidden');
-                        document.getElementById('sidebarMenuStaff').classList.remove('hidden');
-                        document.getElementById('sidebarMenuCustomer').classList.add('hidden');
-                        document.getElementById('staffElements').classList.remove('hidden');
-                        
-                        const canCreate = ['Sales Admin', 'Sales Coordinators', 'Sale Admin', 'Sale Coordinator', 'Admin'].includes(role);
-                        if (canCreate) {
-                            document.getElementById('navBtnCreate').style.display = 'flex';
-                            document.getElementById('sidebarMenuCreate').style.display = 'flex';
-                        } else {
-                            document.getElementById('navBtnCreate').style.display = 'none';
-                            document.getElementById('sidebarMenuCreate').style.display = 'none';
-                        }
-                        
-                        switchTab('StaffOrders'); 
-                        fetchOptions(); 
-                        fetchStaffData();
-                    } else { 
-                        isStaff = false;
-                        
-                        let tierIcon = '<i class="fas fa-user"></i> Regular';
-                        if (dbUserData.Tier === 'VVIP') tierIcon = '<i class="fas fa-crown"></i> VVIP';
-                        if (dbUserData.Tier === 'VIP') tierIcon = '<i class="fas fa-star"></i> VIP';
-                        document.getElementById('headerTier').innerHTML = tierIcon;
+            const cacheKey = 'awesome_cache_' + userProfile.userId;
+            const cachedData = localStorage.getItem(cacheKey);
+            
+            if (cachedData) {
+                try {
+                    const parsedData = JSON.parse(cachedData);
+                    document.getElementById('loader').classList.add('hidden');
+                    renderAppWithData(parsedData);
+                    document.getElementById('syncToast').classList.add('show');
+                } catch(e) { console.log("Cache Error"); }
+            } else {
+                document.getElementById('loader').classList.remove('hidden');
+            }
 
-                        document.getElementById('sidebarRole').innerText = "ID: " + (dbUserData.CustomerID || '-');
-                        document.getElementById('headerId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
-                        document.getElementById('sidebarMenuStaff').classList.add('hidden');
-                        document.getElementById('sidebarMenuCustomer').classList.remove('hidden');
-                        document.getElementById('customerElements').classList.remove('hidden');
-                        setupCustomerView(); 
-                    }
-                } else { 
+            fetch(GAS_API, { method: 'POST', body: JSON.stringify({ action: 'init_app', data: { userId: userProfile.userId } }) })
+            .then(r => r.json())
+            .then(res => { 
+                document.getElementById('loader').classList.add('hidden'); 
+                document.getElementById('syncToast').classList.remove('show');
+                
+                if (JSON.stringify(res) !== cachedData) {
+                    localStorage.setItem(cacheKey, JSON.stringify(res));
+                    renderAppWithData(res);
+                }
+            })
+            .catch(e => { 
+                document.getElementById('loader').classList.add('hidden'); 
+                document.getElementById('syncToast').classList.remove('show');
+                if(!cachedData) {
+                    alert("Error connecting to server. Please try again."); 
                     showAuthView('viewWelcome');
                 }
             });
+        }
+
+        function renderAppWithData(res) {
+            if (res.user && res.user.found) {
+                dbUserData = res.user.data;
+                document.getElementById('viewWelcome').classList.add('hidden');
+                document.getElementById('viewLogin').classList.add('hidden');
+                document.getElementById('viewRegister').classList.add('hidden');
+                document.getElementById('viewApp').classList.remove('hidden');
+                
+                document.getElementById('headerName').innerText = dbUserData.RealName;
+                document.getElementById('headerBrand').innerText = dbUserData.BrandName || 'No Brand';
+                document.getElementById('headerPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
+                document.getElementById('sidebarPic').src = userProfile.pictureUrl || 'https://via.placeholder.com/100';
+                document.getElementById('sidebarName').innerText = dbUserData.RealName;
+                
+                if (res.isStaff) {
+                    isStaff = true;
+                    document.getElementById('headerTier').innerHTML = '<i class="fas fa-user-shield"></i> Staff';
+                    document.getElementById('sidebarRole').innerText = dbUserData.Role; 
+                    document.getElementById('headerId').classList.add('hidden');
+                    document.getElementById('sidebarMenuStaff').classList.remove('hidden');
+                    document.getElementById('sidebarMenuCustomer').classList.add('hidden');
+                    document.getElementById('staffElements').classList.remove('hidden');
+                    
+                    const canCreate = ['Sales Admin', 'Sales Coordinators', 'Sale Admin', 'Sale Coordinator', 'Admin'].includes(dbUserData.Role);
+                    document.getElementById('navBtnCreate').style.display = canCreate ? 'flex' : 'none';
+                    document.getElementById('sidebarMenuCreate').style.display = canCreate ? 'flex' : 'none';
+
+                    if (res.options) {
+                        const s = document.getElementById('ordStyle'); const f = document.getElementById('ordFabric'); 
+                        s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ...</option>'; 
+                        f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>'; 
+                        res.options.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); 
+                        res.options.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`);
+                    }
+
+                    if (res.allOrders) {
+                        globalOrders = res.allOrders;
+                        filterStaffList();
+                    }
+                    switchTab('StaffOrders'); 
+                } else { 
+                    isStaff = false;
+                    let tierIcon = '<i class="fas fa-user"></i> Regular';
+                    if (dbUserData.Tier === 'VVIP') tierIcon = '<i class="fas fa-crown"></i> VVIP';
+                    if (dbUserData.Tier === 'VIP') tierIcon = '<i class="fas fa-star"></i> VIP';
+                    document.getElementById('headerTier').innerHTML = tierIcon;
+
+                    document.getElementById('sidebarRole').innerText = "ID: " + (dbUserData.CustomerID || '-');
+                    document.getElementById('headerId').innerText = "Customer ID: " + (dbUserData.CustomerID || '-');
+                    document.getElementById('sidebarMenuStaff').classList.add('hidden');
+                    document.getElementById('sidebarMenuCustomer').classList.remove('hidden');
+                    document.getElementById('customerElements').classList.remove('hidden');
+                    
+                    if (res.myOrders) {
+                        globalOrders = res.myOrders;
+                        filterOrders();
+                    }
+                    switchTab('Orders'); 
+                }
+            } else { 
+                showAuthView('viewWelcome');
+            }
         }
 
         function register() { 
@@ -1000,7 +1064,8 @@
                 email: document.getElementById('regEmail').value 
             };
             if(!payload.realName || !payload.phone || !payload.email) return alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน (ชื่อ, เบอร์โทร, อีเมล)"); 
-            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); }); 
+            document.getElementById('loader').classList.remove('hidden');
+            callBackend('register', payload, (res) => { if(res.status === 'success') location.reload(); else { document.getElementById('loader').classList.add('hidden'); } }); 
         }
 
         function processLogin() {
@@ -1015,11 +1080,13 @@
                 email: email
             };
             
+            document.getElementById('loader').classList.remove('hidden');
             callBackend('login_user', payload, (res) => {
                 if(res.status === 'success') {
                     alert("เข้าสู่ระบบสำเร็จ!");
                     location.reload(); 
                 } else {
+                    document.getElementById('loader').classList.add('hidden');
                     alert(res.message);
                 }
             });
@@ -1048,7 +1115,6 @@
         // ================= CUSTOMER VIEW =================
         function setupCustomerView() {
             switchTab('Orders'); 
-            fetchCustomerOrders();
         }
 
         function getDisplayStatus(status) {
@@ -1091,7 +1157,7 @@
             document.getElementById('bannerOrderNo').innerText = latestOrder.orderNo;
             document.getElementById('bannerDate').innerText = latestOrder.delivery;
 
-            banner.className = 'status-banner'; // Reset
+            banner.className = 'status-banner'; 
             const step = getStepIndex(latestOrder.status);
             
             if(step === 1) banner.classList.add('bg-banner-received');
@@ -1242,7 +1308,7 @@
 
                                     <div style="border: 1px solid #555; border-radius: 12px; padding: 15px; margin-bottom: 10px;">
                                         <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 5px;">สำหรับออเดอร์ผลิตแบบสั่งทำ</div>
-                                        <div style="font-size: 11px; color: #DDD;">สามารถปรับแก้อะไรได้บ้าง ?</div>
+                                        <div style="font-size: 11px; color: #DDD;">สามารถปรับแก้ดะไรได้บ้าง ?</div>
                                         <ul style="margin: 0; padding-left: 15px; font-size: 11px; color: #DDD; margin-bottom: 10px;">
                                             <li>วิธีการเย็บ / ปกเสื้อ / คอเสื้อ / ป้ายแบรนด์</li>
                                             <li>การปรับตำแหน่งสกรีน</li>
@@ -1597,9 +1663,21 @@
 
             if(!payload.realName || !payload.phone || !payload.address || !payload.email) return alert("กรุณากรอก NAME, EMAIL, PHONE และ ADDRESS หลัก ให้ครบถ้วน");
 
+            document.getElementById('loader').classList.remove('hidden');
             callBackend('update_profile', payload, (res) => { 
-                if(res.status === 'success') { alert("บันทึกข้อมูลเรียบร้อยแล้ว!"); closeEditProfile(); checkUser(); } 
-                else { alert("Error: " + res.message); }
+                if(res.status === 'success') { 
+                    alert("บันทึกข้อมูลเรียบร้อยแล้ว!"); 
+                    // อัปเดต Cache ด้วย
+                    const cacheKey = 'awesome_cache_' + userProfile.userId;
+                    localStorage.removeItem(cacheKey); 
+                    
+                    closeEditProfile(); 
+                    checkUser(); 
+                } 
+                else { 
+                    document.getElementById('loader').classList.add('hidden');
+                    alert("Error: " + res.message); 
+                }
             });
         }
 
@@ -1647,12 +1725,16 @@
             }); 
         }
 
-        function approveAction(no) { callBackend('update_status', { orderNo: no, actionType: 'PP_APPROVE' }, () => fetchCustomerOrders()); }
+        function approveAction(no) { 
+            document.getElementById('loader').classList.remove('hidden');
+            callBackend('update_status', { orderNo: no, actionType: 'PP_APPROVE' }, () => { fetchCustomerOrders(); document.getElementById('loader').classList.add('hidden'); }); 
+        }
         function openRejectModal(no) { document.getElementById('rejOrderNo').value = no; document.getElementById('rejReason').value = ''; document.getElementById('modalReject').classList.add('show'); }
         function confirmReject() { 
             const no = document.getElementById('rejOrderNo').value; const r = document.getElementById('rejReason').value; 
             if(!r) return; 
-            callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); }); 
+            document.getElementById('loader').classList.remove('hidden');
+            callBackend('update_status', { orderNo: no, actionType: 'PP_REJECT', reason: r }, () => { closeModal('modalReject'); fetchCustomerOrders(); document.getElementById('loader').classList.add('hidden'); }); 
         }
 
         function openModal(id) { document.getElementById(id).classList.add('show'); }
@@ -1667,31 +1749,9 @@
         }
 
         // ================= STAFF SECTION =================
-        function fetchStaffData() { callBackend('get_all_orders', {}, (res) => { globalOrders = res.orders; filterStaffList(); }); }
-        function fetchOptions() { 
-            callBackend('get_options', {}, (res) => { 
-                const s = document.getElementById('ordStyle'); const f = document.getElementById('ordFabric'); 
-                s.innerHTML = '<option value="" disabled selected>เลือกทรงเสื้อ...</option>'; f.innerHTML = '<option value="" disabled selected>เลือกชนิดผ้า...</option>'; 
-                res.data.styles.forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`); res.data.fabrics.forEach(v => f.innerHTML += `<option value="${v}">${v}</option>`); 
-            }); 
-        }
-        
-        function createOrder() { 
-            const woInput = document.getElementById('ordWoImage');
-            if (woInput.files.length > 0 && !preloadedImages['wo-new_wo']) {
-                return alert("ระบบกำลังอัปโหลดไฟล์ใบสั่งงาน กรุณารอสักครู่แล้วกดบันทึกอีกครั้งครับ");
-            }
-            
-            let woImg = preloadedImages['wo-new_wo'] || null;
-            const payload = { 
-                adminName: dbUserData.RealName, phone: document.getElementById('ordPhone').value, batch: document.getElementById('ordBatch').value, 
-                style: document.getElementById('ordStyle').value, qty: document.getElementById('ordQty').value, fabric: document.getElementById('ordFabric').value, 
-                deliveryDate: document.getElementById('ordDate').value, detail: document.getElementById('ordDetail').value, address: '-', woImage: woImg 
-            };
-            if(!payload.phone || !payload.batch) return alert("ระบุเบอร์โทรและ Batch"); 
-            callBackend('create_order', payload, (res) => { 
-                if(res.status === 'success') { alert("สร้างออเดอร์เรียบร้อย"); location.reload(); } else { alert(res.message); }
-            }); 
+        function fetchStaffData() { 
+            document.getElementById('syncToast').classList.add('show');
+            callBackend('get_all_orders', {}, (res) => { globalOrders = res.orders; filterStaffList(); document.getElementById('syncToast').classList.remove('show'); }); 
         }
 
         function filterStaffList() {
@@ -1874,21 +1934,28 @@
             document.getElementById(`box-track-${type}-${no}`).style.display = method === 'Messenger' ? 'none' : 'block'; 
             document.getElementById(`box-phone-${type}-${no}`).style.display = method === 'Messenger' ? 'block' : 'none'; 
         }
+        
         function updateStatus(no, action) { 
             if(!confirm('ยืนยันทำรายการ?')) return; 
-            callBackend('update_status', { orderNo: no, actionType: action, staffName: dbUserData.RealName }, () => fetchStaffData()); 
+            document.getElementById('loader').classList.remove('hidden');
+            callBackend('update_status', { orderNo: no, actionType: action, staffName: dbUserData.RealName }, () => { fetchStaffData(); document.getElementById('loader').classList.add('hidden'); }); 
         }
+        
         function openFeedback(no) { document.getElementById('fbOrderNo').value = no; document.getElementById('modalFeedback').classList.add('show'); }
         function openFixPP(no) { document.getElementById('fixPPOrderNo').value = no; document.getElementById('modalFixPP').classList.add('show'); }
+        
         function confirmRollback() { 
             const no = document.getElementById('fbOrderNo').value; const reason = document.getElementById('fbReason').value; 
             if(!reason) return alert("ระบุสาเหตุ"); 
-            callBackend('update_status', { orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: dbUserData.RealName }, () => { closeModal('modalFeedback'); fetchStaffData(); }); 
+            document.getElementById('loader').classList.remove('hidden');
+            callBackend('update_status', { orderNo: no, actionType: 'ROLLBACK', reason: reason, staffName: dbUserData.RealName }, () => { closeModal('modalFeedback'); fetchStaffData(); document.getElementById('loader').classList.add('hidden'); }); 
         }
+        
         function confirmFixPP() { 
             const no = document.getElementById('fixPPOrderNo').value; const detail = document.getElementById('fixPPDetail').value; 
             if(!detail) return alert("ระบุรายละเอียดการแก้ไข"); 
-            callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: dbUserData.RealName }, () => { closeModal('modalFixPP'); fetchStaffData(); }); 
+            document.getElementById('loader').classList.remove('hidden');
+            callBackend('update_status', { orderNo: no, actionType: 'FIX_PP_REJECT', fixDetail: detail, staffName: dbUserData.RealName }, () => { closeModal('modalFixPP'); fetchStaffData(); document.getElementById('loader').classList.add('hidden'); }); 
         }
 
         async function sendSample(no) { 
@@ -1904,6 +1971,7 @@
                 return alert("ระบบกำลังประมวลผลรูปภาพ กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
             }
 
+            document.getElementById('loader').classList.remove('hidden');
             callBackend('update_status', { 
                 orderNo: no, 
                 actionType: 'SEND_SAMPLE', 
@@ -1913,7 +1981,7 @@
                 sampleImages: preloadedImages[`sample-${no}`], 
                 parcelImage: preloadedImages[`parcel-${no}`], 
                 staffName: dbUserData.RealName 
-            }, () => fetchStaffData()); 
+            }, () => { fetchStaffData(); document.getElementById('loader').classList.add('hidden'); }); 
         }
 
         async function shipOrder(no) { 
@@ -1925,6 +1993,7 @@
                 return alert("กำลังอัปโหลดรูปภาพ กรุณารอสักครู่แล้วกดยืนยันจัดส่งอีกครั้งครับ");
             }
 
+            document.getElementById('loader').classList.remove('hidden');
             callBackend('update_status', { 
                 orderNo: no, 
                 actionType: 'SHIP', 
@@ -1933,7 +2002,7 @@
                 messengerPhone: p, 
                 parcelImage: preloadedImages[`ship-${no}`] || null, 
                 staffName: dbUserData.RealName 
-            }, () => fetchStaffData()); 
+            }, () => { fetchStaffData(); document.getElementById('loader').classList.add('hidden'); }); 
         }
     </script>
 </body>
